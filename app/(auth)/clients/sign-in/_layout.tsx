@@ -2,7 +2,7 @@ import { View, Text } from "react-native";
 import React from "react";
 import { Stack } from "expo-router";
 
-const Layout = () => {
+const SignInLayout = () => {
 	return (
 		<Stack screenOptions={{ headerShown: false }}>
 			<Stack.Screen name="index" />
@@ -11,4 +11,4 @@ const Layout = () => {
 	);
 };
 
-export default Layout;
+export default SignInLayout;

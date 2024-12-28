@@ -18,7 +18,11 @@ const FormSchema = z.object({
 
 type FormType = z.infer<typeof FormSchema>;
 
-const EmailSignupForm = () => {
+const EmailSignupForm = ({
+	nextStep,
+}: {
+	nextStep: React.Dispatch<React.SetStateAction<number>>;
+}) => {
 	const form = useForm<FormType>({
 		defaultValues: {
 			firstName: "",
@@ -32,49 +36,57 @@ const EmailSignupForm = () => {
 	function submit(val: FormType) {}
 	return (
 		<View className="flex-1">
-			<View className="flex-row justify-between mb-5">
-				<Controller
-					control={form.control}
-					name="firstName"
-					render={({ field }) => (
-						<View>
-							<Text>First Name</Text>
-							<TextInput
-								placeholder="Enter your first name"
-								value={field.value}
-								onChangeText={field.onChange}
-							/>
-						</View>
-					)}
-				/>
-				<Controller
-					control={form.control}
-					name="lastName"
-					render={({ field }) => (
-						<View>
-							<Text>Last Name</Text>
-							<TextInput
-								placeholder="Enter your last name"
-								value={field.value}
-								onChangeText={field.onChange}
-							/>
-						</View>
-					)}
-				/>
+			<View className="flex-row mb-5 gap-4">
+				<View className="flex-1">
+					<Controller
+						control={form.control}
+						name="firstName"
+						render={({ field }) => (
+							<View className="space-y-[6px]">
+								<Text className="text-sm text-off-black">First Name</Text>
+								<TextInput
+									placeholder="Enter your first name"
+									value={field.value}
+									onChangeText={field.onChange}
+									className="p-2 text-muted text-base rounded border border-light-border"
+								/>
+							</View>
+						)}
+					/>
+				</View>
+
+				<View className="flex-1">
+					<Controller
+						control={form.control}
+						name="lastName"
+						render={({ field }) => (
+							<View className="space-y-[6px]">
+								<Text className="text-sm text-off-black">Last Name</Text>
+								<TextInput
+									placeholder="Enter your last name"
+									value={field.value}
+									onChangeText={field.onChange}
+									className="p-2 text-muted text-base rounded border border-light-border"
+								/>
+							</View>
+						)}
+					/>
+				</View>
 			</View>
 			<View className="mb-5">
 				<Controller
 					control={form.control}
 					name="email"
 					render={({ field }) => (
-						<View>
-							<Text>Email</Text>
+						<View className="space-y-[6px]">
+							<Text className="text-sm text-off-black">Email</Text>
 							<TextInput
 								placeholder="Enter your email address"
 								value={field.value}
 								onChangeText={field.onChange}
 								keyboardType="email-address"
 								textContentType="emailAddress"
+								className="p-2 text-muted text-base rounded border border-light-border"
 							/>
 						</View>
 					)}
@@ -85,14 +97,15 @@ const EmailSignupForm = () => {
 					control={form.control}
 					name="gender"
 					render={({ field }) => (
-						<View>
-							<Text>Gender</Text>
+						<View className="space-y-[6px]">
+							<Text className="text-sm text-off-black">Gender</Text>
 							<TextInput
 								placeholder="Enter your email address"
 								value={field.value}
 								onChangeText={field.onChange}
 								keyboardType="email-address"
 								textContentType="emailAddress"
+								className="p-2 text-muted text-base rounded border border-light-border"
 							/>
 						</View>
 					)}
@@ -103,20 +116,24 @@ const EmailSignupForm = () => {
 					control={form.control}
 					name="location"
 					render={({ field }) => (
-						<View>
-							<Text>Location</Text>
+						<View className="space-y-[6px]">
+							<Text className="text-sm text-off-black">Location</Text>
 							<TextInput
 								placeholder="Kindly enter you address"
 								value={field.value}
 								onChangeText={field.onChange}
 								keyboardType="email-address"
 								textContentType="emailAddress"
+								className="p-2 text-muted text-base rounded border border-light-border"
 							/>
 						</View>
 					)}
 				/>
 			</View>
-			<Pressable className="bg-primary rounded px-1 py-[10px] mt-auto justify-center items-center">
+			<Pressable
+				onPress={() => nextStep((prev) => prev + 1)}
+				className="bg-primary rounded px-1 py-[10px] mt-auto justify-center items-center"
+			>
 				<Text className="text-white">Continue</Text>
 			</Pressable>
 		</View>

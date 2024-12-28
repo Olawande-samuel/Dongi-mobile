@@ -6,6 +6,8 @@ const Layout = () => {
 		<Stack screenOptions={{headerShown: false}}>
 			<Stack.Screen name="sign-up" />
 			<Stack.Screen name="sign-in" />
+			<Stack.Screen name="forgot-password" />
+			<Stack.Screen name="reset-password" />
 		</Stack>
 	);
 };

@@ -10,6 +10,8 @@ module.exports = {
 				"off-black": "#1A1B23",
 				"success-100": "#D1FADF",
 				"success-500": "#12B76A",
+				"light-border": "#F2F2F2",
+				inactive: "#CCCCCC",
 				support: "#676B83",
 				client: {
 					primary: "#18658B",
