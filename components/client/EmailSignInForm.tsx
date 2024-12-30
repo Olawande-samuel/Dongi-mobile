@@ -3,7 +3,7 @@ import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 
 const FormSchema = z.object({
 	email: z.string().email(),
@@ -21,7 +21,9 @@ const EmailSignInForm = () => {
 		resolver: zodResolver(FormSchema),
 	});
 
-	function submit(val: FormType) {}
+	function submit() {
+		router.replace("/client");
+	}
 	return (
 		<View className="flex-1">
 			<View className="mb-5">
@@ -63,13 +65,16 @@ const EmailSignInForm = () => {
 				/>
 			</View>
 			<View className="flex-row justify-end">
-				<Link href="/clients/forgot-password" className="text-primary text-sm text-right">
+				<Link
+					href="/clients/forgot-password"
+					className="text-primary text-sm text-right"
+				>
 					Forgot Password
 				</Link>
 			</View>
 
 			<Pressable
-				onPress={() => console.log("Pressed")}
+				onPress={submit}
 				className="bg-primary rounded px-1 py-[10px] mt-auto justify-center items-center"
 			>
 				<Text className="text-white">Continue</Text>

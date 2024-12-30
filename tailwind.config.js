@@ -11,6 +11,7 @@ module.exports = {
 				"success-100": "#D1FADF",
 				"success-500": "#12B76A",
 				"light-border": "#F2F2F2",
+				"light":"#F9FAFC",
 				inactive: "#CCCCCC",
 				support: "#676B83",
 				client: {
