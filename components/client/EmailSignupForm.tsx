@@ -48,7 +48,7 @@ const EmailSignupForm = ({
 									placeholder="Enter your first name"
 									value={field.value}
 									onChangeText={field.onChange}
-									className="p-2 text-muted text-base rounded border border-light-border"
+									className="p-2 text-muted text-base rounded border border-inner-light"
 								/>
 							</View>
 						)}
@@ -66,7 +66,7 @@ const EmailSignupForm = ({
 									placeholder="Enter your last name"
 									value={field.value}
 									onChangeText={field.onChange}
-									className="p-2 text-muted text-base rounded border border-light-border"
+									className="p-2 text-muted text-base rounded border border-inner-light"
 								/>
 							</View>
 						)}
@@ -86,7 +86,7 @@ const EmailSignupForm = ({
 								onChangeText={field.onChange}
 								keyboardType="email-address"
 								textContentType="emailAddress"
-								className="p-2 text-muted text-base rounded border border-light-border"
+								className="p-2 text-muted text-base rounded border border-inner-light"
 							/>
 						</View>
 					)}
@@ -105,7 +105,7 @@ const EmailSignupForm = ({
 								onChangeText={field.onChange}
 								keyboardType="email-address"
 								textContentType="emailAddress"
-								className="p-2 text-muted text-base rounded border border-light-border"
+								className="p-2 text-muted text-base rounded border border-inner-light"
 							/>
 						</View>
 					)}
@@ -124,7 +124,7 @@ const EmailSignupForm = ({
 								onChangeText={field.onChange}
 								keyboardType="email-address"
 								textContentType="emailAddress"
-								className="p-2 text-muted text-base rounded border border-light-border"
+								className="p-2 text-muted text-base rounded border border-inner-light"
 							/>
 						</View>
 					)}

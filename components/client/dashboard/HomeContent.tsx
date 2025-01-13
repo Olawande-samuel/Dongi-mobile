@@ -15,7 +15,14 @@ const HomeContent = ({
 		<View>
 			<HomeTop />
 			<HomeCategory />
-			<HomeTabs tab={tab} setTab={setTab} />
+			<View className="">
+				<HomeTabs
+					tab={tab}
+					setTab={setTab}
+					tab1title="Ongoing"
+					tab2title="Recommended"
+				/>
+			</View>
 		</View>
 	);
 };

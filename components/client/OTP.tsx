@@ -4,7 +4,6 @@ import OTPForm from "./OTPForm";
 import SignUpHeader from "./SignUpHeader";
 
 const OTP = ({
-	steps,
 	setSteps,
 }: {
 	steps: number;

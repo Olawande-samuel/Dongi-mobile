@@ -9,7 +9,7 @@ function Header({ title }: { title: string }) {
 					console.log("pressed");
 				}}
 			>
-				<Ionicons name="arrow-back" size={24} />
+				<Ionicons name="arrow-back" size={24} color="#1A1B23" />
 			</Pressable>
 			<Text className="text-base text-off-black">{title}</Text>
 			<View></View>

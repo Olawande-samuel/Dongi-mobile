@@ -1,8 +1,10 @@
 import { View, Text, Pressable, Image } from "react-native";
 import React from "react";
 import { Link } from "expo-router";
+import useUserType from "@/hooks/useUserType";
 
 const SocialSignIn = ({ isLogin = false }: { isLogin: boolean }) => {
+	const { userType } = useUserType();
 	return (
 		<View className="space-y-2">
 			<Pressable className="mb-2 flex-row items-center bg-[#1FB4FF1A] rounded px-1 py-[10px] justify-center">
@@ -27,8 +29,10 @@ const SocialSignIn = ({ isLogin = false }: { isLogin: boolean }) => {
 				asChild
 				href={
 					isLogin
-						? "/(auth)/clients/sign-in/email"
-						: "/(auth)/clients/sign-up/email"
+						? userType === "client"
+							? `/(auth)/clients/sign-in/email`
+							: `/(auth)/service-provider/sign-in/email`
+						: userType === "client" ? "/(auth)/clients/sign-up/email" :"/(auth)/service-provider/sign-up/email"
 				}
 			>
 				<Pressable className="mb-2 flex-row items-center bg-[#1FB4FF1A] rounded px-1 py-[10px] justify-center">

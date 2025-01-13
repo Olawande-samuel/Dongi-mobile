@@ -35,7 +35,7 @@ const categoryItems = [
 ];
 const HomeCategory = () => {
 	return (
-		<View className="py-2 px-5 mb-3">
+		<View className="py-2 mb-3">
 			<View className="p-2 bg-light rounded-lg">
 				<View className="flex-row items-center justify-between mb-[10px]">
 					<Text className="text-sm text-off-black">Categories</Text>

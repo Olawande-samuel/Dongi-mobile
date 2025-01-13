@@ -2,16 +2,13 @@ import * as React from "react";
 import Svg, { G, Path, Defs } from "react-native-svg";
 /* SVGR has dropped some elements not supported by react-native-svg: filter */
 
-function Success() {
+function Success({ isServiceProvider }: { isServiceProvider?: boolean }) {
 	return (
-		<Svg
-			width={263}
-			height={263}
-			viewBox="0 0 263 263"
-			fill="none"
-
-		>
-			<G filter="url(#filter0_i_136_3874)" fill="#18658B">
+		<Svg width={263} height={263} viewBox="0 0 263 263" fill="none">
+			<G
+				filter="url(#filter0_i_136_3874)"
+				fill={isServiceProvider ? "#E4AE1B" : "#18658B"}
+			>
 				<Path
 					opacity={0.3}
 					d="M251.652 76.46a92.188 92.188 0 00-54.614 14.31c-3.932-4.479-7.974-8.957-12.234-13.217l-3.167-2.95 1.529-1.31a34.405 34.405 0 009.831-38.12 42.6 42.6 0 00-39.65-24.25V32.77a21.848 21.848 0 0119.224 10.923c1.857 4.37 0 9.175-5.134 14.31l-2.512 2.293a182.427 182.427 0 00-37.247-24.03c-27.635-12.453-41.835-6.663-48.825 0a24.031 24.031 0 00-5.025 7.427l-1.966 5.79-15.729 47.404c12.452 31.021 42.6 86.182 108.136 109.993l54.615-18.131a10.933 10.933 0 004.697-3.387l2.293-1.966c15.62-15.729 5.571-45.985-15.401-75.367a72.415 72.415 0 0141.179-9.722V76.461z"

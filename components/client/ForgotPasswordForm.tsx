@@ -35,7 +35,7 @@ const ForgotPasswordForm = () => {
 								onChangeText={field.onChange}
 								keyboardType="email-address"
 								textContentType="emailAddress"
-								className="p-2 text-muted text-base rounded border border-light-border"
+								className="p-2 text-muted text-base rounded border border-inner-light"
 							/>
 						</View>
 					)}

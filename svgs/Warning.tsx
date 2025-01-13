@@ -2,7 +2,7 @@ import * as React from "react";
 import Svg, { G, Path, Defs } from "react-native-svg";
 /* SVGR has dropped some elements not supported by react-native-svg: filter */
 
-function SvgComponent({ isError }: { isError: boolean }) {
+function Warning({ isError = false }: { isError?: boolean }) {
 	return (
 		<Svg width={263} height={263} viewBox="0 0 263 263" fill="none">
 			<G filter="url(#filter0_i_47_3154)">
@@ -18,4 +18,4 @@ function SvgComponent({ isError }: { isError: boolean }) {
 	);
 }
 
-export default SvgComponent;
+export default Warning;

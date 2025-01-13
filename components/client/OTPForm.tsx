@@ -1,6 +1,7 @@
 import { View, Text, Pressable } from "react-native";
 import React from "react";
 import { OtpInput } from "react-native-otp-entry";
+import StyledButton from "../StyledButton";
 
 const OTPForm = ({
 	nextStep,
@@ -35,12 +36,12 @@ const OTPForm = ({
 					/>
 				</View>
 			</View>
-			<Pressable
-				onPress={() => nextStep((prev) => prev + 1)}
-				className="bg-primary rounded px-1 py-[10px] mt-auto justify-center items-center"
-			>
-				<Text className="text-white">Submit</Text>
-			</Pressable>
+			<View className="mt-auto">
+				<StyledButton
+					title="Submit"
+					onPress={() => nextStep((prev) => prev + 1)}
+				/>
+			</View>
 		</View>
 	);
 };

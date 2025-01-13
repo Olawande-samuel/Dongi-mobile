@@ -45,7 +45,7 @@ const SetupPasswordForm = ({
 									value={field.value}
 									onChangeText={field.onChange}
 									textContentType="password"
-									className="p-2 text-muted text-base rounded border border-light-border"
+									className="p-2 text-muted text-base rounded border border-inner-light"
 								/>
 							</View>
 						)}
@@ -64,7 +64,7 @@ const SetupPasswordForm = ({
 									value={field.value}
 									onChangeText={field.onChange}
 									textContentType="password"
-									className="p-2 text-muted text-base rounded border border-light-border"
+									className="p-2 text-muted text-base rounded border border-inner-light"
 								/>
 							</View>
 						)}

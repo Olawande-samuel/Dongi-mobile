@@ -1,15 +1,19 @@
-import BaseButton from "@/components/BaseButton";
+import { UserType } from "@/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-type UserType = "client" | "service-provider";
 export default function Index() {
 	async function storeUserType(val: UserType) {
 		try {
 			await AsyncStorage.setItem("userType", val);
-			router.push("/(auth)/clients/sign-up");
+			if (val === "client") {
+				router.push("/(auth)/clients/sign-up");
+			} else {
+				router.push("/(auth)/service-provider/sign-up");
+			}
+			// router.push("/(auth)/clients/sign-up");
 		} catch (error) {
 			console.log("Error storing data", error);
 		}
@@ -47,7 +51,7 @@ export default function Index() {
 					</Pressable>
 					<Pressable
 						className="bg-[#1FB4FF1A] py-[10px] rounded w-full"
-						onPress={() => storeUserType("service-provider")}
+						onPress={() => storeUserType("service")}
 					>
 						<Text className="text-base text-primary text-center">
 							I am a service provider

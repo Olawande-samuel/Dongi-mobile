@@ -32,14 +32,18 @@ function Tab({
 const HomeTabs = ({
 	setTab,
 	tab,
+	tab1title,
+	tab2title,
 }: {
 	tab: number;
 	setTab: React.Dispatch<React.SetStateAction<number>>;
+	tab1title: string;
+	tab2title: string;
 }) => {
 	return (
-		<View className="flex-row space-x-2 px-6 mb-3">
-			<Tab id={1} title="Ongoing" isActive={tab === 1} setTab={setTab} />
-			<Tab id={2} title="Recommended" isActive={tab === 2} setTab={setTab} />
+		<View className="flex-row mt-4 space-x-2 mb-3">
+			<Tab id={1} title={tab1title} isActive={tab === 1} setTab={setTab} />
+			<Tab id={2} title={tab2title} isActive={tab === 2} setTab={setTab} />
 		</View>
 	);
 };

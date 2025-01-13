@@ -1,6 +1,7 @@
 import { View, Text, Pressable } from "react-native";
 import React, { PropsWithChildren } from "react";
 import { Ionicons } from "@expo/vector-icons";
+import useUserType from "@/hooks/useUserType";
 
 interface Props extends PropsWithChildren {
 	steps: number;
@@ -8,6 +9,9 @@ interface Props extends PropsWithChildren {
 	setSteps: React.Dispatch<React.SetStateAction<number>>;
 }
 const SignUpHeader = ({ steps, setSteps, title, children }: Props) => {
+	const { userType } = useUserType();
+	const isClient = userType === "client";
+
 	return (
 		<View className="flex-1">
 			<View className="flex-row justify-between py-[10px] mb-[23.5px]">
@@ -28,7 +32,9 @@ const SignUpHeader = ({ steps, setSteps, title, children }: Props) => {
 					<View
 						key={i}
 						className={`h-1 basis-[20%] rounded-[999px] ${
-							steps >= i + 1 ? "bg-primary" : "bg-[#1FB4FF1A]"
+							steps >= i + 1
+								? `bg-${userType}-primary`
+								: `bg-${userType}-primary-light`
 						}`}
 					></View>
 				))}

@@ -1,10 +1,21 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, Pressable } from "react-native";
 import React from "react";
 import { Entypo } from "@expo/vector-icons";
+import { Link, router } from "expo-router";
 
 const HistoryCard = () => {
 	return (
-		<View className="bg-white border border-[#FAFAFA] rounded-lg p-3 mb-4">
+		<Pressable
+			onPress={() =>
+				router.push({
+					pathname: "/client/history/details",
+					params: {
+						id: "1",
+					},
+				})
+			}
+			className="bg-white border border-[#FAFAFA] rounded-lg p-3 mb-4"
+		>
 			<View className="flex-row">
 				<View className="h-[80px] w-[80px] mr-2">
 					<Image
@@ -39,7 +50,7 @@ const HistoryCard = () => {
 					</View>
 				</View>
 			</View>
-		</View>
+		</Pressable>
 	);
 };
 

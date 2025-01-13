@@ -1,5 +1,6 @@
 import HomeContent from "@/components/client/dashboard/HomeContent";
 import ServiceCard from "@/components/client/dashboard/ServiceCard";
+import OngoingCard from "@/components/client/history/OngoingCard";
 import React, { useState } from "react";
 import { FlatList, StatusBar } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -11,9 +12,12 @@ const Home = () => {
 			<StatusBar />
 			<FlatList
 				data={[1, 2, 3, 4]}
-				renderItem={() => <ServiceCard />}
+				renderItem={() => (tab === 1 ? <OngoingCard /> : <ServiceCard />)}
 				ListHeaderComponent={<HomeContent tab={tab} setTab={setTab} />}
 				keyExtractor={(item) => item.toString()}
+				contentContainerStyle={{
+					paddingHorizontal: 24
+				}}
 			/>
 		</SafeAreaView>
 	);

@@ -1,10 +1,29 @@
 import { View, Text, Image, Pressable } from "react-native";
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 
 const ServiceCard = () => {
 	return (
-		<View className="px-6">
+		<Pressable
+			onPress={() =>
+				router.push({
+					pathname: "/client/booking/[vendorId]",
+					params: {
+						vendorId: "1",
+						id: "1",
+						name: "Real Estate Agent",
+						service: "Property Management",
+						rating: 4.5,
+						reviews: 120,
+						price: "#. 150,000 - #. 300,000",
+						location: "Island Lagos, Nigeria",
+						customers: 12,
+					},
+				
+				})
+			}
+		>
 			<View className="rounded-lg border border-[#Fafafa] p-3">
 				<View className="flex-row mb-[10px]">
 					<View className="w-[44px] h-[44px] mr-2">
@@ -63,7 +82,7 @@ const ServiceCard = () => {
 					</Pressable>
 				</View>
 			</View>
-		</View>
+		</Pressable>
 	);
 };
 

@@ -3,6 +3,7 @@ import React, { PropsWithChildren } from "react";
 
 interface Props extends PropsWithChildren {
 	className?: string;
+	
 }
 const BaseButton = ({ children, className }: Props) => {
 	return (

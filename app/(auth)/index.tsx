@@ -3,13 +3,19 @@ import React from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-type UserType = "client" | "service-provider";
+import { UserType } from "@/types";
+
+
 
 const Authentication = () => {
 	async function storeUserType(val: UserType) {
 		try {
 			await AsyncStorage.setItem("userType", val);
-			router.push("/(auth)/clients/sign-up");
+			if (val === "client") {
+				router.push("/(auth)/clients/sign-up");
+			} else {
+				router.push("/(auth)/provider/sign-up");
+			}
 		} catch (error) {
 			console.log("Error storing data", error);
 		}
@@ -47,7 +53,7 @@ const Authentication = () => {
 					</Pressable>
 					<Pressable
 						className="bg-[#1FB4FF1A] py-[10px] rounded w-full"
-						onPress={() => storeUserType("service-provider")}
+						onPress={() => storeUserType("service")}
 					>
 						<Text className="text-base text-primary text-center">
 							I am a service provider
