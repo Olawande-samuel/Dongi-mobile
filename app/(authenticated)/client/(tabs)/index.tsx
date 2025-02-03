@@ -11,12 +11,13 @@ const Home = () => {
 		<SafeAreaView className="flex-1 bg-white">
 			<StatusBar />
 			<FlatList
+				showsVerticalScrollIndicator={false}
 				data={[1, 2, 3, 4]}
 				renderItem={() => (tab === 1 ? <OngoingCard /> : <ServiceCard />)}
 				ListHeaderComponent={<HomeContent tab={tab} setTab={setTab} />}
 				keyExtractor={(item) => item.toString()}
 				contentContainerStyle={{
-					paddingHorizontal: 24
+					paddingHorizontal: 24,
 				}}
 			/>
 		</SafeAreaView>

@@ -5,12 +5,16 @@
 		"version": "1.0.0",
 		"orientation": "portrait",
 		"icon": "./assets/images/icon.png",
-		"scheme": "myapp",
+		"scheme": "dongi",
 		"userInterfaceStyle": "automatic",
 		"newArchEnabled": true,
 		"ios": {
 			"supportsTablet": true,
-			"bundleIdentifier": "com.dongi.dongi"
+			"bundleIdentifier": "com.dongi.dongi",
+			"infoPlist": {
+				"NSLocationWhenInUseUsageDescription": "This app needs access to location services to show you nearby places.",
+				"NSLocationAlwaysAndWhenInUseUsageDescription": "This app needs access to location services to show you nearby places and provide background navigation."
+			}
 		},
 		"android": {
 			"adaptiveIcon": {

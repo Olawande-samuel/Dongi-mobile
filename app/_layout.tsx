@@ -20,12 +20,22 @@ import {
 import { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { StatusBar } from "expo-status-bar";
+import { Toaster } from "sonner-native";
+import QueryProvider from "@/providers/QueryProvider";
+import GlobalStateProvider from "@/providers/GlobalStateProvider";
+import React from "react";
+import "react-native-get-random-values";
+
 
 function AppEntry() {
 	return (
-		<Stack screenOptions={{ headerShown: false }}>
-			<Stack.Screen name="index" />
-		</Stack>
+		<>
+			<StatusBar style="dark" />
+			<Stack screenOptions={{ headerShown: false }}>
+				<Stack.Screen name="index" />
+			</Stack>
+		</>
 	);
 }
 export default function RootLayout() {
@@ -60,11 +70,16 @@ export default function RootLayout() {
 	}
 	return (
 		<AuthProvider>
-			<GestureHandlerRootView >
-				<BottomSheetModalProvider>
-					<AppEntry />
-				</BottomSheetModalProvider>
-			</GestureHandlerRootView>
+			<QueryProvider>
+				<GestureHandlerRootView style={{ flex: 1 }}>
+					<GlobalStateProvider>
+						<BottomSheetModalProvider>
+							<AppEntry />
+							<Toaster position="top-center" />
+						</BottomSheetModalProvider>
+					</GlobalStateProvider>
+				</GestureHandlerRootView>
+			</QueryProvider>
 		</AuthProvider>
 	);
 }

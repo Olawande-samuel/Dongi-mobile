@@ -1,6 +1,6 @@
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import React from "react";
-import { Image, Text, View } from "react-native";
+import { Image, Pressable, Text, View } from "react-native";
 const categoryItems = [
 	{
 		id: 1,
@@ -39,13 +39,24 @@ const HomeCategory = () => {
 			<View className="p-2 bg-light rounded-lg">
 				<View className="flex-row items-center justify-between mb-[10px]">
 					<Text className="text-sm text-off-black">Categories</Text>
-					<Link href="/" className="text-primary text-sm">
+					<Link href="/client/search" className="text-primary text-sm">
 						See more
 					</Link>
 				</View>
 				<View className="flex-row flex-wrap justify-between gap-4">
 					{categoryItems.map((item) => (
-						<View key={item.id} className="w-[99px]">
+						<Pressable
+							key={item.id}
+							className="w-[99px]"
+							onPress={() =>
+								router.push({
+									pathname: "/client/search/category/[query]",
+									params: {
+										query: item.name,
+									},
+								})
+							}
+						>
 							<View className="h-[100px] mb-2 w-[99px] rounded-lg border-[0.5px] border-primary">
 								<Image
 									source={item.image}
@@ -56,7 +67,7 @@ const HomeCategory = () => {
 							<Text className="mt-2 leading-[17.64px] text-sm text-center text-support">
 								{item.name}
 							</Text>
-						</View>
+						</Pressable>
 					))}
 				</View>
 			</View>

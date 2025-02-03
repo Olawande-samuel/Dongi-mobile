@@ -17,9 +17,7 @@ const StyledButton: React.FC<StyledButtonProps> = ({
 	...props
 }) => {
 	const { userType } = useUserType();
-	console.log({ userType });
 	const background = `bg-${userType}-primary`;
-	console.log({ background });
 	return (
 		<Pressable
 			className={cn(
@@ -27,6 +25,14 @@ const StyledButton: React.FC<StyledButtonProps> = ({
 				background,
 				className
 			)}
+			style={{
+				backgroundColor:
+					userType === "client"
+						? "#18658B"
+						: userType === "service"
+						? "#E4AE1B"
+						: "",
+			}}
 			onPress={onPress}
 			{...props}
 		>

@@ -8,7 +8,7 @@ const Layout = () => {
 		<Stack>
 			<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 			<Stack.Screen name="booking" options={{ headerShown: false }} />
-			<Stack.Screen name="profile-info" options={{ headerShown: false }} />
+			
 		</Stack>
 	);
 };

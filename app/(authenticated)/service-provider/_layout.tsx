@@ -21,19 +21,7 @@ const Layout = () => {
 					},
 				}}
 			/>
-			<Stack.Screen
-				name="profile/public-view"
-				options={{
-					headerTitle: (props) => <DoubleHeader {...props} />,
-					headerLeft: () => <BackButton />,
-					headerRight: () => (
-						<Pressable>
-							<Octicons name="share-android" size={24} color="#676B83" />
-						</Pressable>
-					),
-					headerShadowVisible: false,
-				}}
-			/>
+			<Stack.Screen name="profile" options={{ headerShown: false }} />
 		</Stack>
 	);
 };

@@ -1,9 +1,7 @@
 import BackButton from "@/components/BackButton";
 import DoubleHeader from "@/components/client/DoubleHeader";
-import { Ionicons } from "@expo/vector-icons";
-import { router, Stack } from "expo-router";
+import { Stack } from "expo-router";
 import React from "react";
-import { Pressable, Text, View } from "react-native";
 
 const ProfileLayout = () => {
 	return (

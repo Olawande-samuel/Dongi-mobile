@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Header from "@/components/Header";
+import { router } from "expo-router";
 
 const categoryItems = [
 	{
@@ -59,7 +60,18 @@ const Search = () => {
 				<Header title="All Categories" />
 				<View className="flex-1 flex-row flex-wrap justify-between gap-5">
 					{categoryItems.map((item) => (
-						<View key={item.id} className="w-[162px]">
+						<Pressable
+							key={item.id}
+							className="w-[162px]"
+							onPress={() =>
+								router.push({
+									pathname: "/client/search/category/[query]",
+									params: {
+										query: item.name,
+									},
+								})
+							}
+						>
 							<View className="h-[154px] mb-2 w-[162px] rounded-lg border-[0.5px] border-primary">
 								<Image
 									source={item.image}
@@ -70,7 +82,7 @@ const Search = () => {
 							<Text className="mt-2 leading-[17.64px] text-sm text-center text-support">
 								{item.name}
 							</Text>
-						</View>
+						</Pressable>
 					))}
 				</View>
 			</ScrollView>

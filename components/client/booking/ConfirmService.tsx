@@ -59,7 +59,7 @@ function ConfirmService({
 							John Musa has completed your Real estate survey assistance service
 						</Text>
 						<View className="justify-center items-center mb-6">
-							<Delivery />
+							<Delivery isServiceProvider={false} />
 						</View>
 						<View className="rounded-lg p-2 border border-outer-light mb-6">
 							<View className="flex-row items-center gap-x-3">

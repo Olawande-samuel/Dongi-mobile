@@ -1,8 +1,15 @@
 import { View, Text, TextInput, Pressable } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { Api } from "@/utils/endpoints";
+import { useGlobalContext } from "@/providers/GlobalStateProvider";
+import useAsyncStorage from "@/hooks/useAsyncStorage";
+import useTempUser from "@/hooks/useTempUser";
+import { toast } from "sonner-native";
+import { handleError } from "@/utils";
 
 const FormSchema = z
 	.object({
@@ -15,11 +22,15 @@ const FormSchema = z
 	});
 
 type FormType = z.infer<typeof FormSchema>;
+
 const SetupPasswordForm = ({
 	nextStep,
 }: {
 	nextStep: React.Dispatch<React.SetStateAction<number>>;
 }) => {
+	const globalContext = useGlobalContext();
+	const { data } = useTempUser();
+
 	const form = useForm<FormType>({
 		defaultValues: {
 			password: "",
@@ -27,6 +38,33 @@ const SetupPasswordForm = ({
 		},
 		resolver: zodResolver(FormSchema),
 	});
+
+	if (!globalContext) return null;
+
+	const { setIsLoading } = globalContext;
+
+	const { mutate } = useMutation({
+		mutationFn: Api.createPassword,
+		onMutate: () => setIsLoading(true),
+		onSettled: () => setIsLoading(false),
+	});
+
+	function handleSubmit(val: FormType) {
+		mutate(
+			{ type: "client", payload: { ...val, user_id: data.userId } },
+			{
+				onSuccess: (res) => {
+					console.log({ res });
+					toast.success("Password Set Successfully");
+					nextStep((prev) => prev + 1);
+				},
+				onError: (err) => {
+					console.log(err.response);
+					handleError(err);
+				},
+			}
+		);
+	}
 	return (
 		<View className="flex-1">
 			<View className="flex-1">
@@ -72,7 +110,7 @@ const SetupPasswordForm = ({
 				</View>
 			</View>
 			<Pressable
-				onPress={() => nextStep((prev) => prev + 1)}
+				onPress={form.handleSubmit(handleSubmit)}
 				className="bg-primary rounded px-1 py-[10px] mt-auto justify-center items-center"
 			>
 				<Text className="text-white">Continue</Text>

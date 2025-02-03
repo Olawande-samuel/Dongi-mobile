@@ -18,6 +18,7 @@ const Index = () => {
 				contentContainerStyle={{
 					paddingHorizontal: 24,
 				}}
+				showsVerticalScrollIndicator={false}
 			/>
 		</SafeAreaView>
 	);

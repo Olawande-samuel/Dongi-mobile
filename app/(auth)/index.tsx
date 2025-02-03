@@ -4,8 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { UserType } from "@/types";
-
-
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
 const Authentication = () => {
 	async function storeUserType(val: UserType) {
@@ -20,6 +19,7 @@ const Authentication = () => {
 			console.log("Error storing data", error);
 		}
 	}
+	//TODO: if user has previously signed in, go to user login screen
 	return (
 		<SafeAreaView className="flex-1 bg-white px-6" edges={["top", "bottom"]}>
 			<View className="flex-1 bg-white justify-center items-center">

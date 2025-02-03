@@ -26,7 +26,7 @@ const SignUp = () => {
 						<Text className="text-center text-sm text-[#99a2b3]">or</Text>
 					</View>
 					<View className="mb-6">
-						<SocialSignIn />
+						<SocialSignIn isLogin={false} />
 					</View>
 					<View>
 						<Text className="text-muted text-center">

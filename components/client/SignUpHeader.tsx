@@ -2,6 +2,7 @@ import { View, Text, Pressable } from "react-native";
 import React, { PropsWithChildren } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import useUserType from "@/hooks/useUserType";
+import { router } from "expo-router";
 
 interface Props extends PropsWithChildren {
 	steps: number;
@@ -19,6 +20,8 @@ const SignUpHeader = ({ steps, setSteps, title, children }: Props) => {
 					onPress={() => {
 						if (steps > 1) {
 							setSteps((prev) => prev - 1);
+						} else {
+							router.back();
 						}
 					}}
 				>

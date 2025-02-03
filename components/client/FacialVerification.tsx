@@ -1,8 +1,7 @@
-import { View, Text, Pressable } from "react-native";
-import React from "react";
 import { Ionicons } from "@expo/vector-icons";
-import EmailSignupForm from "./EmailSignupForm";
-import OTPForm from "./OTPForm";
+import React from "react";
+import { Pressable, Text, View } from "react-native";
+import FacialVerificationForm from "./FacialVerificationForm";
 
 const FacialVerification = ({
 	steps,
@@ -42,7 +41,7 @@ const FacialVerification = ({
 				</View>
 			</View>
 			<View className="flex-1">
-				{/* <FacialVerificationForm nextStep={setSteps} /> */}
+				<FacialVerificationForm  />
 			</View>
 		</View>
 	);
