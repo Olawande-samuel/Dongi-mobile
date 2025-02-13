@@ -3,6 +3,8 @@ import React from "react";
 import { Pressable, Text, View } from "react-native";
 import FacialVerificationForm from "./FacialVerificationForm";
 
+import TestFaceDetection from "./TestFaceDetection";
+
 const FacialVerification = ({
 	steps,
 	setSteps,
@@ -41,7 +43,8 @@ const FacialVerification = ({
 				</View>
 			</View>
 			<View className="flex-1">
-				<FacialVerificationForm  />
+				<TestFaceDetection />
+				{/* <FacialVerificationForm /> */}
 			</View>
 		</View>
 	);

@@ -9,7 +9,7 @@ import { Api } from "@/utils/endpoints";
 import { toast } from "sonner-native";
 import { handleError } from "@/utils";
 
-const OTPForm = ({
+const EmailVerification = ({
 	nextStep,
 }: {
 	nextStep: React.Dispatch<React.SetStateAction<number>>;
@@ -17,8 +17,6 @@ const OTPForm = ({
 	const [otp, setOtp] = useState("");
 	const { data } = useTempUser();
 	const globalContext = useGlobalContext();
-
-	if (!globalContext) return null;
 
 	const { setIsLoading } = globalContext;
 
@@ -67,7 +65,7 @@ const OTPForm = ({
 			<View className="flex-1">
 				<View className="mb-[6px]">
 					<Text className="text-sm text-off-black">
-						A code was sent to
+						A code was sent to{" "}
 						<Text className="font-bold">{maskEmail(data?.email)}</Text>
 					</Text>
 				</View>
@@ -97,4 +95,4 @@ const OTPForm = ({
 	);
 };
 
-export default OTPForm;
+export default EmailVerification;

@@ -19,7 +19,6 @@ const Otp = () => {
 	const globalContext = useGlobalContext();
 	const { getItem } = useAsyncStorage();
 
-	if (!globalContext) return null;
 
 	const { setIsLoading } = globalContext;
 

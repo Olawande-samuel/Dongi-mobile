@@ -1,4 +1,4 @@
-import OTP from "@/components/client/OTP";
+import OTP from "@/components/client/EmailVerification";
 import SignUpHeader from "@/components/client/SignUpHeader";
 import BusinessInformation from "@/components/provider/BusinessInformation";
 import EmailSignup from "@/components/provider/EmailSignup";
@@ -8,7 +8,7 @@ import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const SignUpWithEmail = () => {
-	const [steps, setSteps] = useState(1);
+	const [steps, setSteps] = useState(3);
 	if (steps === 5) {
 		return <Welcome />;
 	}

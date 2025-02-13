@@ -66,7 +66,7 @@ const EmailSignInForm = () => {
 			</View>
 			<View className="flex-row justify-end">
 				<Link
-					href="/clients/forgot-password"
+					href="/forgot-password"
 					className="text-primary text-sm text-right"
 				>
 					Forgot Password

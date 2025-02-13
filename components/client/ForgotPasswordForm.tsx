@@ -1,9 +1,14 @@
-import { View, Text, TextInput, Pressable } from "react-native";
+import useUserType from "@/hooks/useUserType";
+import { useGlobalContext } from "@/providers/GlobalStateProvider";
+import { handleError } from "@/utils";
+import { Api } from "@/utils/endpoints";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { router } from "expo-router";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
+import { Pressable, Text, TextInput, View } from "react-native";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Link, router } from "expo-router";
 
 const FormSchema = z.object({
 	email: z.string().email(),
@@ -12,6 +17,7 @@ const FormSchema = z.object({
 type FormType = z.infer<typeof FormSchema>;
 
 const ForgotPasswordForm = () => {
+	const { userType } = useUserType();
 	const form = useForm<FormType>({
 		defaultValues: {
 			email: "",
@@ -19,7 +25,30 @@ const ForgotPasswordForm = () => {
 		resolver: zodResolver(FormSchema),
 	});
 
-	function submit(val: FormType) {}
+	const { setIsLoading } = useGlobalContext();
+	const { mutate } = useMutation({
+		mutationFn: Api.forgotPassword,
+		onMutate: () => setIsLoading(true),
+		onSettled: () => setIsLoading(false),
+	});
+
+	function submit(val: FormType) {
+		mutate(
+			{
+				type: userType,
+				payload: val,
+			},
+			{
+				onSuccess: (res) => {
+					console.log({ res });
+					router.push("/(auth)/reset-password");
+				},
+				onError: (err) => {
+					handleError(err);
+				},
+			}
+		);
+	}
 	return (
 		<View className="flex-1">
 			<View className="mb-5">
@@ -40,10 +69,15 @@ const ForgotPasswordForm = () => {
 						</View>
 					)}
 				/>
+				{form.formState.errors?.email && (
+					<Text className="text-xs text-red-400">
+						{form.formState.errors?.email.message ?? ""}
+					</Text>
+				)}
 			</View>
 
 			<Pressable
-				onPress={() => router.push("/clients/reset-password")}
+				onPress={form.handleSubmit(submit)}
 				className="bg-primary rounded px-1 py-[10px] mt-auto justify-center items-center"
 			>
 				<Text className="text-white">Submit</Text>

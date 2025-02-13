@@ -27,7 +27,6 @@ import GlobalStateProvider from "@/providers/GlobalStateProvider";
 import React from "react";
 import "react-native-get-random-values";
 
-
 function AppEntry() {
 	return (
 		<>

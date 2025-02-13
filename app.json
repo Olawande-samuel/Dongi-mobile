@@ -1,62 +1,78 @@
 {
-	"expo": {
-		"name": "Dongi",
-		"slug": "dongi",
-		"version": "1.0.0",
-		"orientation": "portrait",
-		"icon": "./assets/images/icon.png",
-		"scheme": "dongi",
-		"userInterfaceStyle": "automatic",
-		"newArchEnabled": true,
-		"ios": {
-			"supportsTablet": true,
-			"bundleIdentifier": "com.dongi.dongi",
-			"infoPlist": {
-				"NSLocationWhenInUseUsageDescription": "This app needs access to location services to show you nearby places.",
-				"NSLocationAlwaysAndWhenInUseUsageDescription": "This app needs access to location services to show you nearby places and provide background navigation."
-			}
-		},
-		"android": {
-			"adaptiveIcon": {
-				"foregroundImage": "./assets/images/adaptive-icon.png",
-				"backgroundColor": "#ffffff"
-			},
-			"package": "com.dongi.dongi"
-		},
-		"web": {
-			"bundler": "metro",
-			"output": "static",
-			"favicon": "./assets/images/favicon.png"
-		},
-		"plugins": [
-			"expo-router",
-			[
-				"expo-splash-screen",
-				{
-					"image": "./assets/images/icon.png",
-					"resizeMode": "cover",
-					"backgroundColor": "#18658B",
-					"imageWidth": "159"
-				}
-			],
-			[
-				"expo-camera",
-				{
-					"cameraPermission": "Allow $(PRODUCT_NAME) to access your camera to take a picture for identity verification",
-					"microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
-					"recordAudioAndroid": false
-				}
-			],
-			[
-				"expo-image-picker",
-				{
-					"photosPermission": "ALlow ${PRODUCT_NAME} to access your photos to let you set your business logo."
-				}
-			],
-			"expo-font"
-		],
-		"experiments": {
-			"typedRoutes": true
-		}
-	}
+  "expo": {
+    "name": "Dongi",
+    "slug": "dongi",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "dongi",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.dongi.dongi",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "This app needs access to location services to show you nearby places.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "This app needs access to location services to show you nearby places and provide background navigation.",
+        "NSCameraUsageDescription": "Allow $(PRODUCT_NAME) to access your camera"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.dongi.dongi",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ]
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/icon.png",
+          "resizeMode": "cover",
+          "backgroundColor": "#18658B",
+          "imageWidth": "159"
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera to take a picture for identity verification",
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
+          "recordAudioAndroid": false
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "ALlow ${PRODUCT_NAME} to access your photos to let you set your business logo."
+        }
+      ],
+      [
+        "expo-document-picker",
+        {
+          "iCloudContainerEnvironment": "Production"
+        }
+      ],
+      "expo-font"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "b455320a-c0dc-451a-8261-4ba11df2c439"
+      }
+    }
+  }
 }

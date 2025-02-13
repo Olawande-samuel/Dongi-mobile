@@ -5,12 +5,13 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Feather } from "@expo/vector-icons";
 import StyledButton from "../StyledButton";
+import useDocumentPicker from "@/hooks/useDocumentPicker";
 
 const FormSchema = z.object({
-	category: z.string(),
-	banner: z.string(),
+	category_of_service: z.string(),
+	business_logo_or_passport_photo: z.string(),
 	bio: z.string(),
-	about: z.string(),
+	brief_introduction: z.string(),
 });
 
 type FormType = z.infer<typeof FormSchema>;
@@ -19,47 +20,66 @@ const BusinessInformation = ({
 }: {
 	nextStep: React.Dispatch<React.SetStateAction<number>>;
 }) => {
+	const { pickDocument } = useDocumentPicker();
+
 	const form = useForm<FormType>({
 		defaultValues: {
-			category: "",
-			banner: "",
+			category_of_service: "",
+			business_logo_or_passport_photo: "",
 			bio: "",
-			about: "",
+			brief_introduction: "",
 		},
 		resolver: zodResolver(FormSchema),
 	});
+
+	function onSubmit(val: FormType) {
+		nextStep((prev) => prev + 1);
+	}
+
 	return (
 		<View className="flex-1">
 			<View className="flex-1">
 				<View className="mb-5">
 					<Controller
 						control={form.control}
-						name="category"
+						name="category_of_service"
 						render={({ field }) => (
 							<View className="space-y-[6px]">
 								<Text className="text-sm text-off-black">
 									Category of Service
 								</Text>
 								<TextInput
-									secureTextEntry
-									placeholder="********"
+									placeholder=""
 									value={field.value}
 									onChangeText={field.onChange}
-									textContentType="password"
 									className="p-2 text-muted text-base rounded border border-inner-light"
 								/>
 							</View>
 						)}
 					/>
+					{form.formState.errors?.category_of_service && (
+						<Text className="text-xs text-red-400">
+							{form.formState.errors?.category_of_service.message ?? ""}
+						</Text>
+					)}
 				</View>
 				<View className="mb-5">
 					<Controller
 						control={form.control}
-						name="category"
+						name="business_logo_or_passport_photo"
 						render={({ field }) => (
 							<View className="space-y-[6px]">
 								<Text className="text-sm text-off-black">Business Banner</Text>
-								<Pressable className="relative border border-inner-light rounded py-[19px] px-2 justify-center items-center">
+								<Pressable
+									onPress={async () => {
+										const result = await pickDocument();
+										console.log({ result });
+										if (result) {
+											field.onChange(result);
+										}
+									}}
+									className="relative border border-inner-light rounded py-[19px] px-2 justify-center items-center"
+								>
 									<Feather
 										name="upload-cloud"
 										size={32}
@@ -73,6 +93,12 @@ const BusinessInformation = ({
 							</View>
 						)}
 					/>
+					{form.formState.errors?.business_logo_or_passport_photo && (
+						<Text className="text-xs text-red-400">
+							{form.formState.errors?.business_logo_or_passport_photo.message ??
+								""}
+						</Text>
+					)}
 				</View>
 				<View className="mb-5">
 					<Controller
@@ -86,6 +112,7 @@ const BusinessInformation = ({
 										placeholder="I am ..."
 										multiline
 										value={field.value}
+										maxLength={60}
 										onChangeText={field.onChange}
 										className="p-2 text-muted text-base rounded border border-inner-light"
 									/>
@@ -96,11 +123,16 @@ const BusinessInformation = ({
 							</View>
 						)}
 					/>
+					{form.formState.errors?.bio && (
+						<Text className="text-xs text-red-400">
+							{form.formState.errors?.bio.message ?? ""}
+						</Text>
+					)}
 				</View>
 				<View className="mb-5">
 					<Controller
 						control={form.control}
-						name="about"
+						name="brief_introduction"
 						render={({ field }) => (
 							<View className="space-y-[6px]">
 								<Text className="text-sm text-off-black">
@@ -118,13 +150,15 @@ const BusinessInformation = ({
 							</View>
 						)}
 					/>
+					{form.formState.errors?.brief_introduction && (
+						<Text className="text-xs text-red-400">
+							{form.formState.errors?.brief_introduction.message ?? ""}
+						</Text>
+					)}
 				</View>
 			</View>
 			<View className="mt-auto">
-				<StyledButton
-					title="Continue"
-					onPress={() => nextStep((prev) => prev + 1)}
-				/>
+				<StyledButton title="Continue" onPress={form.handleSubmit(onSubmit)} />
 			</View>
 		</View>
 	);

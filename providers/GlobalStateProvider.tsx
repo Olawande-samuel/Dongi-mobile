@@ -15,7 +15,15 @@ type context = {
 
 const GlobalContext = createContext<context | null>(null);
 
-export const useGlobalContext = () => useContext(GlobalContext);
+export const useGlobalContext = () => {
+	const context = useContext(GlobalContext);
+	if (context === null) {
+		throw new Error(
+			"useGlobalContext must be used within a GlobalStateProvider"
+		);
+	}
+	return context;
+};
 
 const GlobalStateProvider = ({ children }: PropsWithChildren) => {
 	const [isLoading, setIsLoading] = useState(false);

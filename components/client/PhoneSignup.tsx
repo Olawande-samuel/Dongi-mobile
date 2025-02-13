@@ -1,26 +1,18 @@
+import useAsyncStorage from "@/hooks/useAsyncStorage";
+import useUserType from "@/hooks/useUserType";
 import { useGlobalContext } from "@/providers/GlobalStateProvider";
+import { handleError } from "@/utils";
 import { Api } from "@/utils/endpoints";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import {
-	Image,
-	Pressable,
-	Text,
-	TextInput,
-	TouchableOpacity,
-	View,
-} from "react-native";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { CountryPicker } from "react-native-country-codes-picker";
 import { toast } from "sonner-native";
 import { z } from "zod";
 import StyledButton from "../StyledButton";
-import useUserType from "@/hooks/useUserType";
-import useAsyncStorage from "@/hooks/useAsyncStorage";
-import { router } from "expo-router";
-import { AxiosError } from "axios";
-import { handleError } from "@/utils";
 
 const FormSchema = z.object({
 	phone: z.string().min(10).max(15),
@@ -35,8 +27,6 @@ const PhoneSignup = () => {
 	const [countryFlag, setCountryFlag] = useState("🇳🇬");
 	const globalContext = useGlobalContext();
 	const { setItem } = useAsyncStorage();
-
-	if (!globalContext) return null;
 
 	const { setIsLoading } = globalContext;
 
@@ -58,35 +48,61 @@ const PhoneSignup = () => {
 	});
 
 	function handleSubmit(val: FormType) {
-		mutate(
-			{
-				type: "client",
-				payload: { phone: countryCode.concat(val.phone) },
-			},
-			{
-				onSuccess: (res) => {
-					console.log({ res });
-					toast.success(res.data.message);
-					setItem(
-						"tempUser",
-						JSON.stringify({
-							phone: countryCode.concat(val.phone),
-							userId: res.data.data.token.user_id ?? "",
-						})
-					);
-					router.push("/clients/otp-verification");
+		if (userType === "client") {
+			mutate(
+				{
+					type: "client",
+					payload: { phone: countryCode.concat(val.phone) },
 				},
-				onError: (err) => {
-					console.log(err);
-					toast.error(err.message);
-					handleError(err);
+				{
+					onSuccess: (res) => {
+						console.log({ res });
+						toast.success(res.data.message);
+						setItem(
+							"tempUser",
+							JSON.stringify({
+								phone: countryCode.concat(val.phone),
+								userId: res.data.data.user.uuid ?? "",
+							})
+						);
+						router.push("/clients/phone-verification");
+					},
+					onError: (err) => {
+						handleError(err);
+					},
+				}
+			);
+		} else {
+			mutate(
+				{
+					type: "service",
+					payload: { phone: countryCode.concat(val.phone) },
 				},
-			}
-		);
+				{
+					onSuccess: (res) => {
+						console.log({ res });
+						toast.success(res.data.message);
+						setItem(
+							"tempUser",
+							JSON.stringify({
+								phone: countryCode.concat(val.phone),
+								userId: res.data.data.user.uuid ?? "",
+							})
+						);
+						router.push("/service-provider/phone-verification");
+					},
+					onError: (err) => {
+						console.log(err);
+						toast.error(err.message);
+						handleError(err);
+					},
+				}
+			);
+		}
 	}
 
 	return (
-		<View>
+		<View className="space-y-[13px]">
 			<Controller
 				control={form.control}
 				name="phone"
@@ -129,10 +145,12 @@ const PhoneSignup = () => {
 					</View>
 				)}
 			/>
-			<StyledButton
-				onPress={form.handleSubmit(handleSubmit)}
-				title="Continue"
-			/>
+			<View>
+				<StyledButton
+					onPress={form.handleSubmit(handleSubmit)}
+					title="Continue"
+				/>
+			</View>
 		</View>
 	);
 };

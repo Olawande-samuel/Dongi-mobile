@@ -1,38 +1,19 @@
-import { View, Text, TextInput, Pressable } from "react-native";
+import { FormType } from "@/app/(auth)/reset-password/_layout";
+import { router } from "expo-router";
 import React from "react";
-import { Controller, useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Link, router } from "expo-router";
-
-const FormSchema = z
-	.object({
-		password: z.string(),
-		confirmPassword: z.string(),
-	})
-	.refine((val) => val.password === val.confirmPassword, {
-		path: ["confirmPassword"],
-		message: "Passwords do not match",
-	});
-type FormType = z.infer<typeof FormSchema>;
+import { Controller, useFormContext } from "react-hook-form";
+import { Pressable, Text, TextInput, View } from "react-native";
 
 const ResetPasswordForm = () => {
-	const form = useForm<FormType>({
-		defaultValues: {
-			confirmPassword: "",
-			password: "",
-		},
-		resolver: zodResolver(FormSchema),
-	});
+	const form = useFormContext<FormType>();
 
-	function submit(val: FormType) {}
 	return (
 		<View className="flex-1">
 			<View className="flex-1">
 				<View className="mb-5">
 					<Controller
 						control={form.control}
-						name="password"
+						name="new_password"
 						render={({ field }) => (
 							<View className="space-y-[6px]">
 								<Text className="text-sm text-off-black">
@@ -53,7 +34,7 @@ const ResetPasswordForm = () => {
 				<View className="mb-5">
 					<Controller
 						control={form.control}
-						name="confirmPassword"
+						name="confirm_password"
 						render={({ field }) => (
 							<View className="space-y-[6px]">
 								<Text className="text-sm text-off-black">Confirm Password</Text>
@@ -71,7 +52,10 @@ const ResetPasswordForm = () => {
 				</View>
 			</View>
 			<Pressable
-				onPress={() => router.push("/(auth)/clients/sign-in/email")}
+				onPress={() => {
+					console.log("clicked");
+					router.push("/(auth)/reset-password/otp-verification");
+				}}
 				className="bg-primary rounded px-1 py-[10px] mt-auto justify-center items-center"
 			>
 				<Text className="text-white">Create new password</Text>

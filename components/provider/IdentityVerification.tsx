@@ -1,53 +1,129 @@
-import { View, Text, TextInput, Pressable } from "react-native";
+import useDocumentPicker from "@/hooks/useDocumentPicker";
+import { EvilIcons, Feather } from "@expo/vector-icons";
+import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
+import { Pressable, Text, View } from "react-native";
+import SelectDropdown from "react-native-select-dropdown";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Feather } from "@expo/vector-icons";
 import StyledButton from "../StyledButton";
 
 const FormSchema = z.object({
-	category: z.string(),
-	banner: z.string(),
-	bio: z.string(),
-	about: z.string(),
+	means_of_verification: z.string().min(3, { message: "Required" }),
+	means_of_verification_file: z.object({
+		uri: z.string(),
+		name: z.string(),
+		mimeType: z.string(),
+		size: z.number(),
+	}),
+	certificate_of_expertise_file: z.object({
+		uri: z.string(),
+		name: z.string(),
+		mimeType: z.string(),
+		size: z.number(),
+	}),
 });
 
 type FormType = z.infer<typeof FormSchema>;
+
 const IdentityVerification = ({
 	nextStep,
 }: {
 	nextStep: React.Dispatch<React.SetStateAction<number>>;
 }) => {
+	const { pickDocument } = useDocumentPicker();
 	const form = useForm<FormType>({
 		defaultValues: {
-			category: "",
-			banner: "",
-			bio: "",
-			about: "",
+			means_of_verification: "",
 		},
 		resolver: zodResolver(FormSchema),
 	});
+
+	console.log(form.formState.errors);
+
+	function submitForm(val: FormType) {
+		nextStep((prev) => prev + 1);
+	}
+
 	return (
 		<View className="flex-1">
 			<View className="flex-1">
 				<View className="mb-5">
 					<Controller
 						control={form.control}
-						name="category"
+						name="means_of_verification"
 						render={({ field }) => (
 							<View className="space-y-[6px]">
 								<Text className="text-sm text-off-black">
 									Choose a means of verification
 								</Text>
-								<TextInput
-									secureTextEntry
-									placeholder="********"
-									value={field.value}
-									onChangeText={field.onChange}
-									textContentType="password"
-									className="p-2 text-muted text-base rounded border border-inner-light"
-								/>
+								<View>
+									<SelectDropdown
+										data={[
+											{ title: "Driver's License", value: "DRIVERS_LICENSE" },
+											{ title: "NIN", value: "NIN" },
+											{ title: "Other", value: "OTHER" },
+										]}
+										onSelect={(selectedItem) => {
+											field.onChange(selectedItem.value);
+										}}
+										renderButton={(selectedItem, isOpened) => {
+											return (
+												<View
+													className="p-2 rounded flex-1"
+													style={{
+														paddingHorizontal: 8,
+														paddingVertical: 10,
+														borderRadius: 4,
+														borderWidth: 1,
+														borderColor: "#f2f2f2",
+														flexDirection: "row",
+														justifyContent: "space-between",
+														alignItems: "center",
+													}}
+												>
+													<Text
+														className="text-sm text-off-black"
+														style={{
+															fontSize: 16,
+															color: "#c6c6c6",
+															// fontWeight: 400,
+														}}
+													>
+														{(selectedItem && selectedItem.title) ||
+															"Select your gender"}
+													</Text>
+													<EvilIcons
+														name={isOpened ? "chevron-up" : "chevron-down"}
+														size={24}
+													/>
+												</View>
+											);
+										}}
+										renderItem={(item, index, isSelected) => {
+											return (
+												<View
+													className="p-3"
+													style={{
+														...(isSelected && { backgroundColor: "#D2D9DF" }),
+														padding: 12,
+													}}
+												>
+													<Text className="text-sm text-off-black">
+														{item.title}
+													</Text>
+												</View>
+											);
+										}}
+										showsVerticalScrollIndicator={false}
+									/>
+									{form.formState.errors?.means_of_verification && (
+										<Text className="text-xs text-red-400">
+											{form.formState.errors?.means_of_verification.message ??
+												""}
+										</Text>
+									)}
+								</View>
 							</View>
 						)}
 					/>
@@ -55,11 +131,20 @@ const IdentityVerification = ({
 				<View className="mb-5">
 					<Controller
 						control={form.control}
-						name="category"
+						name="means_of_verification_file"
 						render={({ field }) => (
 							<View className="space-y-[6px]">
 								<Text className="text-sm text-off-black">Upload document</Text>
-								<Pressable className="relative border border-inner-light rounded py-[19px] px-2 justify-center items-center">
+								<Pressable
+									onPress={async () => {
+										const result = await pickDocument();
+										console.log({ result });
+										if (result) {
+											field.onChange(result);
+										}
+									}}
+									className="relative border border-inner-light rounded py-[19px] px-2 justify-center items-center"
+								>
 									<Feather
 										name="upload-cloud"
 										size={32}
@@ -70,17 +155,31 @@ const IdentityVerification = ({
 							</View>
 						)}
 					/>
+					{form.formState.errors?.means_of_verification_file && (
+						<Text className="text-xs text-red-400">
+							{form.formState.errors?.means_of_verification_file.message ?? ""}
+						</Text>
+					)}
 				</View>
 				<View className="mb-5">
 					<Controller
 						control={form.control}
-						name="bio"
+						name="certificate_of_expertise_file"
 						render={({ field }) => (
 							<View className="space-y-[6px]">
 								<Text className="text-sm text-off-black">
 									Upload Business Certificate
 								</Text>
-								<Pressable className="relative border border-inner-light rounded py-[19px] px-2 justify-center items-center">
+								<Pressable
+									onPress={async () => {
+										const result = await pickDocument();
+										console.log({ bizResult: result });
+										if (result) {
+											field.onChange(result);
+										}
+									}}
+									className="relative border border-inner-light rounded py-[19px] px-2 justify-center items-center"
+								>
 									<Feather
 										name="upload-cloud"
 										size={32}
@@ -94,6 +193,11 @@ const IdentityVerification = ({
 							</View>
 						)}
 					/>
+					{form.formState.errors?.certificate_of_expertise_file && (
+						<Text className="text-xs text-red-400">
+							{form.formState.errors?.certificate_of_expertise_file.message ?? ""}
+						</Text>
+					)}
 				</View>
 			</View>
 			<View className="mt-auto">
@@ -103,10 +207,7 @@ const IdentityVerification = ({
 						Verification takes less than 24 hours
 					</Text>
 				</View>
-				<StyledButton
-					title="Verify"
-					onPress={() => nextStep((prev) => prev + 1)}
-				/>
+				<StyledButton title="Verify" onPress={form.handleSubmit(submitForm)} />
 			</View>
 		</View>
 	);

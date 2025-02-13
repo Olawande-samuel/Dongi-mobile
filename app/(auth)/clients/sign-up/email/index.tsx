@@ -1,14 +1,17 @@
 import EmailSignup from "@/components/client/EmailSignup";
+import EmailVerification from "@/components/client/EmailVerification";
 import FacialVerification from "@/components/client/FacialVerification";
-import OTP from "@/components/client/OTP";
 import SetupPassword from "@/components/client/SetupPassword";
 import SignUpHeader from "@/components/client/SignUpHeader";
 import Welcome from "@/components/Welcome";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Keyboard, Platform, TouchableWithoutFeedback } from "react-native";
+import { KeyboardAvoidingView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const SignUpWithEmail = () => {
 	const [steps, setSteps] = useState(1);
+
 	if (steps === 5) {
 		return <Welcome />;
 	}
@@ -20,7 +23,7 @@ const SignUpWithEmail = () => {
 					setSteps={setSteps}
 					title="Setup your account"
 				>
-					<EmailSignup steps={steps} setSteps={setSteps} />
+					<EmailSignup nextStep={setSteps} />
 				</SignUpHeader>
 			)}
 			{steps === 2 && (
@@ -29,7 +32,7 @@ const SignUpWithEmail = () => {
 					setSteps={setSteps}
 					title="Confirm your email"
 				>
-					<OTP steps={steps} setSteps={setSteps} />
+					<EmailVerification nextStep={setSteps} />
 				</SignUpHeader>
 			)}
 			{steps === 3 && (
@@ -38,7 +41,7 @@ const SignUpWithEmail = () => {
 					setSteps={setSteps}
 					title="Secure your account"
 				>
-					<SetupPassword steps={steps} setSteps={setSteps} />
+					<SetupPassword nextStep={setSteps} />
 				</SignUpHeader>
 			)}
 			{steps === 4 && <FacialVerification steps={steps} setSteps={setSteps} />}

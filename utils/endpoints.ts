@@ -3,10 +3,13 @@ import { baseInstance } from "./axiosSetup";
 
 class API {
 	async phoneSignup(data: {
-		type: "client" | "service";
+		type: USERTYPE;
 		payload: { phone: string };
 	}): Promise<
-		AxiosResponse<{ data: { token: PhoneRegistrationSignup }; message: string }>
+		AxiosResponse<{
+			data: { token: string; user: PhoneRegistrationSignup };
+			message: string;
+		}>
 	> {
 		try {
 			const endpoint = `/${
@@ -19,7 +22,7 @@ class API {
 		}
 	}
 	async phoneOTPVerification(data: {
-		type: "client" | "service";
+		type: USERTYPE;
 		payload: { code: string; phone: string; user_id: string };
 	}): Promise<AxiosResponse<any>> {
 		try {
@@ -33,7 +36,7 @@ class API {
 		}
 	}
 	async registerUserInfo(data: {
-		type: "client" | "service";
+		type: USERTYPE;
 		payload: CustomerRegistrationPayload;
 	}): Promise<AxiosResponse<any>> {
 		try {
@@ -47,7 +50,7 @@ class API {
 		}
 	}
 	async createPassword(data: {
-		type: "client" | "service";
+		type: USERTYPE;
 		payload: CreatePasswordPayload;
 	}): Promise<AxiosResponse<any>> {
 		try {
@@ -61,7 +64,7 @@ class API {
 		}
 	}
 	async verifyEmail(data: {
-		type: "client" | "service";
+		type: USERTYPE;
 		payload: VerifyEmail;
 	}): Promise<AxiosResponse<any>> {
 		try {
@@ -75,7 +78,7 @@ class API {
 		}
 	}
 	async resendToken(data: {
-		type: "client" | "service";
+		type: USERTYPE;
 		payload: ResendToken;
 	}): Promise<AxiosResponse<any>> {
 		try {
@@ -89,7 +92,7 @@ class API {
 		}
 	}
 	async forgotPassword(data: {
-		type: "client" | "service";
+		type: USERTYPE;
 		payload: { email: string };
 	}): Promise<AxiosResponse<any>> {
 		try {
@@ -103,7 +106,7 @@ class API {
 		}
 	}
 	async resetPassword(data: {
-		type: "client" | "service";
+		type: USERTYPE;
 		payload: ResetPasswordPayload;
 	}): Promise<AxiosResponse<any>> {
 		try {
@@ -117,7 +120,7 @@ class API {
 		}
 	}
 	async login(data: {
-		type: "client" | "service";
+		type: USERTYPE;
 		payload: { email: string; password: string };
 	}): Promise<AxiosResponse<any>> {
 		try {

@@ -1,13 +1,27 @@
+type USERTYPE = "client" | "service" | null;
+
 type PhoneRegistrationSignup = {
-	code: string;
+	address: string | null;
+	business_logo: string | null;
+	certificate_of_expertise_url: string | null;
 	created_at: string;
-	expired_at: string;
-	id: number;
-	key: string;
-	status: string;
-	type: string;
+	device_info: string | null;
+	email: string | null;
+	email_verified_at: string | null;
+	face_capture_url: string | null;
+	first_name: string | null;
+	gender: string | null;
+	id: 3;
+	ip_address: string | null;
+	last_name: string | null;
+	means_of_identification: string | null;
+	means_of_identification_url: string | null;
+	onboarding_step: 1;
+	password: string | null;
+	phone_number: string;
+	phone_verified_at: string | null;
 	updated_at: string;
-	user_id: string;
+	user_type: string;
 	uuid: string;
 };
 
@@ -26,7 +40,7 @@ type CreatePasswordPayload = {
 };
 type ResetPasswordPayload = {
 	token: string;
-	newPassword: string;
+	new_password: string;
 };
 type ResendToken = {
 	type: string;

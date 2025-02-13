@@ -19,7 +19,7 @@ export default function Index() {
 		}
 	}
 	return (
-		<SafeAreaView className="flex-1 bg-white px-6" edges={["top", "bottom"]}>
+		<SafeAreaView className="flex-1 px-6 bg-white" edges={["top"]}>
 			<View className="flex-1 bg-white justify-center items-center">
 				<View className="flex-1 justify-center items-center">
 					<View>

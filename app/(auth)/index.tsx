@@ -1,11 +1,12 @@
-import { View, Text, Image, Pressable } from "react-native";
-import React from "react";
+import { UserType } from "@/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
+import React from "react";
+import { Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { UserType } from "@/types";
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
+
+// NOT THIS 
 const Authentication = () => {
 	async function storeUserType(val: UserType) {
 		try {
@@ -21,7 +22,7 @@ const Authentication = () => {
 	}
 	//TODO: if user has previously signed in, go to user login screen
 	return (
-		<SafeAreaView className="flex-1 bg-white px-6" edges={["top", "bottom"]}>
+		<SafeAreaView className="flex-1 bg-white px-6" edges={["top"]}>
 			<View className="flex-1 bg-white justify-center items-center">
 				<View className="flex-1 justify-center items-center">
 					<View>

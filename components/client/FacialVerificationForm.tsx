@@ -93,22 +93,9 @@ const FacialVerificationForm = () => {
 
 	return (
 		<StyledView className="flex-1 relative">
-			<StyledView className="flex-1 border border-red-400 relative">
-				{/* <Image
-					source={require("../../assets/images/client/face-impose.png")}
-					className="w-4/5 h-4/5 border border-red-400 "
-					resizeMode="contain"
-				/> */}
-				{/* <StyledText
-					className={`absolute bottom-5 left-5 right-5 text-center text-lg font-bold ${
-						faceDetected ? "text-green-500" : "text-white"
-					}`}
-				>
-					{faceDetected
-						? "Face Detected"
-						: "Position your face within the outline"}
-				</StyledText> */}
-				<CameraView facing={facing} className="flex-1 border border-green-500" ref={cameraRef}>
+			<StyledView className="flex-1 ">
+				
+				<CameraView facing={facing} className="flex-1 " ref={cameraRef}>
 					<SvgHeadMask />
 				</CameraView>
 			</StyledView>
