@@ -2,8 +2,9 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState, useCallback } from "react";
 
+
 type AsyncStorageHook = {
-	getItem: (key: string) => Promise<string | null>;
+	getItem: (key: string) => any;
 	setItem: (key: string, value: string) => Promise<void>;
 	removeItem: (key: string) => Promise<void>;
 };

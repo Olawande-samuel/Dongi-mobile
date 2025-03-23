@@ -8,6 +8,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Api } from "@/utils/endpoints";
 import { toast } from "sonner-native";
 import { handleError } from "@/utils";
+import useUserType from "@/hooks/useUserType";
 
 const EmailVerification = ({
 	nextStep,
@@ -17,6 +18,7 @@ const EmailVerification = ({
 	const [otp, setOtp] = useState("");
 	const { data } = useTempUser();
 	const globalContext = useGlobalContext();
+	const { userType } = useUserType();
 
 	const { setIsLoading } = globalContext;
 
@@ -41,24 +43,49 @@ const EmailVerification = ({
 	}
 
 	function handleSubmit() {
-		mutate(
-			{
-				type: "client",
-				payload: {
-					user_id: data?.userId,
-					code: otp,
-					email: data?.email,
+		if (!otp) {
+			toast.error("Enter OTP to continue");
+			return;
+		}
+		if (userType === "client") {
+			mutate(
+				{
+					type: "client",
+					payload: {
+						user_id: data?.userId,
+						code: otp,
+						email: data?.email,
+					},
 				},
-			},
-			{
-				onSuccess: (res) => {
-					console.log({ res });
-					toast.success("Email Verified Successfully");
-					nextStep((prev) => prev + 1);
+				{
+					onSuccess: (res) => {
+						console.log({ res });
+						toast.success("Email Verified Successfully");
+						nextStep((prev) => prev + 1);
+					},
+					onError: (err) => handleError(err),
+				}
+			);
+		} else {
+			mutate(
+				{
+					type: "service",
+					payload: {
+						user_id: data?.userId,
+						code: otp,
+						email: data?.email,
+					},
 				},
-				onError: (err) => handleError(err),
-			}
-		);
+				{
+					onSuccess: (res) => {
+						console.log({ res });
+						toast.success("Email Verified Successfully");
+						nextStep((prev) => prev + 1);
+					},
+					onError: (err) => handleError(err),
+				}
+			);
+		}
 	}
 	return (
 		<View className="flex-1">
@@ -88,7 +115,7 @@ const EmailVerification = ({
 					/>
 				</View>
 			</View>
-			<View className="mt-auto">
+			<View className="mt-auto mb-3">
 				<StyledButton title="Submit" onPress={handleSubmit} />
 			</View>
 		</View>

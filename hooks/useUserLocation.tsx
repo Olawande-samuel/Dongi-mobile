@@ -12,7 +12,9 @@ const useUserLocation = () => {
 			if (status !== "granted") {
 				setErrorMsg("Permission to access location was denied");
 			}
-			let location = await Location.getCurrentPositionAsync();
+			let location = await Location.getCurrentPositionAsync({
+				accuracy: Location.Accuracy.High,
+			});
 			setLocation(location);
 		}
 		getCurrentLocation();
@@ -21,7 +23,15 @@ const useUserLocation = () => {
 	if (location) {
 	}
 
-	return { location, errorMsg };
+	return {
+		location: {
+			logitude: location?.coords.longitude,
+			latitutde: location?.coords.latitude,
+			latitudeDelta: 0.0922,
+			longitudeDelta: 0.0421,
+		},
+		errorMsg,
+	};
 };
 
 export default useUserLocation;

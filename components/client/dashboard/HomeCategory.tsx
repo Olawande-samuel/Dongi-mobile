@@ -1,3 +1,4 @@
+import useServiceCategories from "@/hooks/useServiceCategories";
 import { Link, router } from "expo-router";
 import React from "react";
 import { Image, Pressable, Text, View } from "react-native";
@@ -34,6 +35,7 @@ const categoryItems = [
 	},
 ];
 const HomeCategory = () => {
+	const { data, isLoading } = useServiceCategories();
 	return (
 		<View className="py-2 mb-3">
 			<View className="p-2 bg-light rounded-lg">

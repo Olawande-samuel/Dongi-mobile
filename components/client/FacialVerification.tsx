@@ -7,7 +7,6 @@ import TestFaceDetection from "./TestFaceDetection";
 
 const FacialVerification = ({
 	steps,
-	setSteps,
 }: {
 	steps: number;
 	setSteps: React.Dispatch<React.SetStateAction<number>>;
@@ -43,8 +42,8 @@ const FacialVerification = ({
 				</View>
 			</View>
 			<View className="flex-1">
-				<TestFaceDetection />
-				{/* <FacialVerificationForm /> */}
+				{/* <TestFaceDetection /> */}
+				<FacialVerificationForm />
 			</View>
 		</View>
 	);

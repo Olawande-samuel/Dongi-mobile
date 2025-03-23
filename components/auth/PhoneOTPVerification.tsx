@@ -1,38 +1,27 @@
-import { View, Text, Pressable } from "react-native";
-import React, { useEffect, useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Ionicons } from "@expo/vector-icons";
-import { OtpInput } from "react-native-otp-entry";
 import StyledButton from "@/components/StyledButton";
-import useAsyncStorage from "@/hooks/useAsyncStorage";
-import { useMutation } from "@tanstack/react-query";
-import { Api } from "@/utils/endpoints";
-import { toast } from "sonner-native";
+import useTempUser from "@/hooks/useTempUser";
+import useUserType from "@/hooks/useUserType";
 import { useGlobalContext } from "@/providers/GlobalStateProvider";
 import { handleError } from "@/utils";
+import { Api } from "@/utils/endpoints";
+import { Ionicons } from "@expo/vector-icons";
+import { useMutation } from "@tanstack/react-query";
 import { router } from "expo-router";
-import useUserType from "@/hooks/useUserType";
+import React, { useEffect, useState } from "react";
+import { Pressable, Text, View } from "react-native";
+import { OtpInput } from "react-native-otp-entry";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { toast } from "sonner-native";
 
 const PhoneOTPVerification = () => {
 	const { userType } = useUserType();
 	const [otp, setOtp] = useState("");
-	const [phone, setPhone] = useState({ phone: "", userId: "" });
-
+	const { data } = useTempUser();
 	const globalContext = useGlobalContext();
-	const { getItem } = useAsyncStorage();
+	const [countdown, setCountdown] = useState(20);
+	const [isRunning, setIsRunning] = useState(true);
 
 	const { setIsLoading } = globalContext;
-
-	useEffect(() => {
-		(async () => {
-			const val = await getItem("tempUser");
-			if (val) {
-				setPhone(JSON.parse(val));
-			}
-		})();
-	}, []);
-
-	console.log({ phone });
 
 	const { mutate } = useMutation({
 		mutationFn: Api.phoneOTPVerification,
@@ -47,7 +36,7 @@ const PhoneOTPVerification = () => {
 			mutate(
 				{
 					type: "client",
-					payload: { phone: phone.phone, code: otp, user_id: phone.userId },
+					payload: { phone: data.phone, code: otp, user_id: data.userId },
 				},
 				{
 					onSuccess: (res) => {
@@ -63,7 +52,7 @@ const PhoneOTPVerification = () => {
 			mutate(
 				{
 					type: "service",
-					payload: { phone: phone.phone, code: otp, user_id: phone.userId },
+					payload: { phone: data.phone, code: otp, user_id: data.userId },
 				},
 				{
 					onSuccess: (res) => {
@@ -71,12 +60,34 @@ const PhoneOTPVerification = () => {
 						router.push("/service-provider/sign-up/email");
 					},
 					onError: (err) => {
+						console.log(err);
 						handleError(err);
 					},
 				}
 			);
 		}
 	}
+
+	useEffect(() => {
+		let timer: any;
+		if (isRunning) {
+			timer = setInterval(() => {
+				setCountdown((prev) => prev - 1);
+				if (countdown === 1) {
+					setIsRunning(false);
+				}
+			}, 1000);
+		}
+		return () => {
+			if (timer) clearInterval(timer);
+		};
+	}, [countdown, isRunning]);
+
+	const resetCountdown = () => {
+		setCountdown(20);
+		setIsRunning(true);
+	};
+
 	return (
 		<SafeAreaView className="bg-white flex-1 px-6" edges={["top", "bottom"]}>
 			<View className="flex-row justify-between py-[10px] mb-[23.5px]">
@@ -86,13 +97,13 @@ const PhoneOTPVerification = () => {
 				<Text className="text-base text-off-black">Verify Phone Number </Text>
 				<View></View>
 			</View>
-			<View className="flex-1">
+			<View className="flex-1 pb-4">
 				<View className="flex-1">
 					<View className="flex-1">
 						<View className="mb-[6px]">
 							<Text className="text-sm text-off-black">
 								A code was sent to{" "}
-								<Text className="font-bold">{phone?.phone ?? ""}</Text>
+								<Text className="font-bold">{data?.phone ?? ""}</Text>
 							</Text>
 						</View>
 						<View>
@@ -102,6 +113,7 @@ const PhoneOTPVerification = () => {
 								type="numeric"
 								textInputProps={{
 									accessibilityLabel: "One-Time Password",
+									className: "text-sm",
 								}}
 								theme={{
 									pinCodeContainerStyle: {
@@ -112,6 +124,16 @@ const PhoneOTPVerification = () => {
 									},
 								}}
 							/>
+						</View>
+						<View className="flex-row gap-2 items-center mt-3">
+							<Text>Didn't get a token?</Text>
+							{countdown > 1 ? (
+								<Text>{countdown}</Text>
+							) : (
+								<Pressable onPress={resetCountdown}>
+									<Text className="underline">Resend</Text>
+								</Pressable>
+							)}
 						</View>
 					</View>
 					<View className="mt-auto">

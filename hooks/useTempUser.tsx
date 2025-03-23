@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import useAsyncStorage from "./useAsyncStorage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const useTempUser = () => {
 	const { getItem } = useAsyncStorage();
@@ -7,12 +8,13 @@ const useTempUser = () => {
 
 	useEffect(() => {
 		(async () => {
-			const val = await getItem("tempUser");
-			if (val) {
-				setPhone(JSON.parse(val));
+			const value = await AsyncStorage.getItem("tempUser");
+			if (value) {
+				setPhone(JSON.parse(value));
 			}
 		})();
 	}, []);
+
 	return { data: phone };
 };
 

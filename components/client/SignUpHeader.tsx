@@ -3,15 +3,22 @@ import React, { PropsWithChildren } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import useUserType from "@/hooks/useUserType";
 import { router } from "expo-router";
+import { cn } from "@/utils";
 
 interface Props extends PropsWithChildren {
 	steps: number;
 	title: string;
 	setSteps: React.Dispatch<React.SetStateAction<number>>;
+	totalSteps?: number;
 }
-const SignUpHeader = ({ steps, setSteps, title, children }: Props) => {
+const SignUpHeader = ({
+	steps,
+	setSteps,
+	title,
+	children,
+	totalSteps = 4,
+}: Props) => {
 	const { userType } = useUserType();
-	const isClient = userType === "client";
 
 	return (
 		<View className="flex-1">
@@ -31,14 +38,19 @@ const SignUpHeader = ({ steps, setSteps, title, children }: Props) => {
 				<View></View>
 			</View>
 			<View className="flex-row space-x-2 items-center mb-5">
-				{[...Array(4)].map((_, i) => (
+				{Array.from({ length: totalSteps }).map((_, i) => (
 					<View
 						key={i}
-						className={`h-1 basis-[20%] rounded-[999px] ${
+						className={cn(
+							"h-1 basis-[20%] rounded-[999px]",
 							steps >= i + 1
-								? `bg-${userType}-primary`
-								: `bg-${userType}-primary-light`
-						}`}
+								? userType === "client"
+									? `bg-client-primary`
+									: "bg-service-primary"
+								: userType === "client"
+								? "bg-client-primary-light"
+								: "bg-service-primary-light"
+						)}
 					></View>
 				))}
 

@@ -1,10 +1,16 @@
+import useAsyncStorage from "@/hooks/useAsyncStorage";
+import useUserType from "@/hooks/useUserType";
 import { UserType } from "@/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { router } from "expo-router";
+import { Redirect, router } from "expo-router";
+import { useEffect, useState } from "react";
 import { Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
+	const { getItem } = useAsyncStorage();
+	const isReturningUser = getItem("hasAccount");
+
 	async function storeUserType(val: UserType) {
 		try {
 			await AsyncStorage.setItem("userType", val);
@@ -17,6 +23,14 @@ export default function Index() {
 		} catch (error) {
 			console.log("Error storing data", error);
 		}
+	}
+
+	if (isReturningUser === "true") {
+		const { userType } = useUserType();
+		if (userType === "client") {
+			return <Redirect href="/(auth)/clients/sign-in/email" />;
+		}
+		return <Redirect href="/(auth)/service-provider/sign-in/email" />;
 	}
 	return (
 		<SafeAreaView className="flex-1 px-6 bg-white" edges={["top"]}>

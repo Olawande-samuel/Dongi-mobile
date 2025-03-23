@@ -65,6 +65,7 @@ const ForgotPasswordForm = () => {
 								keyboardType="email-address"
 								textContentType="emailAddress"
 								className="p-2 text-muted text-base rounded border border-inner-light"
+								autoCapitalize="none"
 							/>
 						</View>
 					)}
@@ -78,7 +79,7 @@ const ForgotPasswordForm = () => {
 
 			<Pressable
 				onPress={form.handleSubmit(submit)}
-				className="bg-primary rounded px-1 py-[10px] mt-auto justify-center items-center"
+				className="bg-primary rounded px-1 py-[10px] mt-auto justify-center items-center mb-3"
 			>
 				<Text className="text-white">Submit</Text>
 			</Pressable>

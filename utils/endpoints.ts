@@ -1,5 +1,5 @@
 import { AxiosError, AxiosResponse } from "axios";
-import { baseInstance } from "./axiosSetup";
+import { authInstance, baseInstance } from "./axiosSetup";
 
 class API {
 	async phoneSignup(data: {
@@ -128,6 +128,75 @@ class API {
 				data.type === "client" ? "customer" : "service-provider"
 			}/login`;
 			const response = await baseInstance.post(endpoint, data.payload);
+			return response;
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	}
+	async uploadUserPhoto(data: FormData): Promise<AxiosResponse<any>> {
+		console.log({ data });
+		try {
+			const endpoint = `/customer/upload-facial-capture`;
+			const response = await baseInstance.post(endpoint, data, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+				},
+			});
+			return response;
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	}
+	async registerBusinessInfo(data: FormData): Promise<AxiosResponse<any>> {
+		try {
+			const endpoint = `/service-provider/register-business-info`;
+			const response = await baseInstance.post(endpoint, data, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+				},
+			});
+			return response;
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	}
+	async registerVerificationDocs(data: FormData): Promise<AxiosResponse<any>> {
+		try {
+			const endpoint = `/service-providers/upload-verification-docs`;
+			const response = await baseInstance.post(endpoint, data, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+				},
+			});
+			return response;
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	}
+	async getServiceCategories(): Promise<AxiosResponse<any>> {
+		try {
+			const endpoint = `/categories`;
+			const response = await baseInstance.get(endpoint);
+			return response;
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	}
+	async getUserProfile(userType: USERTYPE): Promise<AxiosResponse<any>> {
+		try {
+			const endpoint = `/${
+				userType === "client" ? "customer" : "service-provider"
+			}/dashboard/profile`;
+			const response = await authInstance.get(endpoint);
+			return response;
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	}
+	async getClientServiceCategories(): Promise<AxiosResponse<any>> {
+		try {
+			const endpoint = `/categories`;
+			const response = await authInstance.get(endpoint);
 			return response;
 		} catch (error) {
 			return Promise.reject(error);

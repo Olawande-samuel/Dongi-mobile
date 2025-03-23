@@ -1,4 +1,5 @@
 import OTP from "@/components/client/EmailVerification";
+import SetupPassword from "@/components/client/SetupPassword";
 import SignUpHeader from "@/components/client/SignUpHeader";
 import BusinessInformation from "@/components/provider/BusinessInformation";
 import EmailSignup from "@/components/provider/EmailSignup";
@@ -8,8 +9,8 @@ import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const SignUpWithEmail = () => {
-	const [steps, setSteps] = useState(3);
-	if (steps === 5) {
+	const [steps, setSteps] = useState(1);
+	if (steps === 6) {
 		return <Welcome />;
 	}
 	return (
@@ -19,6 +20,7 @@ const SignUpWithEmail = () => {
 					steps={steps}
 					setSteps={setSteps}
 					title="Setup your account"
+					totalSteps={5}
 				>
 					<EmailSignup steps={steps} setSteps={setSteps} />
 				</SignUpHeader>
@@ -28,8 +30,9 @@ const SignUpWithEmail = () => {
 					steps={steps}
 					setSteps={setSteps}
 					title="Confirm your email"
+					totalSteps={5}
 				>
-					<OTP steps={steps} setSteps={setSteps} />
+					<OTP nextStep={setSteps} />
 				</SignUpHeader>
 			)}
 			{steps === 3 && (
@@ -39,7 +42,6 @@ const SignUpWithEmail = () => {
 					title="Set Up Your Account"
 				>
 					<BusinessInformation nextStep={setSteps} />
-					{/* <SetupPassword steps={steps} setSteps={setSteps} /> */}
 				</SignUpHeader>
 			)}
 			{steps === 4 && (
@@ -47,8 +49,19 @@ const SignUpWithEmail = () => {
 					steps={steps}
 					setSteps={setSteps}
 					title="Verify your identity"
+					totalSteps={5}
 				>
 					<IdentityVerification nextStep={setSteps} />
+				</SignUpHeader>
+			)}
+			{steps === 5 && (
+				<SignUpHeader
+					steps={steps}
+					setSteps={setSteps}
+					totalSteps={5}
+					title="Secure your account"
+				>
+					<SetupPassword nextStep={setSteps} />
 				</SignUpHeader>
 			)}
 		</SafeAreaView>

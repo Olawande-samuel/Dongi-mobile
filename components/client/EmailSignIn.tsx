@@ -1,7 +1,7 @@
 import { View, Text, Pressable } from "react-native";
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
-import EmailSignInForm from "./EmailSignInForm";
+import EmailSignInForm from "../shared/EmailSignInForm";
 import BackButton from "../BackButton";
 
 const EmailSignIn = () => {

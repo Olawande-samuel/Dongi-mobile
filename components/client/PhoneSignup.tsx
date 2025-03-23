@@ -56,15 +56,12 @@ const PhoneSignup = () => {
 				},
 				{
 					onSuccess: (res) => {
-						console.log({ res });
 						toast.success(res.data.message);
-						setItem(
-							"tempUser",
-							JSON.stringify({
-								phone: countryCode.concat(val.phone),
-								userId: res.data.data.user.uuid ?? "",
-							})
-						);
+						const tempUser = {
+							phone: countryCode.concat(val.phone),
+							userId: res.data.data.user.uuid ?? "",
+						};
+						setItem("tempUser", JSON.stringify(tempUser));
 						router.push("/clients/phone-verification");
 					},
 					onError: (err) => {
@@ -81,14 +78,15 @@ const PhoneSignup = () => {
 				{
 					onSuccess: (res) => {
 						console.log({ res });
+
 						toast.success(res.data.message);
-						setItem(
-							"tempUser",
-							JSON.stringify({
-								phone: countryCode.concat(val.phone),
-								userId: res.data.data.user.uuid ?? "",
-							})
-						);
+
+						const tempUser = {
+							phone: countryCode.concat(val.phone),
+							userId: res.data.data.user.uuid ?? "",
+						};
+						console.log({ tempUser });
+						setItem("tempUser", JSON.stringify(tempUser));
 						router.push("/service-provider/phone-verification");
 					},
 					onError: (err) => {

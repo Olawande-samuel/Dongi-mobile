@@ -1,7 +1,9 @@
 import { View, Text, Pressable, Image } from "react-native";
 import React from "react";
+import useUserInfo from "@/hooks/useUserInfo";
 
 const HomeUserInfo = () => {
+	const { data, isLoading } = useUserInfo();
 	return (
 		<View className="flex-row items-center mb-4">
 			<Text className="mr-4 font-semibold text-lg text-black">Hi, James</Text>

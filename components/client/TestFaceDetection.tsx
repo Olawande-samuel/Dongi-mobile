@@ -1,4 +1,4 @@
-import { View, Text, Dimensions } from "react-native";
+import { View, Text, Dimensions, Pressable } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Canvas, Oval, Group } from "@shopify/react-native-skia";
 import { Camera, CameraView } from "expo-camera";
@@ -10,6 +10,7 @@ const TestFaceDetection = () => {
 	const [hasPermission, setHasPermission] = useState<boolean | null>(null);
 
 	async function requestPermission() {
+		console.log("clicked");
 		const { status } = await Camera.getCameraPermissionsAsync();
 		setHasPermission(status === "granted");
 	}
@@ -19,11 +20,20 @@ const TestFaceDetection = () => {
 
 	if (!hasPermission) {
 		return (
-			<View className="flex-1">
-				<Text className="text-center text-red-500">
-					We need your permission to show your camera
-				</Text>
-				<Button onPress={requestPermission} title="Grant Permission" />
+			<View className="flex-1 border justify-center items-center">
+				<View>
+					<Text className="text-center text-green-500 mb-4">
+						We need your permission to show your camera
+					</Text>
+					<Pressable
+						onPress={requestPermission}
+						className="rounded px-1 py-[10px] mt-auto justify-center items-center bg-primary"
+					>
+						<Text className="text-white text-base font-regular">
+							Grant Permission
+						</Text>
+					</Pressable>
+				</View>
 			</View>
 		);
 	}

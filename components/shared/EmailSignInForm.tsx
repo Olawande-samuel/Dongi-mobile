@@ -4,6 +4,12 @@ import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, router } from "expo-router";
+import { useMutation } from "@tanstack/react-query";
+import { Api } from "@/utils/endpoints";
+import { useGlobalContext } from "@/providers/GlobalStateProvider";
+import { handleError } from "@/utils";
+import StyledButton from "../StyledButton";
+import useUserType from "@/hooks/useUserType";
 
 const FormSchema = z.object({
 	email: z.string().email(),
@@ -13,6 +19,8 @@ const FormSchema = z.object({
 type FormType = z.infer<typeof FormSchema>;
 
 const EmailSignInForm = () => {
+	const { setIsLoading } = useGlobalContext();
+	const { userType } = useUserType();
 	const form = useForm<FormType>({
 		defaultValues: {
 			email: "",
@@ -21,11 +29,35 @@ const EmailSignInForm = () => {
 		resolver: zodResolver(FormSchema),
 	});
 
-	function submit() {
-		router.replace("/client");
+	const { mutate } = useMutation({
+		mutationFn: Api.login,
+		onMutate: () => setIsLoading(true),
+		onSettled: () => setIsLoading(false),
+	});
+
+	function submit(val: FormType) {
+		mutate(
+			{
+				type: userType,
+				payload: val,
+			},
+			{
+				onSuccess: (res) => {
+					console.log(res);
+					if (userType === "client") {
+						router.replace("/(authenticated)/client");
+					} else {
+						router.replace("/(authenticated)/service-provider");
+					}
+				},
+				onError: (err) => {
+					handleError(err);
+				},
+			}
+		);
 	}
 	return (
-		<View className="flex-1">
+		<View className="">
 			<View className="mb-5">
 				<Controller
 					control={form.control}
@@ -64,7 +96,7 @@ const EmailSignInForm = () => {
 					)}
 				/>
 			</View>
-			<View className="flex-row justify-end">
+			<View className="flex-row justify-end mb-3">
 				<Link
 					href="/forgot-password"
 					className="text-primary text-sm text-right"
@@ -72,13 +104,7 @@ const EmailSignInForm = () => {
 					Forgot Password
 				</Link>
 			</View>
-
-			<Pressable
-				onPress={submit}
-				className="bg-primary rounded px-1 py-[10px] mt-auto justify-center items-center"
-			>
-				<Text className="text-white">Continue</Text>
-			</Pressable>
+			<StyledButton onPress={form.handleSubmit(submit)} title="Continue" />
 		</View>
 	);
 };

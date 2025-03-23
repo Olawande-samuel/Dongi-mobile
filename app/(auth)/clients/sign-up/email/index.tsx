@@ -4,9 +4,7 @@ import FacialVerification from "@/components/client/FacialVerification";
 import SetupPassword from "@/components/client/SetupPassword";
 import SignUpHeader from "@/components/client/SignUpHeader";
 import Welcome from "@/components/Welcome";
-import React, { useEffect, useState } from "react";
-import { Keyboard, Platform, TouchableWithoutFeedback } from "react-native";
-import { KeyboardAvoidingView } from "react-native";
+import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const SignUpWithEmail = () => {
@@ -16,7 +14,10 @@ const SignUpWithEmail = () => {
 		return <Welcome />;
 	}
 	return (
-		<SafeAreaView className="bg-white flex-1 px-6" edges={["top", "bottom"]}>
+		<SafeAreaView
+			className="bg-white flex-1 px-6 pb-4"
+			edges={["top", "bottom"]}
+		>
 			{steps === 1 && (
 				<SignUpHeader
 					steps={steps}

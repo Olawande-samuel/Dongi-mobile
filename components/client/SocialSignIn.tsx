@@ -25,14 +25,16 @@ const SocialSignIn = ({ isLogin = false }: { isLogin: boolean }) => {
 					{isLogin ? "Sign in" : "Sign up"} with Google
 				</Text>
 			</Pressable>
-			<Link
+			{/* <Link
 				asChild
 				href={
 					isLogin
 						? userType === "client"
 							? `/(auth)/clients/sign-in/email`
 							: `/(auth)/service-provider/sign-in/email`
-						: userType === "client" ? "/(auth)/clients/sign-up/email" :"/(auth)/service-provider/sign-up/email"
+						: userType === "client"
+						? "/(auth)/clients/sign-up/email"
+						: "/(auth)/service-provider/sign-up/email"
 				}
 			>
 				<Pressable className="mb-2 flex-row items-center bg-[#1FB4FF1A] rounded px-1 py-[10px] justify-center">
@@ -44,7 +46,7 @@ const SocialSignIn = ({ isLogin = false }: { isLogin: boolean }) => {
 						{isLogin ? "Sign in" : "Sign up"} with Email
 					</Text>
 				</Pressable>
-			</Link>
+			</Link> */}
 		</View>
 	);
 };
