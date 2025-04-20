@@ -12,19 +12,13 @@ const RequestsLayout = () => {
 				options={{
 					headerTitle: (props) => <DoubleHeader {...props} title="Request" />,
 					headerLeft: () => <BackButton />,
+					headerShadowVisible: false,
 				}}
 			/>
 			<Stack.Screen
 				name="view/[requestId]"
 				options={{
-					headerTitle: (props) => (
-						<DoubleHeader
-							{...props}
-							title="Ongoing Request"
-							subtitle="Real estate survey assistance"
-						/>
-					),
-					headerLeft: () => <BackButton />,
+					headerShown: false,
 				}}
 			/>
 		</Stack>

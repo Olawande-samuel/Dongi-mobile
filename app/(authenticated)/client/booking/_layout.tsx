@@ -15,7 +15,7 @@ const BookingLayout = () => {
 					headerTitle: (props) => <DoubleHeader {...props} />,
 					headerLeft: () => <BackButton />,
 					headerRight: () => (
-						<Pressable>
+						<Pressable onPress={() => router.back()}>
 							<Octicons name="share-android" size={24} color="#676B83" />
 						</Pressable>
 					),

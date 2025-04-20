@@ -15,12 +15,12 @@ function Tab({
 	return (
 		<Pressable
 			onPress={() => setTab(id)}
-			className={`py-[13px] px-3 w-full max-w-[129px] h-[44px] rounded-[999px] ${
+			className={`py-2 large:py-[13px] px-3 w-full max-w-[129px]  rounded-[999px] ${
 				isActive ? "bg-off-black" : "bg-transparent"
 			}`}
 		>
 			<Text
-				className={`text-sm text-center ${
+				className={`text-xs large:text-sm text-center ${
 					isActive ? "text-white" : "text-inactive"
 				}`}
 			>

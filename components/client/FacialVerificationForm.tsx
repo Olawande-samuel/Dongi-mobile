@@ -1,27 +1,15 @@
-import {
-	CameraType,
-	Camera,
-	CameraView,
-	useCameraPermissions,
-	CameraCapturedPicture,
-} from "expo-camera";
+import useAsyncStorage from "@/hooks/useAsyncStorage";
+import { useGlobalContext } from "@/providers/GlobalStateProvider";
+import { cn, handleError } from "@/utils";
+import { Api } from "@/utils/endpoints";
+import { Canvas, Group, Oval, Rect } from "@shopify/react-native-skia";
+import { useMutation } from "@tanstack/react-query";
+import { CameraType, CameraView, useCameraPermissions } from "expo-camera";
+import { ImageManipulator, SaveFormat } from "expo-image-manipulator";
+import { router } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Dimensions, Image, Pressable, Text, View } from "react-native";
-import { Canvas, Group, Oval, Rect } from "@shopify/react-native-skia";
 import { toast } from "sonner-native";
-import { cn, handleError } from "@/utils";
-import {
-	ImageManipulator,
-	SaveFormat,
-	manipulateAsync,
-	useImageManipulator,
-} from "expo-image-manipulator";
-import { useGlobalContext } from "@/providers/GlobalStateProvider";
-import useAsyncStorage from "@/hooks/useAsyncStorage";
-import { useMutation } from "@tanstack/react-query";
-import { Api } from "@/utils/endpoints";
-import { router } from "expo-router";
-// import * as ImageManipulator from "expo-image-manipulator";
 
 const { width, height } = Dimensions.get("window");
 
@@ -130,7 +118,7 @@ const FacialVerificationForm = () => {
 			if (userFile) {
 				const formdata = new FormData();
 				formdata.append("user_id", phone.userId);
-				formdata.append("avatar", userFile, userFile.name);
+				formdata.append("avatar", userFile);
 
 				mutate(formdata, {
 					onSuccess: (res) => {

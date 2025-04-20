@@ -10,18 +10,18 @@ const SocialSignIn = ({ isLogin = false }: { isLogin: boolean }) => {
 			<Pressable className="mb-2 flex-row items-center bg-[#1FB4FF1A] rounded px-1 py-[10px] justify-center">
 				<Image
 					source={require("../../assets/images/apple.png")}
-					className="w-6 h-6 mr-3 "
+					className="large:w-6 large:h-6 w-4 h-4 mr-3 "
 				/>
-				<Text className="text-primary text-base">
+				<Text className="text-primary text-sm large:text-base">
 					{isLogin ? "Sign in" : "Sign up"} with Apple
 				</Text>
 			</Pressable>
 			<Pressable className="mb-2 flex-row items-center bg-[#1FB4FF1A] rounded px-1 py-[10px] justify-center">
 				<Image
 					source={require("../../assets/images/google.png")}
-					className="w-6 h-6 mr-3 "
+					className="large:w-6 large:h-6 w-4 h-4 mr-3 "
 				/>
-				<Text className="text-primary text-base">
+				<Text className="text-primary text-sm large:text-base">
 					{isLogin ? "Sign in" : "Sign up"} with Google
 				</Text>
 			</Pressable>
@@ -42,7 +42,7 @@ const SocialSignIn = ({ isLogin = false }: { isLogin: boolean }) => {
 						source={require("../../assets/images/email.png")}
 						className="w-6 h-6 mr-3 "
 					/>
-					<Text className="text-primary text-base">
+					<Text className="text-primary text-sm large:text-base">
 						{isLogin ? "Sign in" : "Sign up"} with Email
 					</Text>
 				</Pressable>

@@ -1,8 +1,7 @@
-import { View, Text, Pressable } from "react-native";
 import React from "react";
-import { Ionicons } from "@expo/vector-icons";
-import EmailSignInForm from "../shared/EmailSignInForm";
+import { Text, View } from "react-native";
 import BackButton from "../BackButton";
+import EmailSignInForm from "../shared/EmailSignInForm";
 
 const EmailSignIn = () => {
 	return (
@@ -15,7 +14,7 @@ const EmailSignIn = () => {
 				<View></View>
 			</View>
 			<View className="flex-1">
-				<EmailSignInForm />
+				<EmailSignInForm userType="service" />
 			</View>
 		</View>
 	);

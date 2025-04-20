@@ -10,8 +10,7 @@ const HistoryLayout = () => {
 			<Stack.Screen
 				name="index"
 				options={{
-					headerTitle: "History",
-					headerLeft: () => <BackButton />,
+					headerShown: false,
 				}}
 			/>
 		</Stack>

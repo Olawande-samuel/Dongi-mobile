@@ -1,36 +1,16 @@
-import { View, Text, Pressable } from "react-native";
-import React from "react";
-import { Stack } from "expo-router";
-import DoubleHeader from "@/components/client/DoubleHeader";
 import BackButton from "@/components/BackButton";
-import { Octicons } from "@expo/vector-icons";
+import DoubleHeader from "@/components/client/DoubleHeader";
+import { Stack } from "expo-router";
+import React from "react";
 
 const ProfileLayout = () => {
 	return (
 		<Stack>
-			<Stack.Screen
-				name="public-view"
-				options={{
-					headerTitle: (props) => <DoubleHeader {...props} />,
-					headerLeft: () => <BackButton />,
-					headerRight: () => (
-						<Pressable>
-							<Octicons name="share-android" size={24} color="#676B83" />
-						</Pressable>
-					),
-					headerShadowVisible: false,
-				}}
-			/>
+			<Stack.Screen name="public-view" options={{ headerShown: false }} />
 			<Stack.Screen
 				name="info"
 				options={{
-					headerLeft: () => <BackButton />,
-					headerTitle: "Profile",
-					headerTitleStyle: {
-						fontSize: 16,
-						color: "#1A1B23",
-					},
-					headerShadowVisible: false,
+					headerShown: false,
 				}}
 			/>
 			<Stack.Screen
@@ -59,20 +39,19 @@ const ProfileLayout = () => {
 			<Stack.Screen
 				name="help/index"
 				options={{
-					headerTitle: "Help",
-					headerTitleStyle: {
-						fontSize: 16,
-						color: "#1A1B23",
-						fontWeight: 400,
-					},
-					headerLeft: () => <BackButton />,
-					headerShadowVisible: false,
+					headerShown: false,
 				}}
 			/>
 			<Stack.Screen
 				name="legal/index"
 				options={{
-					headerTitle: "Legal",
+					headerShown: false,
+				}}
+			/>
+			<Stack.Screen
+				name="finance"
+				options={{
+					headerTitle: "Finance",
 					headerTitleStyle: {
 						fontSize: 16,
 						color: "#1A1B23",
@@ -80,6 +59,8 @@ const ProfileLayout = () => {
 					},
 					headerLeft: () => <BackButton />,
 					headerShadowVisible: false,
+					headerTitleAlign: "center",
+					headerShown: false,
 				}}
 			/>
 		</Stack>

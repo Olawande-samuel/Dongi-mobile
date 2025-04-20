@@ -9,24 +9,66 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { AirbnbRating } from "react-native-ratings";
 import StyledButton from "@/components/StyledButton";
+import { useMutation } from "@tanstack/react-query";
+import { Api } from "@/utils/endpoints";
+import { useGlobalContext } from "@/providers/GlobalStateProvider";
+import { z } from "zod";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner-native";
+
+const FormSchema = z.object({
+	rate: z.string(),
+	message: z.string(),
+});
+
+type FormType = z.infer<typeof FormSchema>;
 
 function ReviewService({
 	compRef,
 	showCompletionModal,
+	bookingId,
 }: {
 	compRef: React.RefObject<BottomSheetModal>;
 	showCompletionModal: VoidFunction;
+	bookingId: string;
 }) {
 	const { dismissAll } = useBottomSheetModal();
 	const snapPoints = useMemo(() => ["50%"], []);
+
+	const globalContext = useGlobalContext();
+
+	const { setIsLoading } = globalContext;
 
 	const handleClosePress = useCallback(() => {
 		dismissAll();
 	}, [dismissAll]);
 
-	function handleSubmit() {
-		dismissAll();
-		showCompletionModal();
+	const form = useForm<FormType>({
+		defaultValues: {
+			rate: "",
+			message: "",
+		},
+		resolver: zodResolver(FormSchema),
+	});
+
+	const { mutate } = useMutation({
+		mutationFn: Api.rateService,
+		onMutate: () => setIsLoading(true),
+		onSettled: () => setIsLoading(false),
+	});
+
+	function handleSubmit(val: FormType) {
+		mutate(
+			{ id: bookingId, payload: val },
+			{
+				onSuccess: (res) => {
+					toast.success(res?.data?.message || "Rating submitted successfully");
+					dismissAll();
+					showCompletionModal();
+				},
+			}
+		);
 	}
 
 	return (
@@ -60,34 +102,62 @@ function ReviewService({
 						</Pressable>
 					</View>
 					<View>
-						<View className="mb-5">
-							<Text className="text-center text-base font-regular mb-2">
-								Rate your experience with John Musa
-							</Text>
-							<View className="flex-row justify-center gap-x-1">
-								<AirbnbRating
-									onFinishRating={(val) => console.log(val)}
-									showRating={false}
-									defaultRating={0}
-								/>
-							</View>
-						</View>
-						<View className="space-y-5 px-6 mb-[25px]">
-							<Text className="text-sm text-off-black font-regular mb-[6px]">
-								Write a review
-							</Text>
-							<View className="flex-row border p-2 border-inner-background-light h-[158px]">
-								<TextInput
-									placeholder="Mr John did a fantastic job ..."
-									className="flex-1 text-muted placeholder:text-muted text-base"
-									multiline
-								/>
-							</View>
-						</View>
+						<Controller
+							control={form.control}
+							name="rate"
+							render={({ field }) => (
+								<View className="mb-5">
+									<Text className="text-center text-base font-regular mb-2">
+										Rate your experience with John Musa
+									</Text>
+									<View className="flex-row justify-center gap-x-1">
+										<AirbnbRating
+											onFinishRating={field.onChange}
+											showRating={false}
+											defaultRating={0}
+										/>
+									</View>
+									{form.formState.errors?.rate && (
+										<Text className="text-xs text-red-400">
+											{form.formState.errors?.rate.message ?? ""}
+										</Text>
+									)}
+								</View>
+							)}
+						/>
+						<Controller
+							control={form.control}
+							name="message"
+							render={({ field }) => (
+								<View className="space-y-5 px-6 mb-[25px]">
+									<Text className="text-sm text-off-black font-regular mb-[6px]">
+										Write a review
+									</Text>
+									<View className="flex-row border p-2 border-inner-background-light h-[158px]">
+										<TextInput
+											placeholder="Mr John did a fantastic job ..."
+											className="flex-1 text-muted placeholder:text-muted text-base"
+											multiline
+											textAlignVertical="top"
+											value={field.value}
+											onChangeText={field.onChange}
+										/>
+									</View>
+									{form.formState.errors?.message && (
+										<Text className="text-xs text-red-400">
+											{form.formState.errors?.message.message ?? ""}
+										</Text>
+									)}
+								</View>
+							)}
+						/>
 					</View>
 				</View>
 				<View className="mt-auto px-6 mb-2">
-					<StyledButton title="Send" onPress={handleSubmit} />
+					<StyledButton
+						title="Send"
+						onPress={form.handleSubmit(handleSubmit)}
+					/>
 				</View>
 			</BottomSheetScrollView>
 		</BottomSheetModal>

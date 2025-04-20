@@ -1,14 +1,14 @@
-import { View, Text, Pressable } from "react-native";
-import React, { useState } from "react";
-import { OtpInput } from "react-native-otp-entry";
-import StyledButton from "../StyledButton";
 import useTempUser from "@/hooks/useTempUser";
 import { useGlobalContext } from "@/providers/GlobalStateProvider";
-import { useMutation } from "@tanstack/react-query";
-import { Api } from "@/utils/endpoints";
-import { toast } from "sonner-native";
+import { useTempStore } from "@/store/temp-user-store";
 import { handleError } from "@/utils";
-import useUserType from "@/hooks/useUserType";
+import { Api } from "@/utils/endpoints";
+import { useMutation } from "@tanstack/react-query";
+import React, { useState } from "react";
+import { Text, View } from "react-native";
+import { OtpInput } from "react-native-otp-entry";
+import { toast } from "sonner-native";
+import StyledButton from "../StyledButton";
 
 const EmailVerification = ({
 	nextStep,
@@ -18,7 +18,7 @@ const EmailVerification = ({
 	const [otp, setOtp] = useState("");
 	const { data } = useTempUser();
 	const globalContext = useGlobalContext();
-	const { userType } = useUserType();
+	const { userType } = useTempStore();
 
 	const { setIsLoading } = globalContext;
 

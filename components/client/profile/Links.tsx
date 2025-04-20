@@ -1,7 +1,7 @@
-import { View, Text, ImageSourcePropType, Image } from 'react-native'
-import React from 'react'
-import { Link } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
+import { View, Text, ImageSourcePropType, Image } from "react-native";
+import React from "react";
+import { Link } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 
 function Links({
 	source,
@@ -16,8 +16,14 @@ function Links({
 		<Link href={link}>
 			<View className="flex-row w-full justify-between items-center">
 				<View className="flex-row flex-1 gap-2 items-center">
-					<Image source={source} className="w-6 h-6" resizeMode="contain" />
-					<Text className="flex-1 text-base text-off-black font-regular max-w-[231px]">{title}</Text>
+					<Image
+						source={source}
+						className="w-4 large:w-6 h-4 large:h-6"
+						resizeMode="contain"
+					/>
+					<Text className="flex-1 text-sm large:text-base text-off-black font-regular max-w-[231px]">
+						{title}
+					</Text>
 				</View>
 
 				<Ionicons name="arrow-forward" size={20} color="#676B83" />
@@ -26,4 +32,4 @@ function Links({
 	);
 }
 
-export default Links
+export default Links;

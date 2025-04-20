@@ -1,17 +1,20 @@
+import { SIZES } from "@/utils/constants";
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { useRouter } from "expo-router";
 import React from "react";
-import { Pressable } from "react-native";
+import { Pressable, TouchableOpacity } from "react-native";
 
 const BackButton = () => {
+	const router = useRouter();
 	return (
-		<Pressable
+		<TouchableOpacity
 			onPress={() => {
 				router.back();
 			}}
+			className="size-20 "
 		>
-			<Ionicons name="arrow-back" size={24} />
-		</Pressable>
+			<Ionicons name="arrow-back" size={SIZES.height > 700 ? 24 : 18} />
+		</TouchableOpacity>
 	);
 };
 

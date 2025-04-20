@@ -1,16 +1,30 @@
 import { View, Text, Image, Pressable } from "react-native";
 import React from "react";
 import { router } from "expo-router";
+import { OngoingRequest } from "@/types";
+import moment from "moment";
 
-const RequestCard = () => {
+interface Props extends OngoingRequest {
+	activeTab: number;
+}
+
+const RequestCard = ({
+	message,
+	provider,
+	created_at,
+	uuid,
+	activeTab,
+}: Props) => {
 	return (
 		<Pressable
 			onPress={() =>
 				router.push({
 					pathname:
-						"/(authenticated)/service-provider/requests/view/[requestId]",
+						activeTab === 1
+							? "/(authenticated)/service-provider/requests/view/[requestId]"
+							: "/(authenticated)/service-provider/requests/new/[requestId]",
 					params: {
-						requestId: "1",
+						requestId: uuid,
 					},
 				})
 			}
@@ -19,15 +33,15 @@ const RequestCard = () => {
 				<View className="flex-row justify-between gap-x-4 flex-wrap mb-[10px]">
 					<View className="flex-row items-center">
 						<Image
-							className="h-[42px] w-[42px] rounded-full"
+							className="h-9 w-9 large:h-[42px] large:w-[42px] rounded-full"
 							source={require("../../../assets/images/client/temp_user_sq.png")}
 							resizeMode="cover"
 						/>
 						<View className="ml-2 space-y-1">
-							<Text className="text-base font-regular text-off-black">
-								John Musa
+							<Text className="text-sm large:text-base font-regular text-off-black">
+								{provider?.name || ""}
 							</Text>
-							<Text className="text-xs font-regular text-support">
+							<Text className="text-[10px] large:text-xs font-regular text-support">
 								Real estate agent
 							</Text>
 						</View>
@@ -39,23 +53,23 @@ const RequestCard = () => {
 								width={18}
 								height={18}
 								resizeMode="contain"
-								className="w-[18px] h-[18px] mr-[6px]"
+								className="w-4 h-4 large:w-[18px] large:h-[18px] mr-[6px]"
 							/>
-							<Text className="font-regular text-sm text-off-black">Lagos</Text>
+							<Text className="font-regular text-xs large:text-sm text-off-black">
+								Lagos
+							</Text>
 						</View>
 						<Text className="text-xs text-end font-regular text-primaryII">
-							20 Nov • 08:30AM
+							{moment(created_at).format("DD MMM • hh:mmA")}
 						</Text>
 					</View>
 				</View>
 				<View className="border border-inner-light p-2 rounded ">
 					<Text
-						className="text-base font-regular text-off-black"
+						className="text-sm large:text-base font-regular text-off-black"
 						numberOfLines={3}
 					>
-						I’m planning to sell my property but need advice on pricing and
-						staging. Can you assist with marketing it to attract potential
-						buyers?
+						{message}
 					</Text>
 				</View>
 			</View>

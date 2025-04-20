@@ -3,12 +3,15 @@ import React, { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import useUserType from "@/hooks/useUserType";
 import { router } from "expo-router";
+import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 
 const Welcome = () => {
 	const { userType } = useUserType();
+	const { setItem } = useAsyncStorage("hasAccount");
 
 	useEffect(() => {
 		const timeout = setTimeout(() => {
+			setItem(JSON.stringify(true));
 			if (userType === "client") {
 				router.push("/client");
 			} else {

@@ -13,12 +13,7 @@ const Layout = () => {
 			<Stack.Screen
 				name="history/[serviceId]"
 				options={{
-					headerTitle: "Completed",
-					headerLeft: () => <BackButton />,
-					headerShadowVisible: false,
-					headerTitleStyle: {
-						fontWeight: 400,
-					},
+					headerShown: false,
 				}}
 			/>
 			<Stack.Screen name="profile" options={{ headerShown: false }} />

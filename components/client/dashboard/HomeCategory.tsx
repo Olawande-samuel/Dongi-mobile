@@ -45,11 +45,11 @@ const HomeCategory = () => {
 						See more
 					</Link>
 				</View>
-				<View className="flex-row flex-wrap justify-between gap-4">
+				<View className="flex-row flex-wrap justify-between gap-y-4 ">
 					{categoryItems.map((item) => (
 						<Pressable
 							key={item.id}
-							className="w-[99px]"
+							className="w-[99px] "
 							onPress={() =>
 								router.push({
 									pathname: "/client/search/category/[query]",
@@ -59,10 +59,10 @@ const HomeCategory = () => {
 								})
 							}
 						>
-							<View className="h-[100px] mb-2 w-[99px] rounded-lg border-[0.5px] border-primary">
+							<View className="h-[100px] mb-2 rounded-lg border-[0.5px] border-primary">
 								<Image
 									source={item.image}
-									className="w-[99px] h-[100px]"
+									className="w-[99px] h-[100px] rounded-lg "
 									resizeMode="cover"
 								/>
 							</View>

@@ -8,6 +8,10 @@ module.exports = {
 	],
 	theme: {
 		extend: {
+			screens: {
+				small: { raw: "(max-height: 700px)" },
+				large: { raw: "(min-height: 701px)" },
+			},
 			colors: {
 				primary: "#18658B",
 				primaryII: "#E4AE1B",
@@ -19,6 +23,7 @@ module.exports = {
 				"off-black": "#1A1B23",
 				"success-100": "#D1FADF",
 				"success-500": "#12B76A",
+				"success-600": "#039855",
 				"inner-light": "#F2F2F2",
 				"inner-background-light": "#F9FAFC",
 				"outer-light": "#FAFAFA",

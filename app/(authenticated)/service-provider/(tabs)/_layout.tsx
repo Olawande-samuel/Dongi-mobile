@@ -1,11 +1,9 @@
-import { View, Text } from "react-native";
-import { Tabs } from "expo-router";
-import Home from "@/svgs/Home";
-import Search from "@/svgs/Search";
-import Profile from "@/svgs/Profile";
-import History from "@/svgs/History";
-import Services from "@/svgs/Services";
 import useUserType from "@/hooks/useUserType";
+import History from "@/svgs/History";
+import Home from "@/svgs/Home";
+import Profile from "@/svgs/Profile";
+import Services from "@/svgs/Services";
+import { Tabs } from "expo-router";
 
 const Layout = () => {
 	const { userType } = useUserType();

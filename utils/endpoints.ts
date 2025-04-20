@@ -1,4 +1,13 @@
-import { AxiosError, AxiosResponse } from "axios";
+import {
+	ICategoryServices,
+	ICompletedRequest,
+	IProviderService,
+	IRequestInfo,
+	IService,
+	IUser,
+	OngoingRequest,
+} from "@/types";
+import { AxiosResponse } from "axios";
 import { authInstance, baseInstance } from "./axiosSetup";
 
 class API {
@@ -134,7 +143,6 @@ class API {
 		}
 	}
 	async uploadUserPhoto(data: FormData): Promise<AxiosResponse<any>> {
-		console.log({ data });
 		try {
 			const endpoint = `/customer/upload-facial-capture`;
 			const response = await baseInstance.post(endpoint, data, {
@@ -182,7 +190,9 @@ class API {
 			return Promise.reject(error);
 		}
 	}
-	async getUserProfile(userType: USERTYPE): Promise<AxiosResponse<any>> {
+	async getUserProfile(
+		userType: USERTYPE
+	): Promise<AxiosResponse<{ data: IUser }>> {
 		try {
 			const endpoint = `/${
 				userType === "client" ? "customer" : "service-provider"
@@ -193,10 +203,283 @@ class API {
 			return Promise.reject(error);
 		}
 	}
-	async getClientServiceCategories(): Promise<AxiosResponse<any>> {
+	async getClientServiceCategories(): Promise<
+		AxiosResponse<{
+			data: {
+				categories: IService[];
+			};
+		}>
+	> {
 		try {
 			const endpoint = `/categories`;
 			const response = await authInstance.get(endpoint);
+			return response;
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	}
+	async getCategoryServices(id: string): Promise<
+		AxiosResponse<{
+			data: {
+				services: ICategoryServices[];
+			};
+		}>
+	> {
+		try {
+			const endpoint = `/services/category/${id}`;
+			const response = await authInstance.get(endpoint);
+			return response;
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	}
+	async requestService(data: {
+		id: string;
+		payload: {
+			deadline: string;
+			location: string;
+			latitude: number;
+			longitude: number;
+			message: string;
+		};
+	}): Promise<AxiosResponse<any>> {
+		try {
+			const endpoint = `/requests/${data.id}`;
+			const response = await authInstance.post(endpoint, data.payload);
+			return response;
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	}
+	async getPendingRequests(): Promise<
+		AxiosResponse<{
+			data: {
+				requests: OngoingRequest[];
+			};
+		}>
+	> {
+		try {
+			const endpoint = `/requests/customer/pending`;
+			const response = await authInstance.get(endpoint);
+			return response;
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	}
+	async getOngoingRequests(): Promise<
+		AxiosResponse<{
+			data: {
+				requests: OngoingRequest[];
+			};
+		}>
+	> {
+		try {
+			const endpoint = `/requests/customer/ongoing`;
+			const response = await authInstance.get(endpoint);
+			return response;
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	}
+	async getCompletedRequests(): Promise<
+		AxiosResponse<{
+			data: {
+				requests: ICompletedRequest[];
+			};
+		}>
+	> {
+		try {
+			const endpoint = `/requests/customer/completed`;
+			const response = await authInstance.get(endpoint);
+			return response;
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	}
+	async getRequestById(id: string): Promise<
+		AxiosResponse<{
+			data: IRequestInfo;
+		}>
+	> {
+		try {
+			const endpoint = `/requests/${id}`;
+			const response = await authInstance.get(endpoint);
+			return response;
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	}
+	async rateService(data: {
+		id: string;
+		payload: { rate: string; message: string };
+	}): Promise<AxiosResponse<any>> {
+		try {
+			const endpoint = `/rate/${data.id}`;
+			const response = await authInstance.post(endpoint, data.payload);
+			return response;
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	}
+
+	async searchService(query: {
+		query?: string;
+		category?: string;
+		lat?: string;
+		lng?: string;
+	}): Promise<
+		AxiosResponse<{
+			data: {
+				services: ICategoryServices[];
+			};
+		}>
+	> {
+		const queryString = Object.entries(query)
+			.filter(([_, value]) => value !== undefined)
+			.map(([key, value]) => `${key}=${value}`)
+			.join("&");
+		try {
+			const endpoint = `/services/search?${queryString}`;
+			const response = await authInstance.get(endpoint);
+			return response;
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	}
+	async getProviderPendingRequests(): Promise<
+		AxiosResponse<{
+			data: {
+				requests: OngoingRequest[];
+			};
+		}>
+	> {
+		try {
+			const endpoint = `/requests/customer/pending`;
+			const response = await authInstance.get(endpoint);
+			return response;
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	}
+	async getProviderOngoingRequests(): Promise<
+		AxiosResponse<{
+			data: {
+				requests: OngoingRequest[];
+			};
+		}>
+	> {
+		try {
+			const endpoint = `/requests/customer/ongoing`;
+			const response = await authInstance.get(endpoint);
+			return response;
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	}
+	async getProviderCompletedRequests(): Promise<
+		AxiosResponse<{
+			data: {
+				requests: ICompletedRequest[];
+			};
+		}>
+	> {
+		try {
+			const endpoint = `/requests/customer/completed`;
+			const response = await authInstance.get(endpoint);
+			return response;
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	}
+	async acceptServiceRequest(id: string): Promise<AxiosResponse<any>> {
+		try {
+			const endpoint = `/requests/accept/${id}`;
+			const response = await authInstance.post(endpoint);
+			return response;
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	}
+	async rejectServiceRequest(id: string): Promise<AxiosResponse<any>> {
+		try {
+			const endpoint = `/requests/decline/${id}`;
+			const response = await authInstance.post(endpoint);
+			return response;
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	}
+	async getProvidersServices(providerId: string): Promise<
+		AxiosResponse<{
+			data: {
+				services: IProviderService[];
+			};
+		}>
+	> {
+		try {
+			const endpoint = `/services/provider/${providerId}`;
+			const response = await authInstance.get(endpoint);
+			return response;
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	}
+	async getServices(): Promise<
+		AxiosResponse<{
+			data: {
+				services: IProviderService[];
+			};
+		}>
+	> {
+		try {
+			const endpoint = `/services`;
+			const response = await authInstance.get(endpoint);
+			return response;
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	}
+	async getServiceById(serviceId: string): Promise<
+		AxiosResponse<{
+			data: IProviderService;
+		}>
+	> {
+		try {
+			const endpoint = `/services/${serviceId}`;
+			const response = await authInstance.get(endpoint);
+			return response;
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	}
+	async createNewService(data: {
+		category_id: string;
+		description: string;
+		starting_price?: number;
+		name: string;
+		images: string[];
+	}): Promise<AxiosResponse<any>> {
+		try {
+			const endpoint = `/services`;
+			const response = await authInstance.post(endpoint, data);
+			return response;
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	}
+	async editService(data: {
+		serviceId: string;
+		payload: {
+			category_id: string;
+			description: string;
+			starting_price?: number;
+			name: string;
+			images: string[];
+		};
+	}): Promise<AxiosResponse<any>> {
+		try {
+			const endpoint = `/services/${data.serviceId}`;
+			const response = await authInstance.put(endpoint, data.payload);
 			return response;
 		} catch (error) {
 			return Promise.reject(error);

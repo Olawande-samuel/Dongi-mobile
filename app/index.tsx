@@ -1,19 +1,25 @@
-import useAsyncStorage from "@/hooks/useAsyncStorage";
+import Welcome from "@/components/Welcome";
+import { useAuth } from "@/context/Auth";
 import useUserType from "@/hooks/useUserType";
+import { useTempStore } from "@/store/temp-user-store";
 import { UserType } from "@/types";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useResponseInterceptor } from "@/utils/axiosSetup";
 import { Redirect, router } from "expo-router";
-import { useEffect, useState } from "react";
 import { Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
-	const { getItem } = useAsyncStorage();
-	const isReturningUser = getItem("hasAccount");
+	const { user, userType, isLoading } = useAuth();
+	const { userType: user_type } = useUserType();
+
+	const { setUserType } = useTempStore();
+
+	useResponseInterceptor();
 
 	async function storeUserType(val: UserType) {
 		try {
-			await AsyncStorage.setItem("userType", val);
+			// await AsyncStorage.setItem("userType", val);
+			setUserType(val);
 			if (val === "client") {
 				router.push("/(auth)/clients/sign-up");
 			} else {
@@ -25,13 +31,25 @@ export default function Index() {
 		}
 	}
 
-	if (isReturningUser === "true") {
-		const { userType } = useUserType();
-		if (userType === "client") {
+	if (isLoading) {
+		return <Welcome />;
+	}
+
+	if (!user) {
+		if (user_type === "client") {
 			return <Redirect href="/(auth)/clients/sign-in/email" />;
 		}
 		return <Redirect href="/(auth)/service-provider/sign-in/email" />;
 	}
+
+	if (user && userType === "service") {
+		return <Redirect href="/service-provider/(tabs)" />;
+	}
+
+	if (user && userType === "client") {
+		return <Redirect href="/client/(tabs)" />;
+	}
+
 	return (
 		<SafeAreaView className="flex-1 px-6 bg-white" edges={["top"]}>
 			<View className="flex-1 bg-white justify-center items-center">

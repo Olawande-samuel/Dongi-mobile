@@ -1,14 +1,26 @@
-import { View, Text, FlatList } from "react-native";
-import React from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import { toast } from "sonner-native";
-import { Pressable } from "react-native";
-import { router } from "expo-router";
+import useCurrentLocation from "@/hooks/useCurrentLocation";
+import { SIZES } from "@/utils/constants";
 import { Ionicons } from "@expo/vector-icons";
-import Header from "@/components/Header";
+import { router } from "expo-router";
+import React from "react";
+import {
+	ActivityIndicator,
+	FlatList,
+	Pressable,
+	Text,
+	View,
+} from "react-native";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { toast } from "sonner-native";
 
 function LocationForm() {
+	const { address, loading, location } = useCurrentLocation();
+
+	function handleLocationUpdate() {
+		// update location with coordinates and address
+		// invalidate location queries: userProfile
+	}
 	return (
 		<View className="flex-1 p-6">
 			<View className="space-y-[6px]">
@@ -39,6 +51,22 @@ function LocationForm() {
 						}}
 					/>
 				</View>
+				<View>
+					{loading ? (
+						<View className="items-center justify-center">
+							<ActivityIndicator />
+						</View>
+					) : (
+						<View>
+							<Text className="text-primary">Your current location</Text>
+							<Pressable onPress={handleLocationUpdate}>
+								<View>
+									<Text>{address}</Text>
+								</View>
+							</Pressable>
+						</View>
+					)}
+				</View>
 			</View>
 		</View>
 	);
@@ -53,7 +81,11 @@ const ChangeLocation = () => {
 						router.dismiss();
 					}}
 				>
-					<Ionicons name="arrow-back" size={24} color="#1A1B23" />
+					<Ionicons
+						name="arrow-back"
+						size={SIZES.height > 700 ? 24 : 18}
+						color="#1A1B23"
+					/>
 				</Pressable>
 				<Text className="text-base text-off-black">Change Location</Text>
 				<View></View>

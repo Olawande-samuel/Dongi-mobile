@@ -1,5 +1,6 @@
 import useTempUser from "@/hooks/useTempUser";
 import { useGlobalContext } from "@/providers/GlobalStateProvider";
+import { useTempStore } from "@/store/temp-user-store";
 import { handleError } from "@/utils";
 import { Api } from "@/utils/endpoints";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -38,6 +39,7 @@ const SetupPassword = ({
 }) => {
 	const globalContext = useGlobalContext();
 	const { data } = useTempUser();
+	const { userType } = useTempStore();
 
 	const form = useForm<FormType>({
 		defaultValues: {
@@ -57,7 +59,7 @@ const SetupPassword = ({
 
 	function handleSubmit(val: FormType) {
 		mutate(
-			{ type: "client", payload: { ...val, user_id: data.userId } },
+			{ type: userType, payload: { ...val, user_id: data.userId } },
 			{
 				onSuccess: (res) => {
 					toast.success("Password Set Successfully");

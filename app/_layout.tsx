@@ -1,4 +1,3 @@
-import AuthProvider from "@/providers/AuthProvider";
 import { SplashScreen, Stack } from "expo-router";
 import {
 	useFonts,
@@ -26,6 +25,7 @@ import QueryProvider from "@/providers/QueryProvider";
 import GlobalStateProvider from "@/providers/GlobalStateProvider";
 import React from "react";
 import "react-native-get-random-values";
+import { AuthProvider } from "@/context/Auth";
 
 function AppEntry() {
 	return (
@@ -68,8 +68,8 @@ export default function RootLayout() {
 		return null;
 	}
 	return (
-		<AuthProvider>
-			<QueryProvider>
+		<QueryProvider>
+			<AuthProvider>
 				<GestureHandlerRootView style={{ flex: 1 }}>
 					<GlobalStateProvider>
 						<BottomSheetModalProvider>
@@ -78,7 +78,7 @@ export default function RootLayout() {
 						</BottomSheetModalProvider>
 					</GlobalStateProvider>
 				</GestureHandlerRootView>
-			</QueryProvider>
-		</AuthProvider>
+			</AuthProvider>
+		</QueryProvider>
 	);
 }

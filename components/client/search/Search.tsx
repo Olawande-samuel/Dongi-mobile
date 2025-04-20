@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { Feather } from "@expo/vector-icons";
 import SearchBar from "../dashboard/SearchBar";
 import { cn } from "@/utils";
+import { IService } from "@/types";
+import CategoryServiceSearchBar from "../dashboard/CategoryServiceSearchBar";
 
 const categoryItems = [
 	{
@@ -70,8 +72,18 @@ function Tab({
 	);
 }
 
-const Search = () => {
-	const [activeTab, setActiveTab] = useState(1);
+interface Props {
+	categoryId?: number;
+	activeTab: number;
+	setActiveTab: React.Dispatch<React.SetStateAction<number>>;
+	searchValue: string;
+}
+
+const Search = ({
+	activeTab,
+	setActiveTab,
+	searchValue,
+}: Props) => {
 	return (
 		<View>
 			<View className="py-6 border-b border-outer-light px-6">
@@ -116,29 +128,29 @@ const Search = () => {
 				</View>
 			</View>
 			<View className="px-6 mb-3">
-                <ScrollView
-                    horizontal
-                    className="flex-1 flex-row gap-x-2"
-                    showsHorizontalScrollIndicator={false}
-                    snapToAlignment="center"
-                    decelerationRate="fast"
-                >
-                    <Tab
-                        title="All"
-                        id={1}
-                        isActive={activeTab === 1}
-                        setActiveTab={setActiveTab}
-                    />
-                    {categoryItems.map((item) => (
-                        <Tab
-                            key={item.id}
-                            title={item.name}
-                            id={item.id + 1}
-                            setActiveTab={setActiveTab}
-                            isActive={activeTab === item.id + 1}
-                        />
-                    ))}
-                </ScrollView>
+				<ScrollView
+					horizontal
+					className="flex-1 flex-row gap-x-2"
+					showsHorizontalScrollIndicator={false}
+					snapToAlignment="center"
+					decelerationRate="fast"
+				>
+					<Tab
+						title="All"
+						id={1}
+						isActive={activeTab === 1}
+						setActiveTab={setActiveTab}
+					/>
+					{/* {categoryItems.map((item) => (
+						<Tab
+							key={item.id}
+							title={item.name}
+							id={item.id + 1}
+							setActiveTab={setActiveTab}
+							isActive={activeTab === item.id + 1}
+						/>
+					))} */}
+				</ScrollView>
 			</View>
 		</View>
 	);

@@ -3,6 +3,7 @@ import React from "react";
 import ModalComp from "@/components/Modal";
 import Success from "@/svgs/Success";
 import StyledButton from "./StyledButton";
+import Warning from "@/svgs/Warning";
 
 interface Props {
 	modalVisible: boolean;
@@ -10,6 +11,8 @@ interface Props {
 	onPress: VoidFunction;
 	title: string;
 	buttonText?: string;
+	loading?: boolean;
+	type?: "warning" | "success";
 }
 const AppModal = ({
 	modalVisible,
@@ -17,14 +20,16 @@ const AppModal = ({
 	buttonText,
 	title,
 	onPress,
+	loading,
+	type = "success",
 }: Props) => {
 	return (
 		<ModalComp modalVisible={modalVisible} setModalVisible={setModalVisible}>
 			<View className="space-y-3 w-full" style={{ padding: 16 }}>
 				<View className="justify-center items-center">
-					<Success isServiceProvider />
+					{type === "success" ? <Success isServiceProvider /> : <Warning />}
 				</View>
-				<Text className="text-base font-regular text-off-black text-center">
+				<Text className="text-sm large:text-base font-regular text-off-black text-center">
 					{title}
 				</Text>
 				<View className="mt-auto mb-2">
@@ -32,6 +37,7 @@ const AppModal = ({
 						onPress={onPress}
 						textClassName="font-regular text-base"
 						title={buttonText ?? "Continue"}
+						isLoading={loading}
 					/>
 				</View>
 			</View>

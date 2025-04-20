@@ -10,24 +10,24 @@ const StatusPill = ({
 	buttonClassName?: string;
 }) => {
 	function getPillBGColor() {
-		switch (title) {
-			case "Pending":
+		switch (title.toLowerCase()) {
+			case "pending":
 				return "bg-blue-light";
-			case "Completed":
+			case "completed":
 				return "bg-success-100";
-			case "Cancelled":
+			case "cancelled":
 				return "bg-danger-100";
 			default:
 				return "bg-gray-100";
 		}
 	}
 	function getPillDotColor() {
-		switch (title) {
-			case "Pending":
+		switch (title.toLowerCase()) {
+			case "pending":
 				return "bg-blue-light-500";
-			case "Completed":
+			case "completed":
 				return "bg-success-500";
-			case "Cancelled":
+			case "cancelled":
 				return "bg-danger-500";
 			default:
 				return "bg-gray-100";
@@ -41,9 +41,11 @@ const StatusPill = ({
 			)}
 		>
 			<View
-				className={`h-[7.8px] w-[7.8px] rounded-full ${getPillDotColor()}`}
+				className={`h-[7.8px] w-[7.8px] rounded-full  ${getPillDotColor()}`}
 			></View>
-			<Text className="text-xs text-off-black font-regular">{title}</Text>
+			<Text className="text-[10px] large:text-xs text-off-black font-regular">
+				{title}
+			</Text>
 		</View>
 	);
 };

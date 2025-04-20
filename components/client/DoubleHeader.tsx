@@ -1,6 +1,5 @@
-import { View, Text } from "react-native";
 import React from "react";
-import { useLocalSearchParams } from "expo-router";
+import { Text, View } from "react-native";
 
 interface props {
 	children?: string;
@@ -8,17 +7,17 @@ interface props {
 	title?: string;
 	subtitle?: string;
 }
-const DoubleHeader = ({ title, subtitle, }: props) => {
-	const params = useLocalSearchParams();
-	console.log("DOUBLE HEADER, ", params);
+const DoubleHeader = ({ title, subtitle }: props) => {
 	return (
 		<View>
-			<Text className="text-center text-base text-off-black font-regular">
-				{title ?? "John Musa"}
+			<Text className="text-center text-xs large:text-base text-off-black font-regular">
+				{title}
 			</Text>
-			<Text className="text-center text-muted text-sm font-regular ">
-				{subtitle ?? "Real Estate Agent"}
-			</Text>
+			{subtitle && (
+				<Text className="text-center text-muted text-[10px] large:text-sm font-regular ">
+					{subtitle}
+				</Text>
+			)}
 		</View>
 	);
 };

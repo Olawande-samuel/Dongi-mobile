@@ -1,8 +1,14 @@
 import { View, Text, Image } from "react-native";
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
+import { ICategoryServices } from "@/types";
+import { formatCurrency } from "@/utils";
 
-const VendorProfile = () => {
+const VendorProfile = ({
+	provider,
+	description,
+	starting_price,
+}: ICategoryServices) => {
 	return (
 		<View className="flex-row mb-5">
 			<View className="mr-4">
@@ -16,8 +22,7 @@ const VendorProfile = () => {
 			<View className="flex-1 py-[6px] space-y-2 ">
 				<View>
 					<Text className="text-sm font-regular text-support mb-2">
-						I specialize in helping clients buy and sell property with
-						confidence.
+						{description || ""}
 					</Text>
 				</View>
 				<View className="flex-row justify-between">
@@ -25,13 +30,15 @@ const VendorProfile = () => {
 						<Text className="text-xs font-regular mb-1 text-muted">
 							Starting From
 						</Text>
-						<Text className="text-sm text-center text-off-black">#245</Text>
+						<Text className="text-sm text-center text-off-black">
+							{formatCurrency(starting_price)}
+						</Text>
 					</View>
 					<View>
 						<Text className="text-xs font-regular mb-1 text-muted">
 							Customers
 						</Text>
-						<Text className="text-sm text-center text-off-black">#245</Text>
+						<Text className="text-sm text-center text-off-black">245</Text>
 					</View>
 					<View>
 						<Text className="text-xs font-regular mb-1 text-muted">Rating</Text>

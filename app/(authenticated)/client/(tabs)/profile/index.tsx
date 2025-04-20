@@ -3,15 +3,10 @@ import DeleteAccountModal from "@/components/client/profile/DeleteAccountModal";
 import Links from "@/components/client/profile/Links";
 import SignOut from "@/components/client/profile/SignOut";
 import SignOutConfirmModal from "@/components/client/profile/SignOutConfirmModal";
-import {
-	BottomSheetModal
-} from "@gorhom/bottom-sheet";
+import useUserInfo from "@/hooks/useUserInfo";
+import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import React, { useCallback, useRef } from "react";
-import {
-	ScrollView,
-	Text,
-	View
-} from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const profile = require("../../../../../assets/images/client/profile/profile.png");
@@ -24,12 +19,15 @@ const Profile = () => {
 	const bottomSheetModalSignOutRef = useRef<BottomSheetModal>(null);
 	const bottomSheetModalDeleteAccountRef = useRef<BottomSheetModal>(null);
 
+	const { data, isLoading } = useUserInfo();
+
 	const handleSignoutModalPress = useCallback(() => {
 		bottomSheetModalSignOutRef.current?.present();
 	}, []);
 	const handleDeleteAccountModalPress = useCallback(() => {
 		bottomSheetModalDeleteAccountRef.current?.present();
 	}, []);
+
 	return (
 		<SafeAreaView className="flex-1 bg-white" edges={["bottom"]}>
 			<ScrollView
@@ -44,10 +42,10 @@ const Profile = () => {
 					</View>
 					<View>
 						<Text className="text-base font-semibold text-off-black mb-2">
-							Rebecca Anyaoku
+							{`${data?.firstname || ""} ${data?.lastname || ""}`}
 						</Text>
 						<Text className="text-base text-support font-normal font-regular">
-							Rebeccaanyaoku@gmail.com
+							{data?.email ||""}
 						</Text>
 					</View>
 				</View>

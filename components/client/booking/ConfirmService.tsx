@@ -9,6 +9,10 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import Delivery from "@/svgs/Delivery";
 import StatusPill from "@/components/StatusPill";
+import { useLocalSearchParams } from "expo-router";
+import { useQuery } from "@tanstack/react-query";
+import { Api } from "@/utils/endpoints";
+import moment from "moment";
 
 function ConfirmService({
 	compRef,
@@ -19,6 +23,16 @@ function ConfirmService({
 }) {
 	const { dismiss } = useBottomSheetModal();
 	const snapPoints = useMemo(() => ["90%"], []);
+
+	const params = useLocalSearchParams();
+	const bookingId = params?.["booking-id"];
+
+	const { data, isLoading } = useQuery({
+		queryKey: ["get request detail", bookingId as string],
+		queryFn: () => Api.getRequestById(bookingId as string),
+	});
+
+	const result = data?.data?.data;
 
 	const handleClosePress = useCallback(() => {
 		dismiss();
@@ -56,7 +70,7 @@ function ConfirmService({
 					</View>
 					<View className="px-6">
 						<Text className="text-center text-lg font-semibold text-off-black leading-[22.68px]">
-							John Musa has completed your Real estate survey assistance service
+							{`John Musa has completed your Real estate survey assistance service`}
 						</Text>
 						<View className="justify-center items-center mb-6">
 							<Delivery isServiceProvider={false} />
@@ -78,10 +92,10 @@ function ConfirmService({
 										Real estate agent
 									</Text>
 									<Text className="text-xs font-regular text-support">
-										Island Lagos, Nigeria
+										{result?.location || ""}
 									</Text>
 									<Text className="text-xs font-regular text-support">
-										20 Nov • 08:30AM
+										{moment(result?.created_at).format("DD MMM • hh:mmA")}
 									</Text>
 								</View>
 							</View>
@@ -91,7 +105,7 @@ function ConfirmService({
 								<Text className="text-support text-sm font-regular mr-4">
 									Status
 								</Text>
-								<StatusPill title="Pending" />
+								<StatusPill title={result?.status || ""} />
 							</View>
 							<View className="flex-row justify-between items-center">
 								<Text className="text-support text-sm font-regular mr-4">
@@ -106,7 +120,7 @@ function ConfirmService({
 									Date Requested
 								</Text>
 								<Text className="font-regular text-sm text-off-black text-right">
-									10 Nov. 11:30AM
+									{moment(result?.updated_at).format("DD MMM • hh:mmA")}
 								</Text>
 							</View>
 
@@ -121,8 +135,7 @@ function ConfirmService({
 										numberOfLines={1}
 										className=" flex-1 font-regular text-sm text-off-black text-right"
 									>
-										Hello John, I need assistance with real estate survey,
-										here’s is some info about my project
+										{result?.message || ""}
 									</Text>
 								</View>
 							</View>

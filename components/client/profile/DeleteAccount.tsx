@@ -11,10 +11,12 @@ const DeleteAccount = ({ showPrompt }: { showPrompt: VoidFunction }) => {
 			<View className="flex-row gap-2 items-center">
 				<Image
 					source={require("../../../assets/images/client/profile/delete.png")}
-					className="w-6 h-6"
+					className="w-4 large:w-6 h-4 large:h-6"
 					resizeMode="contain"
 				/>
-				<Text className="text-base text-off-black font-regular">Delete Account</Text>
+				<Text className="text-sm large:text-base text-off-black font-regular">
+					Delete Account
+				</Text>
 			</View>
 
 			<Ionicons name="arrow-forward" size={20} color="#676B83" />

@@ -1,30 +1,38 @@
 import { View, Text, Image, Pressable } from "react-native";
 import React from "react";
 import { router } from "expo-router";
+import { OngoingRequest } from "@/types";
+import moment from "moment";
 
-const OngoingCard = () => {
+const OngoingCard = ({
+	message,
+	provider,
+	location,
+	created_at,
+	id,
+	uuid,
+}: OngoingRequest) => {
+	console.log({ uuid });
 	return (
 		<Pressable
 			onPress={() =>
 				router.push({
-					pathname: "/client/booking/track-booking/booking-id",
+					pathname: "/client/booking/track-booking/[booking-id]",
 					params: {
-						id: "1",
-						"booking-id": "123",
+						"booking-id": uuid,
+						id,
 					},
 				})
 			}
 			className="p-3 rounded-lg bg-white border border-outer-light mb-4"
 		>
 			<View>
-				<View className="border border-inner-light p-2 mb-[10px]">
+				<View className="border border-inner-light p-2 mb-[10px] rounded">
 					<Text
 						className="text-base font-regular text-off-black"
 						numberOfLines={3}
 					>
-						I’m planning to sell my property but need advice on pricing and
-						staging. Can you assist with marketing it to attract potential
-						buyers?
+						{message || ""}
 					</Text>
 				</View>
 				<View className="flex-row justify-between gap-x-4 flex-wrap">
@@ -36,7 +44,7 @@ const OngoingCard = () => {
 						/>
 						<View className="ml-2 space-y-1">
 							<Text className="text-base font-regular text-off-black">
-								John Musa
+								{provider.name || ""}
 							</Text>
 							<Text className="text-xs font-regular text-support">
 								Real estate agent
@@ -52,10 +60,12 @@ const OngoingCard = () => {
 								resizeMode="contain"
 								className="w-[18px] h-[18px] mr-[6px]"
 							/>
-							<Text className="font-regular text-sm text-off-black">Lagos</Text>
+							<Text className="font-regular text-sm text-off-black">
+								{location || ""}
+							</Text>
 						</View>
 						<Text className="text-xs text-end font-regular text-primaryII">
-							20 Nov • 08:30AM
+							{moment(created_at).format("DD MMM • hh:mmA")}
 						</Text>
 					</View>
 				</View>

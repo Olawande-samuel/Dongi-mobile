@@ -2,25 +2,27 @@ import { View, Text, Image, Pressable } from "react-native";
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import { ICategoryServices } from "@/types";
+import { formatCurrency } from "@/utils";
 
-const ServiceCard = () => {
+const ServiceCard = ({
+	category_id,
+	provider_id,
+	name,
+	starting_price,
+	provider,
+	uuid,
+}: ICategoryServices) => {
 	return (
 		<Pressable
 			onPress={() =>
 				router.push({
 					pathname: "/client/booking/[vendorId]",
 					params: {
-						vendorId: "1",
-						id: "1",
-						name: "Real Estate Agent",
-						service: "Property Management",
-						rating: 4.5,
-						reviews: 120,
-						price: "#. 150,000 - #. 300,000",
-						location: "Island Lagos, Nigeria",
-						customers: 12,
+						vendorId: provider_id,
+						serviceId: uuid,
+						categoryId: category_id,
 					},
-				
 				})
 			}
 		>
@@ -34,8 +36,10 @@ const ServiceCard = () => {
 						/>
 					</View>
 					<View>
-						<Text className="mb-1 text-base text-off-black">John Musa</Text>
-						<Text className="text-sm text-muted">Real Estate Agent</Text>
+						<Text className="mb-1 text-base text-off-black">
+							{provider?.name || ""}
+						</Text>
+						<Text className="text-sm text-muted">{name || ""}</Text>
 					</View>
 				</View>
 				<View className="flex-row gap-[2px] mb-[10px]">
@@ -64,7 +68,9 @@ const ServiceCard = () => {
 				<View className="flex-row justify-between items-center">
 					<View>
 						<Text className="mb-1 text-muted text-xs">Starting From</Text>
-						<Text className="text-sm text-off-black">#245</Text>
+						<Text className="text-sm text-off-black">
+							{formatCurrency(starting_price) || ""}
+						</Text>
 					</View>
 					<View>
 						<Text className="mb-1 text-muted text-xs">Customers</Text>

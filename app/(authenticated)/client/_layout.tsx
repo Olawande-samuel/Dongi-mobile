@@ -7,7 +7,11 @@ import Header from "@/components/Header";
 
 const Layout = () => {
 	return (
-		<Stack>
+		<Stack
+			screenOptions={{
+				headerShown: false,
+			}}
+		>
 			<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 			<Stack.Screen name="booking" options={{ headerShown: false }} />
 			<Stack.Screen

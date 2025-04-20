@@ -1,15 +1,16 @@
-import { View, Text, TextInput, Pressable } from "react-native";
-import React from "react";
-import { Controller, useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Link, router } from "expo-router";
-import { useMutation } from "@tanstack/react-query";
-import { Api } from "@/utils/endpoints";
+import { useAuth } from "@/context/Auth";
 import { useGlobalContext } from "@/providers/GlobalStateProvider";
 import { handleError } from "@/utils";
+import { Api } from "@/utils/endpoints";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useAsyncStorage } from "@react-native-async-storage/async-storage";
+import { useMutation } from "@tanstack/react-query";
+import { Link } from "expo-router";
+import React from "react";
+import { Controller, useForm } from "react-hook-form";
+import { Text, TextInput, View } from "react-native";
+import { z } from "zod";
 import StyledButton from "../StyledButton";
-import useUserType from "@/hooks/useUserType";
 
 const FormSchema = z.object({
 	email: z.string().email(),
@@ -18,9 +19,14 @@ const FormSchema = z.object({
 
 type FormType = z.infer<typeof FormSchema>;
 
-const EmailSignInForm = () => {
+const EmailSignInForm = ({ userType }: { userType: USERTYPE }) => {
+	const { setItem } = useAsyncStorage("user");
+	const { setItem: setUserType } = useAsyncStorage("userType");
+
+	const { handleLogin } = useAuth();
+
 	const { setIsLoading } = useGlobalContext();
-	const { userType } = useUserType();
+
 	const form = useForm<FormType>({
 		defaultValues: {
 			email: "",
@@ -43,12 +49,18 @@ const EmailSignInForm = () => {
 			},
 			{
 				onSuccess: (res) => {
-					console.log(res);
+					const value = {
+						token: res.data.data.token,
+						user: res.data.data.user,
+					};
+					setItem(JSON.stringify(value));
+
 					if (userType === "client") {
-						router.replace("/(authenticated)/client");
+						setUserType("client");
 					} else {
-						router.replace("/(authenticated)/service-provider");
+						setUserType("service");
 					}
+					handleLogin(res.data.data.token);
 				},
 				onError: (err) => {
 					handleError(err);

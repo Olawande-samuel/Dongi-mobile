@@ -1,6 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useQueryClient } from "@tanstack/react-query";
+import { useAuth } from "@/context/Auth";
+import { router } from "expo-router";
 
 const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 
@@ -25,7 +27,7 @@ authInstance.interceptors.request.use(
 		let authToken;
 		const storedData = await AsyncStorage.getItem("user");
 		if (storedData) {
-			authToken = JSON.parse(storedData).access_token;
+			authToken = JSON.parse(storedData).token;
 		}
 		if (authToken) {
 			config.headers.Authorization = "Bearer " + authToken;
@@ -37,15 +39,20 @@ authInstance.interceptors.request.use(
 	}
 );
 
-export const useResponseInterceptor = (logout: VoidFunction) => {
+export const useResponseInterceptor = () => {
 	const queryClient = useQueryClient();
+	const { logout, userType } = useAuth();
+
 	authInstance.interceptors.response.use(
-		async (response) => response,
-		async (error) => {
-			if (error.response?.status === 401) {
+		(response) => {
+			return response;
+		},
+		(error) => {
+			if (
+				error.response?.data.message === "Session expired, kindly login again"
+			) {
 				queryClient.clear();
-				// logout();
-				// router.replace("/");
+				logout();
 			}
 			return Promise.reject(error);
 		}

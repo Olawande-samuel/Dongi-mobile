@@ -1,6 +1,6 @@
 import useAsyncStorage from "@/hooks/useAsyncStorage";
-import useUserType from "@/hooks/useUserType";
 import { useGlobalContext } from "@/providers/GlobalStateProvider";
+import { useTempStore } from "@/store/temp-user-store";
 import { handleError } from "@/utils";
 import { Api } from "@/utils/endpoints";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,7 +20,9 @@ const FormSchema = z.object({
 type FormType = z.infer<typeof FormSchema>;
 
 const PhoneSignup = () => {
-	const { userType } = useUserType();
+	const { userType } = useTempStore();
+
+	console.log({ userType });
 
 	const [show, setShow] = useState(false);
 	const [countryCode, setCountryCode] = useState("+234");

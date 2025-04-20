@@ -1,12 +1,14 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import { Pressable, Text, View } from "react-native";
 
 function Header({ title }: { title: string }) {
+	const router = useRouter();
 	return (
 		<View className="flex-row justify-between py-[10px] mb-[23.5px] bg-white">
 			<Pressable
 				onPress={() => {
-					console.log("pressed");
+					router.back();
 				}}
 			>
 				<Ionicons name="arrow-back" size={24} color="#1A1B23" />

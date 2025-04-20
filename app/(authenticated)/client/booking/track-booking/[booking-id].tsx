@@ -3,33 +3,29 @@ import ReviewService from "@/components/client/booking/ReviewService";
 import VendorProfile from "@/components/client/VendorProfile";
 import ReviewComplete from "@/components/ReviewComplete";
 import StatusPill from "@/components/StatusPill";
-import Success from "@/svgs/Success";
+import { Api } from "@/utils/endpoints";
 import {
 	BottomSheetModal,
 	BottomSheetModalProvider,
-	TouchableWithoutFeedback
 } from "@gorhom/bottom-sheet";
-import React, {
-	useCallback,
-	useEffect,
-	useRef,
-	useState
-} from "react";
-import {
-	Alert,
-	Image,
-	Modal,
-	Pressable,
-	ScrollView,
-	Text,
-	TextInput,
-	View,
-} from "react-native";
+import { useQuery } from "@tanstack/react-query";
+import { useLocalSearchParams } from "expo-router";
+import moment from "moment";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { Image, ScrollView, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-
 const Track = () => {
+	const params = useLocalSearchParams();
+	const bookingId = params?.["booking-id"];
+
+	const { data, isLoading } = useQuery({
+		queryKey: ["get request detail", bookingId as string],
+		queryFn: () => Api.getRequestById(bookingId as string),
+	});
+
+	const result = data?.data?.data;
 	const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 	const bottomSheetReviewModalRef = useRef<BottomSheetModal>(null);
 	const [modalVisible, setModalVisible] = useState(false);
@@ -37,6 +33,7 @@ const Track = () => {
 	const handlePresentModalPress = useCallback(() => {
 		bottomSheetModalRef.current?.present();
 	}, []);
+
 	const handlePresentReviewModalPress = useCallback(() => {
 		bottomSheetReviewModalRef.current?.present();
 	}, []);
@@ -48,6 +45,7 @@ const Track = () => {
 	useEffect(() => {
 		handlePresentModalPress();
 	}, []);
+
 
 	return (
 		<SafeAreaView className="flex-1 bg-white" edges={["bottom"]}>
@@ -66,7 +64,7 @@ const Track = () => {
 									<Text className="text-support text-sm font-regular mr-4">
 										Status
 									</Text>
-									<StatusPill title="Pending" />
+									<StatusPill title={result?.status || ""} />
 								</View>
 								<View className="flex-row justify-between items-center">
 									<Text className="text-support text-sm font-regular mr-4">
@@ -82,7 +80,7 @@ const Track = () => {
 										Date Requested
 									</Text>
 									<Text className="font-regular text-sm text-off-black text-right">
-										20 Nov. 11:30AM
+										{moment(result?.created_at).format("DD MMM • hh:mmA")}
 									</Text>
 								</View>
 							</View>
@@ -103,11 +101,14 @@ const Track = () => {
 												resizeMode="contain"
 												className="w-[18px] h-[18px] mr-[6px]"
 											/>
-											<TextInput
+											<Text className="flex-1 text-base">
+												{result?.location || ""}
+											</Text>
+											{/* <TextInput
 												placeholder="Island Lagos, Nigeria"
 												className="flex-1 text-base"
 												readOnly
-											/>
+											/> */}
 										</View>
 									</View>
 									<View>
@@ -115,11 +116,9 @@ const Track = () => {
 											How soon do you need this?
 										</Text>
 										<View className="flex-row border p-2 border-inner-background-light">
-											<TextInput
-												placeholder="In 3 days"
-												className="flex-1 text-base text-off-black placeholder:text-off-black"
-												readOnly
-											/>
+											<Text className="flex-1 text-base text-off-black placeholder:text-off-black">
+												{result?.deadline || ""}
+											</Text>
 										</View>
 									</View>
 									<View>
@@ -127,12 +126,9 @@ const Track = () => {
 											Message
 										</Text>
 										<View className="flex-row border p-2 border-inner-background-light h-[158px]">
-											<TextInput
-												placeholder="In 3 days"
-												className="flex-1 text-off-black placeholder:text-off-black text-base"
-												multiline
-												readOnly
-											/>
+											<Text className="flex-1 text-off-black placeholder:text-off-black text-base">
+												{result?.message || ""}
+											</Text>
 										</View>
 									</View>
 								</View>
@@ -145,6 +141,7 @@ const Track = () => {
 						<ReviewService
 							compRef={bottomSheetReviewModalRef}
 							showCompletionModal={showCompletionModal}
+							bookingId={bookingId as string}
 						/>
 						<ReviewComplete
 							modalVisible={modalVisible}

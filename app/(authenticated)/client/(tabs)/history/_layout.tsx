@@ -1,10 +1,11 @@
 import { View, Text, Pressable } from "react-native";
 import React from "react";
-import { Stack } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import BackButton from "@/components/BackButton";
 
 const HistoryLayout = () => {
+	const router = useRouter();
 	return (
 		<Stack>
 			<Stack.Screen
@@ -12,6 +13,8 @@ const HistoryLayout = () => {
 				options={{
 					headerTitle: "History",
 					headerLeft: () => <BackButton />,
+					headerShadowVisible: false,
+					headerTitleAlign: "center",
 				}}
 			/>
 			<Stack.Screen
@@ -21,12 +24,14 @@ const HistoryLayout = () => {
 					headerLeft: () => (
 						<Pressable
 							onPress={() => {
-								console.log("pressed");
+								router.back();
 							}}
 						>
 							<Ionicons name="arrow-back" size={24} />
 						</Pressable>
 					),
+					headerTitleAlign: "center",
+					headerShadowVisible: false,
 				}}
 			/>
 		</Stack>

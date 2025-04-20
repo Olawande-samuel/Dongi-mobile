@@ -1,7 +1,6 @@
-import { View, Text, Pressable } from "react-native";
-import React from "react";
-import { Stack } from "expo-router";
 import BackButton from "@/components/BackButton";
+import { Stack } from "expo-router";
+import React from "react";
 
 const Layout = () => {
 	return (
@@ -9,15 +8,19 @@ const Layout = () => {
 			<Stack.Screen
 				name="index"
 				options={{
-					headerTitle: "Services",
-					headerLeft: () => <BackButton />,
+					headerShown: false,
 				}}
 			/>
 			<Stack.Screen
 				name="add-new"
 				options={{
-					headerTitle: "Add New",
-					headerLeft: () => <BackButton />,
+					headerShown: false,
+				}}
+			/>
+			<Stack.Screen
+				name="edit/[serviceId]"
+				options={{
+					headerShown: false,
 				}}
 			/>
 		</Stack>

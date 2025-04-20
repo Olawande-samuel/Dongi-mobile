@@ -3,7 +3,7 @@ import React from "react";
 
 const NoHistory = ({ text }: { text: string }) => {
 	return (
-		<View className="flex-1 border border-red-400 items-center justify-center">
+		<View className="flex-1 items-center justify-center">
 			<View className="items-center">
 				<Image
 					source={require("../../../assets/images/not-found.png")}

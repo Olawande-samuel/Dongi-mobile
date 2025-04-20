@@ -2,7 +2,14 @@ import PhoneSignup from "@/components/client/PhoneSignup";
 import SocialSignIn from "@/components/client/SocialSignIn";
 import { Link } from "expo-router";
 import React from "react";
-import { Image, KeyboardAvoidingView, Platform, ScrollView, Text, View } from "react-native";
+import {
+	Image,
+	KeyboardAvoidingView,
+	Platform,
+	ScrollView,
+	Text,
+	View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const SignUp = () => {

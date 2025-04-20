@@ -1,7 +1,5 @@
-import { View, Text } from "react-native";
-import React from "react";
 import { Stack } from "expo-router";
-import BackButton from "@/components/BackButton";
+import React from "react";
 
 const ProfileLayout = () => {
 	return (
@@ -9,8 +7,7 @@ const ProfileLayout = () => {
 			<Stack.Screen
 				name="index"
 				options={{
-					headerTitle: "Profile",
-					headerLeft: () => <BackButton />,
+					headerShown: false,
 				}}
 			/>
 		</Stack>

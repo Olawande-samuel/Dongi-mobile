@@ -16,6 +16,7 @@ const ProfileLayout = () => {
 						color: "#1A1B23",
 					},
 					headerShadowVisible: false,
+					// headerShown: false,
 				}}
 			/>
 			<Stack.Screen

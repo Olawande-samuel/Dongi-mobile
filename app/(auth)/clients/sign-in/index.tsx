@@ -21,7 +21,7 @@ const PhoneSignIn = () => {
 				</View>
 				<View className="flex-1">
 					<View className="mb-6">
-						<EmailSignInForm />
+						<EmailSignInForm userType="client" />
 					</View>
 					<View className="items-center mb-3">
 						<Text className="text-center text-sm text-[#99a2b3]">or</Text>

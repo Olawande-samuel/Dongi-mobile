@@ -64,14 +64,19 @@ const SignUp = () => {
 			</KeyboardAvoidingView>
 			<View>
 				<View className="">
-					<Text className="text-sm text-center text-support">
+					<Text className="text-xs large:text-sm text-center text-support">
 						By creating a new account, you agree to Dongi's{" "}
 						<Link href="/">
-							<Text className="underline text-sm">Terms & Conditions </Text>
+							<Text className="underline text-xs large:text-sm">
+								Terms & Conditions{" "}
+							</Text>
 						</Link>
 						and
 						<Link href="/">
-							<Text className="underline text-sm"> Privacy Policy</Text>
+							<Text className="underline text-xs large:text-sm">
+								{" "}
+								Privacy Policy
+							</Text>
 						</Link>
 					</Text>
 				</View>
