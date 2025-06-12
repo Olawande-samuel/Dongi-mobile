@@ -49,11 +49,11 @@ const History = () => {
 
 	const listItems = groupByDate(
 		tab === 1
-			? data?.data.data.requests || []
-			: [
+			? [
 					...(ongoingServices?.data.data?.requests || []),
 					// ...(data?.data?.data.requests || []),
 			  ]
+			: data?.data.data.requests || []
 	);
 	return (
 		// <View className="flex-1">
@@ -91,7 +91,7 @@ const History = () => {
 							}
 						/>
 					}
-					keyExtractor={(section, index) => section + index}
+					keyExtractor={(item, index) => String(item.id + index)}
 					renderSectionHeader={({ section: {} }) => (
 						<View className="py-2 relative mb-4">
 							<Text className="text-support text-center text-sm leading-[17.64px]">

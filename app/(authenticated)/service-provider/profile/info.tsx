@@ -3,8 +3,11 @@ import React from "react";
 import { Link } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import RouteHeader from "@/components/shared/RouteHeader";
+import useUserInfo from "@/hooks/useUserInfo";
 
 const Index = () => {
+	const { data, isLoading } = useUserInfo();
+
 	return (
 		<SafeAreaView className="flex-1 bg-white " edges={["top"]}>
 			<View className="flex-1 px-4 large:px-6">
@@ -16,7 +19,7 @@ const Index = () => {
 						</Text>
 						<View className="w-14 large:w-[60px] h-14 large:h-[60px] items-center justify-center rounded-full bg-primary">
 							<Text className="uppercase text-[36px] large:text-[42px] font-bold text-white text-center ">
-								R
+								{data?.user?.firstname.charAt(0) || "D"}
 							</Text>
 						</View>
 					</View>
@@ -30,7 +33,9 @@ const Index = () => {
 									className="text-xs large:text-sm text-off-black font-regular"
 									numberOfLines={1}
 								>
-									Rebecca Anyaoku
+									{`${data?.user?.firstname || ""} ${
+										data?.user?.lastname || ""
+									}`}
 								</Text>
 								<View>
 									<Image
@@ -49,7 +54,7 @@ const Index = () => {
 									className="text-xs large:text-sm text-off-black font-regular"
 									numberOfLines={1}
 								>
-									Rebecca@gmail.com
+									{data?.user?.email || ""}
 								</Text>
 								<Link href="/service-provider/profile/change-email">
 									<Image
@@ -68,7 +73,7 @@ const Index = () => {
 									className="text-xs large:text-sm text-off-black font-regular"
 									numberOfLines={1}
 								>
-									123312121
+									{data?.user.phone || ""}
 								</Text>
 								<View>
 									<Image
@@ -84,7 +89,7 @@ const Index = () => {
 							</Text>
 							<View className="flex-row items-center gap-2 flex-1 justify-between">
 								<Text className="text-xs large:text-sm text-off-black font-regular">
-									Female
+									{data?.user?.gender || ""}
 								</Text>
 								<View>
 									<Image

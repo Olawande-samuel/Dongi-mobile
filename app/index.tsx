@@ -14,6 +14,7 @@ export default function Index() {
 
 	const { setUserType } = useTempStore();
 
+	console.log({user_type, user,})
 	useResponseInterceptor();
 
 	async function storeUserType(val: UserType) {

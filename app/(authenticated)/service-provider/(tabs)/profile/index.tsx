@@ -9,6 +9,7 @@ import SignOutConfirmModal from "@/components/client/profile/SignOutConfirmModal
 import DeleteAccountModal from "@/components/client/profile/DeleteAccountModal";
 import BackButton from "@/components/BackButton";
 import RouterHeader from "@/components/shared/RouteHeader";
+import useUserInfo from "@/hooks/useUserInfo";
 
 const profile = require("../../../../../assets/images/client/profile/profile.png");
 const security = require("../../../../../assets/images/client/profile/security.png");
@@ -26,6 +27,9 @@ const Profile = () => {
 	const handleDeleteAccountModalPress = useCallback(() => {
 		bottomSheetModalDeleteAccountRef.current?.present();
 	}, []);
+
+	const { data, isLoading } = useUserInfo();
+
 	return (
 		<SafeAreaView className="flex-1 bg-white" edges={["bottom", "top"]}>
 			<View className="flex-1 bg-white px-4 large:px-6">
@@ -37,17 +41,17 @@ const Profile = () => {
 					<View className="flex-row items-center gap-x-3 mb-[36px]">
 						<View className=" h-12 w-12 large:w-[60px] large:h-[60px] rounded-full">
 							<Image
-								className="large:h-[60px]  h-12 w-12 large:w-[60px] rounded-full"
-								source={require("../../../../../assets/images/client/temp_user_sq.png")}
+								className="large:h-[60px] h-12 w-12 large:w-[60px] rounded-full"
+								source={data?.user?.business_logo ? { uri: data?.user?.business_logo } : require("../../../../../assets/images/client/temp_user_sq.png")}
 								resizeMode="contain"
 							/>
 						</View>
 						<View>
 							<Text className="text-sm large:text-base font-semibold text-off-black mb-1 large:mb-2">
-								John Anyaoku
+								{`${data?.user?.firstname || ""} ${data?.user?.lastname || ""} `}
 							</Text>
 							<Text className="text-sm large:text-base text-support font-normal font-regular">
-								Rebeccaanyaoku@gmail.com
+								{data?.user?.email || ""}
 							</Text>
 						</View>
 					</View>
