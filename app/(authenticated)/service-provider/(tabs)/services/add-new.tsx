@@ -78,7 +78,9 @@ const AddNewService = () => {
 		},
 	});
 
+	console.log({ services });
 	function onSubmit(val: FormType) {
+		console.log(val);
 		if (services?.[0].category_id) {
 			const payload = {
 				...val,

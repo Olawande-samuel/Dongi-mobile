@@ -104,6 +104,7 @@ export interface IUser {
 		longitude: number;
 		email_verified_at: string;
 		phone_verified_at: string;
+		category_id?: string;
 		category_of_service: string;
 		business_name?: string | null;
 		certificate?: string | null;

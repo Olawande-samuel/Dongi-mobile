@@ -50,6 +50,7 @@ const PhoneSignup = () => {
 	});
 
 	function handleSubmit(val: FormType) {
+		console.log({ val });
 		if (userType === "client") {
 			mutate(
 				{

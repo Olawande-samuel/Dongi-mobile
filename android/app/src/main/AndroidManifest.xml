@@ -30,6 +30,7 @@
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="dongi"/>
         <data android:scheme="com.dongi.dongi"/>
+        <data android:scheme="exp+dongi"/>
       </intent-filter>
     </activity>
   </application>

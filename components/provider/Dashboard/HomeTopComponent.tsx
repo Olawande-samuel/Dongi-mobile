@@ -1,3 +1,4 @@
+import * as Clipboard from "expo-clipboard";
 import HomeTabs from "@/components/client/dashboard/HomeTabs";
 import HomeUserInfo from "@/components/client/dashboard/HomeUserInfo";
 import useUserInfo from "@/hooks/useUserInfo";
@@ -12,6 +13,7 @@ import { router } from "expo-router";
 import React, { useEffect, useRef } from "react";
 import { Pressable, Text, View } from "react-native";
 import AccountApproved from "./AccountApproved";
+import { toast } from "sonner-native";
 
 const HomeTopComponent = ({
 	setTab,
@@ -80,9 +82,21 @@ const HomeTopComponent = ({
 						Paystack-Titan
 					</Text>
 					<Text className="text-xs large:text-sm font-semibold text-service-primary">
-						0123456789
+						{data?.wallet?.account_number || ""}
 					</Text>
-					<Copy />
+					<Pressable
+						onPress={async () => {
+							if (data?.wallet?.account_number) {
+								await Clipboard.setStringAsync(
+									data?.wallet?.account_number || ""
+								);
+								// Clipboard.setString(data?.wallet?.account_number || "");
+								toast.success("Account number copied to clipboard");
+							}
+						}}
+					>
+						<Copy />
+					</Pressable>
 				</View>
 			</View>
 			<View className="mb-9">

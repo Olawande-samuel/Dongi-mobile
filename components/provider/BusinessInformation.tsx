@@ -115,7 +115,7 @@ const BusinessInformation = ({
 							name="category_of_service"
 							render={({ field }) => (
 								<View className="space-y-[6px]">
-									<Text className="text-sm text-off-black">Gender</Text>
+									<Text className="text-sm text-off-black">Service Category</Text>
 									<View>
 										<SelectDropdown
 											data={serviceCategories || []}

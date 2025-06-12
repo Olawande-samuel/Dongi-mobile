@@ -1,18 +1,23 @@
-import { View, Text, Image, Pressable } from "react-native";
-import React from "react";
+import StatusPill from "@/components/StatusPill";
+import { ICompletedRequest } from "@/types";
+import { SIZES } from "@/utils/constants";
 import { Entypo } from "@expo/vector-icons";
 import { router } from "expo-router";
-import StatusPill from "@/components/StatusPill";
-import { SIZES } from "@/utils/constants";
+import React from "react";
+import { Image, Pressable, Text, View } from "react-native";
 
-const CompletedServiceItem = () => {
+interface Props extends ICompletedRequest {
+	activeTab: number;
+}
+
+const CompletedServiceItem = ({ id, uuid, provider,   }: Props) => {
 	return (
 		<Pressable
 			onPress={() =>
 				router.push({
 					pathname: "/service-provider/history/[serviceId]",
 					params: {
-						serviceId: "1",
+						serviceId: uuid,
 					},
 				})
 			}
@@ -30,10 +35,10 @@ const CompletedServiceItem = () => {
 					<View className="flex-row justify-between">
 						<View className="large:mb-2">
 							<Text className="text-xs large:text-sm text-off-black mb-1 leading-[17.64px]">
-								John Musa
+								{provider?.name || ""}{" "}
 							</Text>
 							<Text className="text-[10px] large:text-xs text-support  leading-[15.12px]">
-								Real Estate Agent
+								{}{" "}
 							</Text>
 						</View>
 						<View className="flex-row items-center">

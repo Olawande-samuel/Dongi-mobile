@@ -3,6 +3,9 @@ import NoHistory from "@/components/client/history/NoHistory";
 import CompletedServiceItem from "@/components/provider/Dashboard/CompletedServiceItem";
 import RequestCard from "@/components/provider/Dashboard/RequestCard";
 import RouteHeader from "@/components/shared/RouteHeader";
+import { groupByDate } from "@/utils";
+import { Api } from "@/utils/endpoints";
+import { useQuery } from "@tanstack/react-query";
 import moment from "moment";
 import React, { useState } from "react";
 import { SectionList, Text, useWindowDimensions, View } from "react-native";
@@ -31,6 +34,27 @@ const History = () => {
 	const [tab, setTab] = useState(1);
 	const { height } = useWindowDimensions();
 
+	const { data } = useQuery({
+		queryKey: ["get completed services"],
+		queryFn: Api.getProviderCompletedRequests,
+	});
+	const { data: ongoingServices } = useQuery({
+		queryKey: ["get ongoing services"],
+		queryFn: Api.getProviderOngoingRequests,
+	});
+
+	console.log({ data: data?.data });
+	// const services =
+	// 	tab === 1 ? data?.data?.data.requests : ongoingServices?.data.data.requests;
+
+	const listItems = groupByDate(
+		tab === 1
+			? data?.data.data.requests || []
+			: [
+					...(ongoingServices?.data.data?.requests || []),
+					// ...(data?.data?.data.requests || []),
+			  ]
+	);
 	return (
 		// <View className="flex-1">
 		<SafeAreaView className="flex-1 bg-white" edges={["top"]}>
@@ -39,14 +63,15 @@ const History = () => {
 				<SectionList
 					className="bg-white "
 					showsVerticalScrollIndicator={false}
-					sections={DATA}
+					sections={listItems}
 					renderItem={({ item }) =>
 						tab === 1 ? (
 							<RequestCard
 								activeTab={1} //1 represents ongoing
+								{...item}
 							/>
 						) : (
-							<CompletedServiceItem />
+							<CompletedServiceItem {...item} />
 						)
 					}
 					ListHeaderComponent={

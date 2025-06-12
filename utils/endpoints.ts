@@ -369,7 +369,7 @@ class API {
 		}>
 	> {
 		try {
-			const endpoint = `/requests/customer/ongoing`;
+			const endpoint = `/requests/ongoing`;
 			const response = await authInstance.get(endpoint);
 			return response;
 		} catch (error) {
@@ -384,7 +384,7 @@ class API {
 		}>
 	> {
 		try {
-			const endpoint = `/requests/customer/completed`;
+			const endpoint = `/requests/completed`;
 			const response = await authInstance.get(endpoint);
 			return response;
 		} catch (error) {
@@ -434,6 +434,7 @@ class API {
 		try {
 			const endpoint = `/services`;
 			const response = await authInstance.get(endpoint);
+			console.log({ response: JSON.stringify(response, null, 2) });
 			return response;
 		} catch (error) {
 			return Promise.reject(error);
@@ -485,6 +486,7 @@ class API {
 			return Promise.reject(error);
 		}
 	}
+	
 }
 
 export const Api = new API();

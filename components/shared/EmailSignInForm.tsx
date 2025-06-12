@@ -13,7 +13,7 @@ import { z } from "zod";
 import StyledButton from "../StyledButton";
 
 const FormSchema = z.object({
-	email: z.string().email(),
+	email: z.string().trim().email(),
 	password: z.string(),
 });
 
@@ -40,6 +40,8 @@ const EmailSignInForm = ({ userType }: { userType: USERTYPE }) => {
 		onMutate: () => setIsLoading(true),
 		onSettled: () => setIsLoading(false),
 	});
+
+	console.log(form.formState.errors, form.getValues());
 
 	function submit(val: FormType) {
 		mutate(
