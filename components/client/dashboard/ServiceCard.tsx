@@ -69,7 +69,7 @@ const ServiceCard = ({
 					<View>
 						<Text className="mb-1 text-muted text-xs">Starting From</Text>
 						<Text className="text-sm text-off-black">
-							{formatCurrency(starting_price) || ""}
+							{formatCurrency(starting_price || 0) || ""}
 						</Text>
 					</View>
 					<View>

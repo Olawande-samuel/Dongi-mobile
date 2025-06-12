@@ -10,6 +10,7 @@ import DeleteAccountModal from "@/components/client/profile/DeleteAccountModal";
 import BackButton from "@/components/BackButton";
 import RouterHeader from "@/components/shared/RouteHeader";
 import useUserInfo from "@/hooks/useUserInfo";
+import useServiceProviderUserInfo from "@/hooks/useServiceProviderUserInfo";
 
 const profile = require("../../../../../assets/images/client/profile/profile.png");
 const security = require("../../../../../assets/images/client/profile/security.png");
@@ -28,7 +29,7 @@ const Profile = () => {
 		bottomSheetModalDeleteAccountRef.current?.present();
 	}, []);
 
-	const { data, isLoading } = useUserInfo();
+	const { data, isLoading } = useServiceProviderUserInfo();
 
 	return (
 		<SafeAreaView className="flex-1 bg-white" edges={["bottom", "top"]}>

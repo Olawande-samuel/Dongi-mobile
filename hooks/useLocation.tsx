@@ -22,6 +22,7 @@ export const getAddressFromCoordinates = async (
 	}
 };
 
+
 const useLocation = (latitude: number, longitude: number) => {
 	const [location, setLocation] = useState("");
 

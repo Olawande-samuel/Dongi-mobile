@@ -12,13 +12,14 @@ const BookingLayout = () => {
 			<Stack.Screen
 				name="[vendorId]"
 				options={{
-					headerTitle: (props) => <DoubleHeader {...props} />,
-					headerLeft: () => <BackButton />,
-					headerRight: () => (
-						<Pressable onPress={() => router.back()}>
-							<Octicons name="share-android" size={24} color="#676B83" />
-						</Pressable>
-					),
+					// headerTitle: (props) => <DoubleHeader {...props} />,
+					// headerLeft: () => <BackButton />,
+					// headerRight: () => (
+					// 	<Pressable onPress={() => router.back()}>
+					// 		<Octicons name="share-android" size={24} color="#676B83" />
+					// 	</Pressable>
+					// ),
+					headerShown: false,
 					headerShadowVisible: false,
 				}}
 			/>
@@ -26,15 +27,7 @@ const BookingLayout = () => {
 				name="track-booking/[booking-id]"
 				options={{
 					headerTitle: (props) => <TrackingHeader {...props} />,
-					headerLeft: () => (
-						<Pressable
-							onPress={() => {
-								router.back();
-							}}
-						>
-							<Ionicons name="arrow-back" color="#1A1B23" size={24} />
-						</Pressable>
-					),
+					headerLeft: () => <BackButton />,
 					headerShadowVisible: false,
 				}}
 			/>

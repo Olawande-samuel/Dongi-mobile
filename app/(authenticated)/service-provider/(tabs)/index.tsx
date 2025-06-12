@@ -1,13 +1,13 @@
 import HomeTopComponent from "@/components/provider/Dashboard/HomeTopComponent";
+import PendingRequestCard from "@/components/provider/Dashboard/PendingRequestsCard";
 import RequestCard from "@/components/provider/Dashboard/RequestCard";
-import { OngoingRequest } from "@/types";
+import { OngoingRequest, ServiceProviderOngoingRequest, ServiceProviderPendingRequest } from "@/types";
+import { SIZES } from "@/utils/constants";
 import { Api } from "@/utils/endpoints";
 import { useQueries, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { FlatList, RefreshControl, StatusBar } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import NewRequest from "../requests/new/[requestId]";
-import { SIZES } from "@/utils/constants";
 
 const Index = () => {
 	const [tab, setTab] = useState(1);
@@ -44,9 +44,16 @@ const Index = () => {
 			<StatusBar />
 			<FlatList
 				data={result.data[tab - 1] || []}
-				renderItem={({ item }) => (
-					<RequestCard activeTab={tab} {...(item as OngoingRequest)} />
-				)}
+				renderItem={({ item }) =>
+					tab === 1 ? (
+						<RequestCard activeTab={tab} {...(item as ServiceProviderOngoingRequest)} />
+					) : (
+						<PendingRequestCard
+							activeTab={tab}
+							{...(item as ServiceProviderPendingRequest)}
+						/>
+					)
+				}
 				ListHeaderComponent={
 					<HomeTopComponent
 						tab={tab}

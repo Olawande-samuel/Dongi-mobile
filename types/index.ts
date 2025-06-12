@@ -48,6 +48,66 @@ export interface OngoingRequest {
 	uuid: string;
 }
 
+export interface ServiceProviderPendingRequest {
+	id: number;
+	uuid: string;
+	provider_id: string;
+	customer_id: string;
+	service_id: string;
+	location: string;
+	latitude: string;
+	longitude: string;
+	deadline: string;
+	message: string;
+	status: string;
+	created_at: string;
+	updated_at: string;
+	rating: {
+		total_rating: number;
+		average_rating: number;
+	};
+	customer: {
+		name: string;
+		image: string;
+		email: string;
+		location: string;
+	};
+}
+export interface ServiceProviderOngoingRequest {
+	id: number;
+	uuid: string;
+	provider_id: string;
+	customer_id: string;
+	service_id: string;
+	location: string;
+	latitude: string;
+	longitude: string;
+	deadline: string;
+	message: string;
+	status: string;
+	created_at: string;
+	updated_at: string;
+}
+
+export interface IServiceProviderCompletedRequest {
+	id: number;
+	uuid: string;
+	provider_id: string;
+	customer_id: string;
+	service_id: string;
+	location: string;
+	latitude: string;
+	longitude: string;
+	deadline: string;
+	message: string;
+	status: string;
+	created_at: string;
+	updated_at: string;
+	rating: {
+		total_rating: number;
+		average_rating: number;
+	};
+}
 export interface ICompletedRequest {
 	id: number;
 	uuid: string;
@@ -89,7 +149,6 @@ export interface IRequestInfo {
 	updated_at: string;
 	uuid: string;
 }
-
 export interface IUser {
 	user: {
 		id: number;

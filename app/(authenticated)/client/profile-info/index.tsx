@@ -15,7 +15,7 @@ const Index = () => {
 				</Text>
 				<View className="w-[60px] h-[60px] rounded-full bg-primary">
 					<Text className="uppercase text-[42px] font-bold text-white text-center ">
-						{data?.firstname?.split("")[0] || ""}
+						{data?.user?.firstname?.split("")[0] || ""}
 					</Text>
 				</View>
 			</View>
@@ -29,7 +29,7 @@ const Index = () => {
 							className="text-sm text-off-black font-regular"
 							numberOfLines={1}
 						>
-							{`${data?.firstname || ""} ${data?.lastname || ""}`}
+							{`${data?.user?.firstname || ""} ${data?.user?.lastname || ""}`}
 						</Text>
 						<View>
 							<Image
@@ -46,9 +46,10 @@ const Index = () => {
 					<View className="flex-row items-center gap-2 flex-1 justify-between">
 						<Text
 							className="text-sm text-off-black font-regular"
-							numberOfLines={1}
+
+							// numberOfLines={1}
 						>
-							{data?.email || ""}
+							{data?.user?.email || ""}
 						</Text>
 						<Link href="/client/profile-info/change-email">
 							<Image
@@ -67,7 +68,7 @@ const Index = () => {
 							className="text-sm text-off-black font-regular"
 							numberOfLines={1}
 						>
-							{data?.phone || ""}
+							{data?.user?.phone || ""}
 						</Text>
 						<View>
 							<Image
@@ -83,7 +84,7 @@ const Index = () => {
 					</Text>
 					<View className="flex-row items-center gap-2 flex-1 justify-between">
 						<Text className="text-sm text-off-black font-regular">
-							{data?.gender || ""}
+							{data?.user?.gender || ""}
 						</Text>
 						<View>
 							<Image

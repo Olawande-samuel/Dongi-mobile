@@ -11,6 +11,8 @@ const OngoingCard = ({
 	created_at,
 	id,
 	uuid,
+	service_id,
+	provider_id
 }: OngoingRequest) => {
 	console.log({ uuid });
 	return (
@@ -21,6 +23,8 @@ const OngoingCard = ({
 					params: {
 						"booking-id": uuid,
 						id,
+						service_id,
+						provider_id,
 					},
 				})
 			}
@@ -47,7 +51,7 @@ const OngoingCard = ({
 								{provider.name || ""}
 							</Text>
 							<Text className="text-xs font-regular text-support">
-								Real estate agent
+								{/* Real estate agent */}
 							</Text>
 						</View>
 					</View>

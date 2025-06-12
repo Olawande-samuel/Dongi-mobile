@@ -23,7 +23,7 @@ const TrackingHeader = (props: props) => {
 				Track Booking
 			</Text>
 			<Text className="text-center text-muted text-sm font-regular ">
-				{result?.provider_id}
+				{result?.status}
 			</Text>
 		</View>
 	);

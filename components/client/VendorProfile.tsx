@@ -26,14 +26,14 @@ const VendorProfile = ({
 					</Text>
 				</View>
 				<View className="flex-row justify-between">
-					<View>
+					{/* <View>
 						<Text className="text-xs font-regular mb-1 text-muted">
 							Starting From
 						</Text>
 						<Text className="text-sm text-center text-off-black">
 							{formatCurrency(starting_price)}
 						</Text>
-					</View>
+					</View> */}
 					<View>
 						<Text className="text-xs font-regular mb-1 text-muted">
 							Customers

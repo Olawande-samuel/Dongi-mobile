@@ -40,6 +40,8 @@ const History = () => {
 			queryFn: Api.getCompletedRequests,
 			enabled: tab === 1,
 		});
+	
+	console.log({ ongoingRequestData });
 
 	const listItems = groupByDate(
 		tab === 1

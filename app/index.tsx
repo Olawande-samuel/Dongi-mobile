@@ -12,10 +12,10 @@ export default function Index() {
 	const { user, userType, isLoading } = useAuth();
 	const { userType: user_type } = useUserType();
 
-	const { setUserType } = useTempStore();
 
-	console.log({user_type, user,})
 	useResponseInterceptor();
+
+	const { setUserType } = useTempStore();
 
 	async function storeUserType(val: UserType) {
 		try {

@@ -38,6 +38,7 @@ function ConfirmService({
 		dismiss();
 	}, [dismiss]);
 
+	console.log("result", result);
 	return (
 		<BottomSheetModal
 			index={1}
@@ -88,9 +89,9 @@ function ConfirmService({
 									<Text className="text-base font-regular text-off-black">
 										John Musa
 									</Text>
-									<Text className="text-xs font-regular text-support">
+									{/* <Text className="text-xs font-regular text-support">
 										Real estate agent
-									</Text>
+									</Text> */}
 									<Text className="text-xs font-regular text-support">
 										{result?.location || ""}
 									</Text>

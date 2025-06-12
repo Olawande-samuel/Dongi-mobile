@@ -1,4 +1,11 @@
-import { View, Text, Image, Pressable, ScrollView } from "react-native";
+import {
+	View,
+	Text,
+	Image,
+	Pressable,
+	ScrollView,
+	ActivityIndicator,
+} from "react-native";
 import React, { useState } from "react";
 
 import { Feather } from "@expo/vector-icons";
@@ -8,6 +15,8 @@ import { IService } from "@/types";
 import CategoryServiceSearchBar from "../dashboard/CategoryServiceSearchBar";
 import { router } from "expo-router";
 import useUserInfo from "@/hooks/useUserInfo";
+import useUserLocation from "@/hooks/useUserLocation";
+import useCurrentLocation from "@/hooks/useCurrentLocation";
 
 const categoryItems = [
 	{
@@ -91,6 +100,9 @@ const CategorySearch = ({
 	setSearchValue,
 }: Props) => {
 	const { data, isLoading } = useUserInfo();
+	const { location, address } = useCurrentLocation();
+
+	console.log({ data });
 	return (
 		<View>
 			<View className="py-6 border-b border-outer-light px-6">
@@ -98,29 +110,38 @@ const CategorySearch = ({
 					searchValue={searchValue}
 					setSearchValue={setSearchValue}
 				/>
-				<View className="flex-row gap-x-4 mt-4">
-					<View className="flex-1">
-						<Text className="font-xs text-muted font-regular mb-1">
-							Location
-						</Text>
-						<Pressable
-							onPress={() => router.push("/client/change-location")}
-							className="flex-row items-center px-1 py-[7px] rounded-lg bg-light"
-						>
-							<Image
-								source={require("../../../assets/images/location.png")}
-								width={18}
-								height={18}
-								resizeMode="contain"
-								className="w-[18px] h-[18px] mr-[6px]"
-							/>
-							<Text className="mr-[2px] text-sm font-regular text-off-black">
-								{data?.location || ""}
+				{isLoading ? (
+					<ActivityIndicator />
+				) : (
+					<View className="flex-row gap-x-4 mt-4">
+						<View className="flex-1">
+							<Text className="font-xs text-muted font-regular mb-1">
+								Location
 							</Text>
-							<Feather name="x" size={24} color="#1A1B23" />
-						</Pressable>
+							<Pressable
+								onPress={() => router.push("/client/change-location")}
+								className="flex-row items-center px-1 py-[7px] rounded-lg bg-light"
+							>
+								<View className="flex-row items-center">
+									<Image
+										source={require("../../../assets/images/location.png")}
+										width={18}
+										height={18}
+										resizeMode="contain"
+										className="w-[18px] h-[18px] mr-[6px]"
+									/>
+									<Text className="mr-[2px] text-sm font-regular text-off-black">
+										{/* {data?.user?.location || ""} */}
+										{address}
+									</Text>
+									<View>
+										<Feather name="x" size={18} color="#1A1B23" />
+									</View>
+								</View>
+							</Pressable>
+						</View>
 					</View>
-				</View>
+				)}
 			</View>
 			<View className="px-6 mb-3">
 				<ScrollView

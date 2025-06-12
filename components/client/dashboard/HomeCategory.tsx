@@ -1,39 +1,41 @@
 import useServiceCategories from "@/hooks/useServiceCategories";
+import { CATEGORY_IMAGE_MAP } from "@/utils";
 import { Link, router } from "expo-router";
 import React from "react";
 import { Image, Pressable, Text, View } from "react-native";
-const categoryItems = [
-	{
-		id: 1,
-		name: "Mechanical Services",
-		image: require("../../../assets/images/mechanical.png"),
-	},
-	{
-		id: 2,
-		name: "Electrical Services",
-		image: require("../../../assets/images/electrical.png"),
-	},
-	{
-		id: 3,
-		name: "Automobile Repairs",
-		image: require("../../../assets/images/automobile.png"),
-	},
-	{
-		id: 4,
-		name: "Technical/Phone",
-		image: require("../../../assets/images/phone_repair.png"),
-	},
-	{
-		id: 5,
-		name: "Computer/IT Services",
-		image: require("../../../assets/images/computer.png"),
-	},
-	{
-		id: 6,
-		name: "Plumbing/Boreholes",
-		image: require("../../../assets/images/plumbing.png"),
-	},
-];
+
+// const categoryItems = [
+// 	{
+// 		id: 1,
+// 		name: "Mechanical Services",
+// 		image: require("../../../assets/images/mechanical.png"),
+// 	},
+// 	{
+// 		id: 2,
+// 		name: "Electrical Services",
+// 		image: require("../../../assets/images/electrical.png"),
+// 	},
+// 	{
+// 		id: 3,
+// 		name: "Automobile Repairs",
+// 		image: require("../../../assets/images/automobile.png"),
+// 	},
+// 	{
+// 		id: 4,
+// 		name: "Technical/Phone",
+// 		image: require("../../../assets/images/phone_repair.png"),
+// 	},
+// 	{
+// 		id: 5,
+// 		name: "Computer/IT Services",
+// 		image: require("../../../assets/images/computer.png"),
+// 	},
+// 	{
+// 		id: 6,
+// 		name: "Plumbing/Boreholes",
+// 		image: require("../../../assets/images/plumbing.png"),
+// 	},
+// ];
 const HomeCategory = () => {
 	const { data, isLoading } = useServiceCategories();
 	return (
@@ -46,7 +48,7 @@ const HomeCategory = () => {
 					</Link>
 				</View>
 				<View className="flex-row flex-wrap justify-between gap-y-4 ">
-					{categoryItems.map((item) => (
+					{data?.data?.categories?.slice(0, 6).map((item) => (
 						<Pressable
 							key={item.id}
 							className="w-[99px] "
@@ -61,7 +63,7 @@ const HomeCategory = () => {
 						>
 							<View className="h-[100px] mb-2 rounded-lg border-[0.5px] border-primary">
 								<Image
-									source={item.image}
+									source={CATEGORY_IMAGE_MAP[item.name]}
 									className="w-[99px] h-[100px] rounded-lg "
 									resizeMode="cover"
 								/>

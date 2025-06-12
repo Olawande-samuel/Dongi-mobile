@@ -5,12 +5,13 @@ import { Api } from "@/utils/endpoints";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import { useMutation } from "@tanstack/react-query";
-import { Link } from "expo-router";
-import React from "react";
+import { Link, router } from "expo-router";
+import React, { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Text, TextInput, View } from "react-native";
 import { z } from "zod";
 import StyledButton from "../StyledButton";
+import { useTempStore } from "@/store/temp-user-store";
 
 const FormSchema = z.object({
 	email: z.string().trim().email(),
@@ -70,6 +71,24 @@ const EmailSignInForm = ({ userType }: { userType: USERTYPE }) => {
 			}
 		);
 	}
+
+	// useEffect(() => {
+	// 	async function storeUserType(val) {
+	// 		try {
+	// 			// await AsyncStorage.setItem("userType", val);
+	// 			setUserType(val);
+	// 			if (val === "client") {
+	// 				router.push("/(auth)/clients/sign-up");
+	// 			} else {
+	// 				router.push("/(auth)/service-provider/sign-up");
+	// 			}
+	// 			// router.push("/(auth)/clients/sign-up");
+	// 		} catch (error) {
+	// 			console.log("Error storing data", error);
+	// 		}
+	// 	}
+	// 	storeUserType("service");
+	// }, []);
 	return (
 		<View className="">
 			<View className="mb-5">

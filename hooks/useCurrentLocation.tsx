@@ -2,6 +2,7 @@ import { View, Text } from "react-native";
 import React, { useEffect, useState } from "react";
 import * as Location from "expo-location";
 import { getAddressFromCoordinates } from "./useLocation";
+import { GooglePlaceData, GooglePlaceDetail } from "react-native-google-places-autocomplete";
 
 const useCurrentLocation = () => {
 	const [errorMsg, setErrorMsg] = useState("");
@@ -42,18 +43,34 @@ const useCurrentLocation = () => {
 		})();
 	}, []);
 
-	async function updateLocation() {
+	useEffect(() => { 
+		console.log("address changed")
+	}, [address])
+	async function updateLocation(data?: GooglePlaceDetail) {
 		try {
 			setLoading(true);
-			const currentLocation = await Location.getCurrentPositionAsync({
-				accuracy: Location.Accuracy.Balanced,
-			});
-			setLocation(currentLocation);
-			const result = await getAddressFromCoordinates(
-				currentLocation.coords.latitude,
-				currentLocation.coords.longitude
-			);
-			return result;
+			if (data) {
+				const currentLocation = {
+					coords: {
+						latitude: data.geometry.location.lat,
+						longitude: data.geometry.location.lng,
+					},
+				} as Location.LocationObject;
+				setLocation(currentLocation);
+				setAddress(data.formatted_address);
+				return data.formatted_address;
+			} else {
+				const currentLocation = await Location.getCurrentPositionAsync({
+					accuracy: Location.Accuracy.Balanced,
+				});
+				setLocation(currentLocation);
+				const result = await getAddressFromCoordinates(
+					currentLocation.coords.latitude,
+					currentLocation.coords.longitude
+				);
+				setAddress(result);
+				return result;
+			}
 		} catch (error) {
 			setErrorMsg(
 				"Error getting current location: " +

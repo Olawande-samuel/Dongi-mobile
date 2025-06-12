@@ -3,6 +3,7 @@ import NoHistory from "@/components/client/history/NoHistory";
 import CompletedServiceItem from "@/components/provider/Dashboard/CompletedServiceItem";
 import RequestCard from "@/components/provider/Dashboard/RequestCard";
 import RouteHeader from "@/components/shared/RouteHeader";
+import { IServiceProviderCompletedRequest } from "@/types";
 import { groupByDate } from "@/utils";
 import { Api } from "@/utils/endpoints";
 import { useQuery } from "@tanstack/react-query";
@@ -71,7 +72,10 @@ const History = () => {
 								{...item}
 							/>
 						) : (
-							<CompletedServiceItem {...item} />
+							<CompletedServiceItem
+								{...(item as IServiceProviderCompletedRequest)}
+								activeTab={2}
+							/>
 						)
 					}
 					ListHeaderComponent={

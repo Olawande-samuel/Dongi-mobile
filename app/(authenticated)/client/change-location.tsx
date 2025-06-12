@@ -3,22 +3,32 @@ import { SIZES } from "@/utils/constants";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React from "react";
+import { Keyboard, TouchableWithoutFeedback } from "react-native";
 import {
 	ActivityIndicator,
 	FlatList,
+	KeyboardAvoidingView,
+	Platform,
 	Pressable,
 	Text,
 	View,
 } from "react-native";
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import {
+	GooglePlaceDetail,
+	GooglePlacesAutocomplete,
+} from "react-native-google-places-autocomplete";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { toast } from "sonner-native";
 
 function LocationForm() {
-	const { address, loading, location } = useCurrentLocation();
+	const { address, loading, location, updateLocation } = useCurrentLocation();
 
-	function handleLocationUpdate() {
+	async function handleLocationUpdate(data?: GooglePlaceDetail) {
+		console.log("updating");
 		// update location with coordinates and address
+		const result = await updateLocation(data);
+
+		console.log({ result });
 		// invalidate location queries: userProfile
 	}
 	return (
@@ -32,13 +42,17 @@ function LocationForm() {
 							console.log("failed", error);
 							toast.error("An error occurred fetching your location");
 						}}
-						onPress={(data) => {
+						onPress={(data, details) => {
+							console.log("pressed", data);
+							handleLocationUpdate(details ?? undefined);
 							// form.setValue("location", data.description);
 						}}
 						query={{
 							key: process.env.EXPO_PUBLIC_GOOGLE_API,
 							language: "en",
+							components: "country:ng",
 						}}
+						fetchDetails
 						styles={{
 							textInput: {
 								borderWidth: 1,
@@ -48,7 +62,17 @@ function LocationForm() {
 								borderRadius: 4,
 								fontSize: 16,
 							},
+							listView: {
+								zIndex: 9999,
+								elevation: 5,
+								position: "absolute",
+								top: 60,
+							},
 						}}
+						enablePoweredByContainer={false}
+						keyboardShouldPersistTaps="handled"
+						listUnderlayColor="transparent"
+						debounce={400}
 					/>
 				</View>
 				<View>
@@ -59,7 +83,7 @@ function LocationForm() {
 					) : (
 						<View>
 							<Text className="text-primary">Your current location</Text>
-							<Pressable onPress={handleLocationUpdate}>
+							<Pressable onPress={() => handleLocationUpdate(undefined)}>
 								<View>
 									<Text>{address}</Text>
 								</View>
@@ -75,33 +99,42 @@ function LocationForm() {
 const ChangeLocation = () => {
 	return (
 		<SafeAreaView className="flex-1 bg-white" edges={["top"]}>
-			<View className="flex-row justify-between py-[10px] bg-white px-4">
-				<Pressable
-					onPress={() => {
-						router.dismiss();
-					}}
+			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+				<KeyboardAvoidingView
+					style={{ flex: 1 }}
+					behavior={Platform.OS === "ios" ? "padding" : "height"}
+					keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
 				>
-					<Ionicons
-						name="arrow-back"
-						size={SIZES.height > 700 ? 24 : 18}
-						color="#1A1B23"
+					<View className="flex-row justify-between py-[10px] bg-white px-4">
+						<Pressable
+							onPress={() => {
+								router.dismiss();
+							}}
+						>
+							<Ionicons
+								name="arrow-back"
+								size={SIZES.height > 700 ? 24 : 18}
+								color="#1A1B23"
+							/>
+						</Pressable>
+						<Text className="text-base text-off-black">Change Location</Text>
+						<View></View>
+					</View>
+
+					<FlatList
+						data={[]}
+						ListHeaderComponent={() => <LocationForm />}
+						renderItem={() => null}
+						showsVerticalScrollIndicator={false}
+						style={{
+							flex: 1,
+						}}
+						contentContainerStyle={{
+							justifyContent: "space-between",
+						}}
 					/>
-				</Pressable>
-				<Text className="text-base text-off-black">Change Location</Text>
-				<View></View>
-			</View>
-			<FlatList
-				data={[]}
-				ListHeaderComponent={() => <LocationForm />}
-				renderItem={() => null}
-				showsVerticalScrollIndicator={false}
-				style={{
-					flex: 1,
-				}}
-				contentContainerStyle={{
-					justifyContent: "space-between",
-				}}
-			/>
+				</KeyboardAvoidingView>
+			</TouchableWithoutFeedback>
 		</SafeAreaView>
 	);
 };

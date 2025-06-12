@@ -11,6 +11,7 @@ import { useNavigation } from "expo-router";
 import DoubleHeader from "@/components/client/DoubleHeader";
 import BackButton from "@/components/BackButton";
 import { SIZES } from "@/utils/constants";
+import useServiceProviderUserInfo from "@/hooks/useServiceProviderUserInfo";
 
 function ServiceComponent() {
 	return (
@@ -41,7 +42,7 @@ function ServiceComponent() {
 }
 
 const PublicProfile = () => {
-	const { data } = useUserInfo();
+	const { data } = useServiceProviderUserInfo();
 	const navigation = useNavigation();
 
 	const { data: services, isLoading } = useQuery({

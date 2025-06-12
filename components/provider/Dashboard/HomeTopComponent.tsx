@@ -14,6 +14,8 @@ import React, { useEffect, useRef } from "react";
 import { Pressable, Text, View } from "react-native";
 import AccountApproved from "./AccountApproved";
 import { toast } from "sonner-native";
+import useServiceProviderUserInfo from "@/hooks/useServiceProviderUserInfo";
+import ProviderHomeUserInfo from "./ProviderHomeUserInfo";
 
 const HomeTopComponent = ({
 	setTab,
@@ -26,7 +28,7 @@ const HomeTopComponent = ({
 	totalOngoing: number;
 	totalPending: number;
 }) => {
-	const { data, isLoading } = useUserInfo();
+	const { data, isLoading } = useServiceProviderUserInfo();
 	const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
 	useEffect(() => {
@@ -35,7 +37,8 @@ const HomeTopComponent = ({
 	return (
 		<View className="">
 			<View className="mb-[18px]">
-				<HomeUserInfo />
+				{/* <HomeUserInfo /> */}
+				<ProviderHomeUserInfo />
 			</View>
 			<View className="p-2 mb-3 space-y-2 border border-outer-light rounded-lg">
 				<View className="rounded-lg bg-light justify-center items-center py-4 px-3">

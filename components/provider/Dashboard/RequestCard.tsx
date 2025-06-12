@@ -1,20 +1,14 @@
 import { View, Text, Image, Pressable } from "react-native";
 import React from "react";
 import { router } from "expo-router";
-import { OngoingRequest } from "@/types";
+import { OngoingRequest, ServiceProviderOngoingRequest } from "@/types";
 import moment from "moment";
 
-interface Props extends OngoingRequest {
+interface Props extends ServiceProviderOngoingRequest {
 	activeTab: number;
 }
 
-const RequestCard = ({
-	message,
-	provider,
-	created_at,
-	uuid,
-	activeTab,
-}: Props) => {
+const RequestCard = ({ message, created_at, uuid, activeTab }: Props) => {
 	return (
 		<Pressable
 			onPress={() =>
@@ -39,11 +33,11 @@ const RequestCard = ({
 						/>
 						<View className="ml-2 space-y-1">
 							<Text className="text-sm large:text-base font-regular text-off-black">
-								{provider?.name || ""}
+								{/* {provider?.name || ""} */}
 							</Text>
-							<Text className="text-[10px] large:text-xs font-regular text-support">
+							{/* <Text className="text-[10px] large:text-xs font-regular text-support">
 								Real estate agent
-							</Text>
+							</Text> */}
 						</View>
 					</View>
 					<View className="space-y-1">

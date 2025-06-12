@@ -37,15 +37,15 @@ const Profile = () => {
 				<View className="flex-row gap-x-3 mb-[36px]">
 					<View className="w-[60px] h-[60px] rounded-full bg-primary">
 						<Text className="uppercase text-[42px] font-bold text-white text-center ">
-							R
+							{data?.user.firstname.charAt(0) || "D"}
 						</Text>
 					</View>
 					<View>
 						<Text className="text-base font-semibold text-off-black mb-2">
-							{`${data?.firstname || ""} ${data?.lastname || ""}`}
+							{`${data?.user.firstname || ""} ${data?.user.lastname || ""}`}
 						</Text>
 						<Text className="text-base text-support font-normal font-regular">
-							{data?.email ||""}
+							{data?.user.email || ""}
 						</Text>
 					</View>
 				</View>

@@ -4,9 +4,10 @@ import { Link } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import RouteHeader from "@/components/shared/RouteHeader";
 import useUserInfo from "@/hooks/useUserInfo";
+import useServiceProviderUserInfo from "@/hooks/useServiceProviderUserInfo";
 
 const Index = () => {
-	const { data, isLoading } = useUserInfo();
+	const { data, isLoading } = useServiceProviderUserInfo();
 
 	return (
 		<SafeAreaView className="flex-1 bg-white " edges={["top"]}>

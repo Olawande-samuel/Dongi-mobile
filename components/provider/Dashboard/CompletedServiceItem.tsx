@@ -1,16 +1,16 @@
 import StatusPill from "@/components/StatusPill";
-import { ICompletedRequest } from "@/types";
+import { ICompletedRequest, IServiceProviderCompletedRequest } from "@/types";
 import { SIZES } from "@/utils/constants";
 import { Entypo } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React from "react";
 import { Image, Pressable, Text, View } from "react-native";
 
-interface Props extends ICompletedRequest {
+interface Props extends IServiceProviderCompletedRequest {
 	activeTab: number;
 }
 
-const CompletedServiceItem = ({ id, uuid, provider,   }: Props) => {
+const CompletedServiceItem = ({ id, uuid }: Props) => {
 	return (
 		<Pressable
 			onPress={() =>
@@ -35,7 +35,7 @@ const CompletedServiceItem = ({ id, uuid, provider,   }: Props) => {
 					<View className="flex-row justify-between">
 						<View className="large:mb-2">
 							<Text className="text-xs large:text-sm text-off-black mb-1 leading-[17.64px]">
-								{provider?.name || ""}{" "}
+								{/* {provider?.name || ""}{" "} */}
 							</Text>
 							<Text className="text-[10px] large:text-xs text-support  leading-[15.12px]">
 								{}{" "}

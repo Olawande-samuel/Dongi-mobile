@@ -6,6 +6,8 @@ import {
 	IService,
 	IUser,
 	OngoingRequest,
+	ServiceProviderOngoingRequest,
+	ServiceProviderPendingRequest,
 } from "@/types";
 import { AxiosResponse } from "axios";
 import { authInstance, baseInstance } from "./axiosSetup";
@@ -190,13 +192,18 @@ class API {
 			return Promise.reject(error);
 		}
 	}
-	async getUserProfile(
-		userType: USERTYPE
-	): Promise<AxiosResponse<{ data: IUser }>> {
+	async getUserProfile(): Promise<AxiosResponse<{ data: IUser }>> {
 		try {
-			const endpoint = `/${
-				userType === "client" ? "customer" : "service-provider"
-			}/dashboard/profile`;
+			const endpoint = `/customer/dashboard/profile`;
+			const response = await authInstance.get(endpoint);
+			return response;
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	}
+	async getProviderUserProfile(): Promise<AxiosResponse<{ data: IUser }>> {
+		try {
+			const endpoint = `/service-provider/dashboard/profile`;
 			const response = await authInstance.get(endpoint);
 			return response;
 		} catch (error) {
@@ -349,12 +356,12 @@ class API {
 	async getProviderPendingRequests(): Promise<
 		AxiosResponse<{
 			data: {
-				requests: OngoingRequest[];
+				requests: ServiceProviderPendingRequest[];
 			};
 		}>
 	> {
 		try {
-			const endpoint = `/requests/customer/pending`;
+			const endpoint = `/requests/pending`;
 			const response = await authInstance.get(endpoint);
 			return response;
 		} catch (error) {
@@ -364,7 +371,7 @@ class API {
 	async getProviderOngoingRequests(): Promise<
 		AxiosResponse<{
 			data: {
-				requests: OngoingRequest[];
+				requests: ServiceProviderOngoingRequest[];
 			};
 		}>
 	> {
@@ -434,7 +441,7 @@ class API {
 		try {
 			const endpoint = `/services`;
 			const response = await authInstance.get(endpoint);
-			console.log({ response: JSON.stringify(response, null, 2) });
+			// console.log({ response: JSON.stringify(response, null, 2) });
 			return response;
 		} catch (error) {
 			return Promise.reject(error);
@@ -486,7 +493,6 @@ class API {
 			return Promise.reject(error);
 		}
 	}
-	
 }
 
 export const Api = new API();

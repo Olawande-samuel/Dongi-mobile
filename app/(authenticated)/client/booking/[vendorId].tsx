@@ -1,3 +1,5 @@
+import BackButton from "@/components/BackButton";
+import DoubleHeader from "@/components/client/DoubleHeader";
 import VendorProfile from "@/components/client/VendorProfile";
 import useCurrentLocation from "@/hooks/useCurrentLocation";
 import useUserInfo from "@/hooks/useUserInfo";
@@ -5,7 +7,7 @@ import { useGlobalContext } from "@/providers/GlobalStateProvider";
 import { ICategoryServices } from "@/types";
 import { handleError } from "@/utils";
 import { Api } from "@/utils/endpoints";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, Octicons } from "@expo/vector-icons";
 import {
 	BottomSheetBackdrop,
 	BottomSheetModal,
@@ -25,6 +27,7 @@ import React, {
 } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
+	ActivityIndicator,
 	Image,
 	Pressable,
 	ScrollView,
@@ -97,67 +100,78 @@ const VendorBooking = () => {
 	const serviceInfo = data?.data?.data?.services.find(
 		(item) => item.uuid === params.serviceId
 	);
+
+	console.log({ data: data?.data.data });
 	return (
-		<SafeAreaView className="flex-1 bg-white" edges={["bottom"]}>
+		<SafeAreaView className="flex-1 bg-white" edges={["top", "bottom"]}>
 			<GestureHandlerRootView className="flex-1 bg-white">
 				<BottomSheetModalProvider>
+					<View className="flex-row justify-between items-center px-6 py-3">
+						<BackButton />
+						<DoubleHeader title={serviceInfo?.provider.name} subtitle={""} />
+						<Pressable onPress={() => router.back()}>
+							<Octicons name="share-android" size={24} color="#676B83" />
+						</Pressable>
+					</View>
 					<ScrollView
 						className="bg-white flex-1 pt-[18px] border-t border-outer-light px-6"
 						showsVerticalScrollIndicator={false}
 					>
-						<View className="flex-1 bg-white ">
-							{serviceInfo && <VendorProfile {...serviceInfo} />}
-							<Pressable
-								onPress={handlePresentModalPress}
-								className="mb-6 py-3 px-1 bg-off-black rounded"
-							>
-								<Text className="text-base font-regular text-center text-white">
-									Request a custom service
-								</Text>
-							</Pressable>
-							<View className="flex-1 mb-6">
-								<Text className="text-center text-sm text-off-black font-regular mb-3">
-									Services
-								</Text>
-								<View className="bg-inner-background-light flex-1 p-2 rounded-lg">
-									{
-										serviceInfo && (
-											// {/* {[...Array(3)].map((item) => ( */}
-											<ServiceComponent
-												handlePresentModalPress={handlePresentModalPress}
-												{...serviceInfo}
-											/>
-										)
-										// {/* ))} */}
-									}
+						{isLoading ? (
+							<ActivityIndicator />
+						) : (
+							<>
+								<View className="flex-1 bg-white ">
+									{serviceInfo && <VendorProfile {...serviceInfo} />}
+									<Pressable
+										onPress={handlePresentModalPress}
+										className="mb-6 py-3 px-1 bg-off-black rounded"
+									>
+										<Text className="text-base font-regular text-center text-white">
+											Request a custom service
+										</Text>
+									</Pressable>
+									<View className="flex-1 mb-6">
+										<Text className="text-center text-sm text-off-black font-regular mb-3">
+											Services
+										</Text>
+										<View className="bg-inner-background-light flex-1 p-2 rounded-lg">
+											{serviceInfo && (
+												<ServiceComponent
+													handlePresentModalPress={handlePresentModalPress}
+													{...serviceInfo}
+												/>
+											)}
+										</View>
+									</View>
+									<View className="mb-6">
+										<Text className="text-center text-sm text-off-black font-regular mb-3">
+											Bio
+										</Text>
+										<Text className="text-sm text-support leading-[22.4px] font-regular">
+											Navigating the real estate market can be overwhelming—but
+											it doesn’t have to be. As an experienced real estate
+											consultant, I specialize in helping clients buy and sell
+											property with confidence. I provide personalized advice,
+											market analysis, and negotiation strategies to ensure you
+											get the best deal possible.
+										</Text>
+									</View>
+									<Pressable
+										onPress={handlePresentModalPress}
+										className="border-[0.5px] border-primary px-1 py-3 rounded mb-6"
+									>
+										<Text className="text-center text-primary text-base ">
+											Need a custom service?
+										</Text>
+									</Pressable>
 								</View>
-							</View>
-							<View className="mb-6">
-								<Text className="text-center text-sm text-off-black font-regular mb-3">
-									Bio
-								</Text>
-								<Text className="text-sm text-support leading-[22.4px] font-regular">
-									Navigating the real estate market can be overwhelming—but it
-									doesn’t have to be. As an experienced real estate consultant,
-									I specialize in helping clients buy and sell property with
-									confidence. I provide personalized advice, market analysis,
-									and negotiation strategies to ensure you get the best deal
-									possible.
-								</Text>
-							</View>
-							<Pressable
-								onPress={handlePresentModalPress}
-								className="border-[0.5px] border-primary px-1 py-3 rounded mb-6"
-							>
-								<Text className="text-center text-primary text-base ">
-									Need a custom service?
-								</Text>
-							</Pressable>
-						</View>
-						<RequestService
-							serviceId={serviceInfo?.uuid || ""}
-							compRef={bottomSheetModalRef}
-						/>
+								<RequestService
+									serviceId={serviceInfo?.uuid || ""}
+									compRef={bottomSheetModalRef}
+								/>
+							</>
+						)}
 					</ScrollView>
 				</BottomSheetModalProvider>
 			</GestureHandlerRootView>
@@ -187,10 +201,11 @@ function RequestService({
 	const { address, updateLocation, location } = useCurrentLocation();
 	const { setIsLoading } = useGlobalContext();
 
+	console.log({ address, location });
 	const form = useForm({
 		defaultValues: {
 			deadline: "",
-			location: data?.location || "",
+			location: data?.user.location || "",
 			latitude: location?.coords.latitude || 0,
 			longitude: location?.coords.longitude || 0,
 			message: "",
@@ -199,10 +214,14 @@ function RequestService({
 	});
 
 	useEffect(() => {
-		if (data?.location) {
-			form.setValue("location", data.location);
+		if (data?.user.location) {
+			if (address) {
+				form.setValue("location", address);
+				return;
+			}
+			form.setValue("location", data.user.location);
 		}
-	}, [data]);
+	}, [data, address]);
 
 	const handleSheetChanges = useCallback((index: number) => {
 		console.log("handleSheetChanges", index);
@@ -226,7 +245,7 @@ function RequestService({
 			{
 				onSuccess: (res) => {
 					toast.success(res.data.message);
-					router.push("/clients/(tabs)");
+					router.push("/client/(tabs)/index");
 				},
 				onError: (err) => {
 					handleError(err);
@@ -280,7 +299,9 @@ function RequestService({
 								resizeMode="contain"
 								className="w-[18px] h-[18px] mr-[6px]"
 							/>
-							<Text className="flex-1 text-base">{data?.location || ""}</Text>
+							<Text className="flex-1 text-base">
+								{address || data?.user.location || ""}
+							</Text>
 							{/* <TextInput
 								placeholder="Island Lagos, Nigeria"
 								className="flex-1 text-base"

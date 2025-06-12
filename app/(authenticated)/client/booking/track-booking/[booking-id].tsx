@@ -19,11 +19,24 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const Track = () => {
 	const params = useLocalSearchParams();
 	const bookingId = params?.["booking-id"];
+	const serviceId = params?.["service_id"];
+	const providerId = params?.["provider_id"];
+
+	console.log({ params });
 
 	const { data, isLoading } = useQuery({
 		queryKey: ["get request detail", bookingId as string],
 		queryFn: () => Api.getRequestById(bookingId as string),
 	});
+
+	const { data: services, isLoading: isServicesLoading } = useQuery({
+		queryKey: ["get provider services", providerId],
+		queryFn: () => Api.getProvidersServices(providerId as string),
+	});
+
+	const serviceInfo = services?.data?.data?.services.find(
+		(item) => item.uuid === serviceId
+	);
 
 	const result = data?.data?.data;
 	const bottomSheetModalRef = useRef<BottomSheetModal>(null);
@@ -42,10 +55,19 @@ const Track = () => {
 		setModalVisible(true);
 	}, []);
 
-	useEffect(() => {
-		handlePresentModalPress();
-	}, []);
+	console.log("request status", data?.data?.data?.status);
 
+	useEffect(() => {
+		if (data?.data?.data?.status === "completed") {
+			handlePresentModalPress();
+		}
+	}, [data?.data.data.status]);
+
+	console.log({
+		result,
+		serviceInfo,
+		services: services?.data?.data?.services,
+	});
 
 	return (
 		<SafeAreaView className="flex-1 bg-white" edges={["bottom"]}>

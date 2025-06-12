@@ -1,63 +1,18 @@
-import {
-	View,
-	Text,
-	ScrollView,
-	Pressable,
-	Dimensions,
-	ActivityIndicator,
-} from "react-native";
-import React from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Image } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import Header from "@/components/Header";
-import { router, useLocalSearchParams } from "expo-router";
-import { useQuery } from "@tanstack/react-query";
+import { CATEGORY_IMAGE_MAP } from "@/utils";
 import { Api } from "@/utils/endpoints";
-import { IService } from "@/types";
-
-// const categoryItems = [
-// 	{
-// 		id: 1,
-// 		name: "Mechanical Services",
-// 		image: require("../../../../../assets/images/mechanical.png"),
-// 	},
-// 	{
-// 		id: 2,
-// 		name: "Electrical Services",
-// 		image: require("../../../../../assets/images/electrical.png"),
-// 	},
-// 	{
-// 		id: 3,
-// 		name: "Automobile Repairs",
-// 		image: require("../../../../../assets/images/automobile.png"),
-// 	},
-// 	{
-// 		id: 4,
-// 		name: "Technical/Phone",
-// 		image: require("../../../../../assets/images/phone_repair.png"),
-// 	},
-// 	{
-// 		id: 5,
-// 		name: "Computer/IT Services",
-// 		image: require("../../../../../assets/images/computer.png"),
-// 	},
-// 	{
-// 		id: 6,
-// 		name: "Plumbing/Boreholes",
-// 		image: require("../../../../../assets/images/plumbing.png"),
-// 	},
-// 	{
-// 		id: 7,
-// 		name: "TV/Cable Services",
-// 		image: require("../../../../../assets/images/tv.png"),
-// 	},
-// 	{
-// 		id: 8,
-// 		name: "Customized Services",
-// 		image: require("../../../../../assets/images/custom.png"),
-// 	},
-// ];
+import { useQuery } from "@tanstack/react-query";
+import { router, useLocalSearchParams } from "expo-router";
+import React from "react";
+import {
+	ActivityIndicator,
+	Image,
+	Pressable,
+	ScrollView,
+	Text,
+	View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Search = () => {
 	const params = useLocalSearchParams();
@@ -69,9 +24,16 @@ const Search = () => {
 		queryFn: Api.getClientServiceCategories,
 	});
 
-	const categoryItems =
-		data?.data?.data?.categories.filter((item) => item.status === "active") ||
-		[];
+	const categoryItems = [
+		...(data?.data?.data?.categories.filter(
+			(item) => item.status === "active"
+		) || []),
+		{
+			name: "Customized Services",
+			id: "",
+			uuid:"custom_services"
+		},
+	];
 
 	return (
 		<SafeAreaView className="flex-1 bg-white px-4 large:px-6 " edges={["top"]}>
@@ -102,7 +64,7 @@ const Search = () => {
 							>
 								<View className="h-[154px] w-full  max-w-[162px] mb-2 rounded-lg border-[0.5px] border-primary">
 									<Image
-										source={{ uri: item.image }}
+										source={CATEGORY_IMAGE_MAP[item.name]}
 										className="max-w-[162px] h-[154px]"
 										resizeMode="cover"
 									/>

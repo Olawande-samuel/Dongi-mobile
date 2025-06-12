@@ -88,3 +88,14 @@ export function groupByDate<T extends IDatesOptions>(
 
 	return result;
 }
+
+export const CATEGORY_IMAGE_MAP: { [key: string]: any } = {
+	"Mechanical Services": require("../assets/images/mechanical.png"),
+	"Electrical Services": require("../assets/images/electrical.png"),
+	"Automobile Repairs": require("../assets/images/automobile.png"),
+	"Technical/Phone": require("../assets/images/phone_repair.png"),
+	"Computer/IT Services": require("../assets/images/computer.png"),
+	"Plumbing/Boreholes": require("../assets/images/plumbing.png"),
+	"Customized Services": require("../assets/images/custom.png"),
+	"TV/Cable Services": require("../assets/images/tv.png"),
+};
