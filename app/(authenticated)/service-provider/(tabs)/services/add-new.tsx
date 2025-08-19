@@ -24,19 +24,20 @@ import { toast } from "sonner-native";
 import { router } from "expo-router";
 import AppModal from "@/components/AppModal";
 import RouteHeader from "@/components/shared/RouteHeader";
+import useServiceProviderUserInfo from "@/hooks/useServiceProviderUserInfo";
+import { useGlobalContext } from "@/providers/GlobalStateProvider";
 
 const FormSchema = z.object({
-	name: z.string(),
+	name: z.string().trim(),
 	description: z
 		.string()
-		.max(600, "Description should not be more than 500 characters"),
+		.max(600, "Description should not be more than 500 characters")
+		.trim(),
 	images: z.object({
 		uri: z.string(),
 		type: z.string(),
 		name: z.string(),
 	}),
-	category_id: z.string().optional(),
-	starting_price: z.number().optional(),
 });
 
 type FormType = z.infer<typeof FormSchema>;
@@ -44,13 +45,9 @@ type FormType = z.infer<typeof FormSchema>;
 const AddNewService = () => {
 	const { pickImage } = useDocumentPicker();
 	const [modalVisible, setModalVisible] = useState(false);
+	const { data: userInfo } = useServiceProviderUserInfo();
 
-	const { data } = useQuery({
-		queryKey: ["get all services"],
-		queryFn: Api.getServices,
-	});
-
-	const services = data?.data?.data?.services;
+	const { setIsLoading, isLoading } = useGlobalContext();
 
 	const queryClient = useQueryClient();
 
@@ -64,30 +61,37 @@ const AddNewService = () => {
 
 	const bannerName = form.watch("images")?.name ?? "";
 
-	const { mutate, isPending } = useMutation({
+	const { mutate } = useMutation({
 		mutationFn: Api.createNewService,
 		onSuccess: () => {
 			toast.success("Service created successfully");
 			queryClient.invalidateQueries({
 				queryKey: ["get all services"],
 			});
+			form.reset({
+				description: "",
+				name: "",
+			});
 			setModalVisible(true);
 		},
 		onError: (err) => {
 			handleError(err);
 		},
+		onMutate: () => {
+			setIsLoading(true);
+		},
+		onSettled: () => setIsLoading(false),
 	});
 
-	console.log({ services });
 	function onSubmit(val: FormType) {
 		console.log(val);
-		if (services?.[0].category_id) {
+		if (userInfo?.user?.category_of_service) {
 			const payload = {
 				...val,
-				starting_price: 2450,
 				images: [val.images.uri],
-				category_id: services?.[0].category_id,
+				category_id: userInfo.user.category_of_service,
 			};
+			console.log({ payload });
 			mutate(payload);
 		}
 	}
@@ -205,11 +209,7 @@ const AddNewService = () => {
 					</ScrollView>
 				</KeyboardAvoidingView>
 				<View className="mt-auto mb-3">
-					<StyledButton
-						title="Next"
-						isLoading={isPending}
-						onPress={form.handleSubmit(onSubmit)}
-					/>
+					<StyledButton title="Next" onPress={form.handleSubmit(onSubmit)} />
 				</View>
 			</View>
 			<AppModal

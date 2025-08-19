@@ -1,4 +1,5 @@
-import useUserType from "@/hooks/useUserType";
+
+import { useAuth } from "@/context/Auth";
 import { useGlobalContext } from "@/providers/GlobalStateProvider";
 import { handleError } from "@/utils";
 import { Api } from "@/utils/endpoints";
@@ -17,7 +18,7 @@ const FormSchema = z.object({
 type FormType = z.infer<typeof FormSchema>;
 
 const ForgotPasswordForm = () => {
-	const { userType } = useUserType();
+	const { userType } = useAuth();
 	const form = useForm<FormType>({
 		defaultValues: {
 			email: "",

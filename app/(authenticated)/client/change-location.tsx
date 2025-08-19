@@ -2,7 +2,7 @@ import useCurrentLocation from "@/hooks/useCurrentLocation";
 import { SIZES } from "@/utils/constants";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import React from "react";
+import React, { useRef } from "react";
 import { Keyboard, TouchableWithoutFeedback } from "react-native";
 import {
 	ActivityIndicator,
@@ -19,9 +19,11 @@ import {
 } from "react-native-google-places-autocomplete";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { toast } from "sonner-native";
+import uuid from "react-native-uuid";
 
-function LocationForm() {
+const LocationForm = React.memo(function LocationForm() {
 	const { address, loading, location, updateLocation } = useCurrentLocation();
+	const sessionTokenRef = useRef<string>(uuid.v4().toString());
 
 	async function handleLocationUpdate(data?: GooglePlaceDetail) {
 		console.log("updating");
@@ -44,13 +46,14 @@ function LocationForm() {
 						}}
 						onPress={(data, details) => {
 							console.log("pressed", data);
+							sessionTokenRef.current = uuid.v4().toString();
 							handleLocationUpdate(details ?? undefined);
-							// form.setValue("location", data.description);
 						}}
 						query={{
 							key: process.env.EXPO_PUBLIC_GOOGLE_API,
 							language: "en",
 							components: "country:ng",
+							sessiontoken: sessionTokenRef.current,
 						}}
 						fetchDetails
 						styles={{
@@ -72,7 +75,8 @@ function LocationForm() {
 						enablePoweredByContainer={false}
 						keyboardShouldPersistTaps="handled"
 						listUnderlayColor="transparent"
-						debounce={400}
+						debounce={800}
+						minLength={3}
 					/>
 				</View>
 				<View>
@@ -94,7 +98,7 @@ function LocationForm() {
 			</View>
 		</View>
 	);
-}
+});
 
 const ChangeLocation = () => {
 	return (

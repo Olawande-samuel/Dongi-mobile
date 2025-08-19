@@ -1,6 +1,6 @@
-import OTP from "@/components/client/EmailVerification";
-import SetupPassword from "@/components/client/SetupPassword";
-import SignUpHeader from "@/components/client/SignUpHeader";
+import OTP from "@/components/shared/EmailVerification";
+import SetupPassword from "@/components/shared/SetupPassword";
+import SignUpHeader from "@/components/shared/SignUpHeader";
 import BusinessInformation from "@/components/provider/BusinessInformation";
 import EmailSignup from "@/components/provider/EmailSignup";
 import IdentityVerification from "@/components/provider/IdentityVerification";
@@ -40,6 +40,7 @@ const SignUpWithEmail = () => {
 					steps={steps}
 					setSteps={setSteps}
 					title="Set Up Your Account"
+					totalSteps={5}
 				>
 					<BusinessInformation nextStep={setSteps} />
 				</SignUpHeader>

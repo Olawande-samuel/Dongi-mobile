@@ -1,7 +1,7 @@
 import { View, Text, Image } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import PhoneSignup from "@/components/client/PhoneSignup";
+import PhoneSignup from "@/components/shared/PhoneSignup";
 import SocialSignIn from "@/components/client/SocialSignIn";
 import { Link } from "expo-router";
 import EmailSignInForm from "@/components/shared/EmailSignInForm";

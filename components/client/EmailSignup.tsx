@@ -6,7 +6,6 @@ import { EvilIcons } from "@expo/vector-icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import { useMutation } from "@tanstack/react-query";
-import { Link } from "expo-router";
 import React from "react";
 import {
 	Controller,
@@ -34,6 +33,8 @@ const FormSchema = z.object({
 	email: z.string().email(),
 	gender: z.union([z.literal("MALE"), z.literal("FEMALE"), z.literal("OTHER")]),
 	location: z.string(),
+	latitude: z.number(),
+	longitude: z.number(),
 });
 
 type FormType = z.infer<typeof FormSchema>;
@@ -115,7 +116,8 @@ const EmailForm = () => {
 										{ title: "Other", value: "OTHER" },
 									]}
 									onSelect={(selectedItem) => {
-										form.setValue("gender", selectedItem.value);
+										// form.setValue("gender", selectedItem.value);
+										field.onChange(selectedItem.value);
 									}}
 									renderButton={(selectedItem, isOpened) => {
 										return (
@@ -181,13 +183,20 @@ const EmailForm = () => {
 				<View>
 					<GooglePlacesAutocomplete
 						placeholder="Search"
-						
 						onFail={(error) => {
 							console.log("failed", error);
+							// TODO:REMOVE THIS IMPORTANT
+							form.setValue("location", "Lekki, Lagos");
+							form.setValue("latitude", 87.7749);
+							form.setValue("longitude", 22.4194);
+
 							toast.error("An error occurred fetching your location");
 						}}
-						onPress={(data) => {
+						onPress={(data, detail) => {
+							console.log({ data, detail });
 							form.setValue("location", data.description);
+							form.setValue("latitude", detail?.location.latitude);
+							form.setValue("longitude", detail?.location.longitude);
 						}}
 						query={{
 							key: process.env.EXPO_PUBLIC_GOOGLE_API,
@@ -220,7 +229,9 @@ function EmailSignup({
 	const { setItem } = useAsyncStorage("tempUser");
 	const globalContext = useGlobalContext();
 	const { setIsLoading } = globalContext;
+
 	const { data } = useTempUser();
+
 	const form = useForm<FormType>({
 		defaultValues: {
 			firstname: "",

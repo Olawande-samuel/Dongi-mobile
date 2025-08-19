@@ -14,6 +14,7 @@ const Query = () => {
 	const [activeTab, setActiveTab] = useState(1);
 	const [searchValue, setSearchValue] = useState("");
 
+	console.log({ params });
 	const { data: user } = useUserInfo();
 
 	const queryClient = useQueryClient();

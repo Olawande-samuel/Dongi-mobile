@@ -56,7 +56,7 @@ const HomeCategory = () => {
 								router.push({
 									pathname: "/client/search/category/[query]",
 									params: {
-										query: item.name,
+										query: item.uuid,
 									},
 								})
 							}

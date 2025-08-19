@@ -12,6 +12,7 @@ import { Text, TextInput, View } from "react-native";
 import { z } from "zod";
 import StyledButton from "../StyledButton";
 import { useTempStore } from "@/store/temp-user-store";
+import PasswordInput from "../PasswordInput";
 
 const FormSchema = z.object({
 	email: z.string().trim().email(),
@@ -117,8 +118,7 @@ const EmailSignInForm = ({ userType }: { userType: USERTYPE }) => {
 					render={({ field }) => (
 						<View className="space-y-[6px]">
 							<Text className="text-sm text-off-black">Password</Text>
-							<TextInput
-								secureTextEntry
+							<PasswordInput
 								placeholder="********"
 								value={field.value}
 								onChangeText={field.onChange}

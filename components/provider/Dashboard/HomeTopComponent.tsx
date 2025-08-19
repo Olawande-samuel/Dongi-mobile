@@ -29,6 +29,8 @@ const HomeTopComponent = ({
 	totalPending: number;
 }) => {
 	const { data, isLoading } = useServiceProviderUserInfo();
+
+	console.log({ data });
 	const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
 	useEffect(() => {
@@ -74,7 +76,7 @@ const HomeTopComponent = ({
 						</View>
 						<View>
 							<Text className="large:text-base text-off-black font-regular">
-								{data?.rating?.average_rating || 5} (
+								{data?.rating?.average_rating || 0} (
 								{data?.rating?.total_rating || 0})
 							</Text>
 						</View>

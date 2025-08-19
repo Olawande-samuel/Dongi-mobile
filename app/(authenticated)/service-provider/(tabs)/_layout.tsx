@@ -1,4 +1,5 @@
-import useUserType from "@/hooks/useUserType";
+
+import { useAuth } from "@/context/Auth";
 import History from "@/svgs/History";
 import Home from "@/svgs/Home";
 import Profile from "@/svgs/Profile";
@@ -6,7 +7,7 @@ import Services from "@/svgs/Services";
 import { Tabs } from "expo-router";
 
 const Layout = () => {
-	const { userType } = useUserType();
+	const { userType } = useAuth();
 	return (
 		<Tabs
 			screenOptions={{

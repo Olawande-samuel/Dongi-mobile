@@ -1,25 +1,24 @@
 import StyledButton from "@/components/StyledButton";
 import useTempUser from "@/hooks/useTempUser";
-import useUserType from "@/hooks/useUserType";
 import { useGlobalContext } from "@/providers/GlobalStateProvider";
+import { useTempStore } from "@/store/temp-user-store";
 import { handleError } from "@/utils";
 import { Api } from "@/utils/endpoints";
 import { Ionicons } from "@expo/vector-icons";
 import { useMutation } from "@tanstack/react-query";
 import { router } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { OtpInput } from "react-native-otp-entry";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { toast } from "sonner-native";
+import ResendVerificationOtp from "../shared/ResendVerificationOTP";
 
 const PhoneOTPVerification = () => {
-	const { userType } = useUserType();
+	const { userType } = useTempStore();
 	const [otp, setOtp] = useState("");
 	const { data } = useTempUser();
 	const globalContext = useGlobalContext();
-	const [countdown, setCountdown] = useState(20);
-	const [isRunning, setIsRunning] = useState(true);
 
 	const { setIsLoading } = globalContext;
 
@@ -68,26 +67,6 @@ const PhoneOTPVerification = () => {
 		}
 	}
 
-	useEffect(() => {
-		let timer: any;
-		if (isRunning) {
-			timer = setInterval(() => {
-				setCountdown((prev) => prev - 1);
-				if (countdown === 1) {
-					setIsRunning(false);
-				}
-			}, 1000);
-		}
-		return () => {
-			if (timer) clearInterval(timer);
-		};
-	}, [countdown, isRunning]);
-
-	const resetCountdown = () => {
-		setCountdown(20);
-		setIsRunning(true);
-	};
-
 	return (
 		<SafeAreaView className="bg-white flex-1 px-6" edges={["top", "bottom"]}>
 			<View className="flex-row justify-between py-[10px] mb-[23.5px]">
@@ -125,16 +104,10 @@ const PhoneOTPVerification = () => {
 								}}
 							/>
 						</View>
-						<View className="flex-row gap-2 items-center mt-3">
-							<Text>Didn't get a token?</Text>
-							{countdown > 1 ? (
-								<Text>{countdown}</Text>
-							) : (
-								<Pressable onPress={resetCountdown}>
-									<Text className="underline">Resend</Text>
-								</Pressable>
-							)}
-						</View>
+						<ResendVerificationOtp
+							reference={data?.phone}
+							type="PHONE_VERIFICATION"
+						/>
 					</View>
 					<View className="mt-auto">
 						<StyledButton title="Submit" onPress={verifyOtp} />

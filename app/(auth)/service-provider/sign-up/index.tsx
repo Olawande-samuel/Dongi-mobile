@@ -5,11 +5,12 @@ import {
 	ScrollView,
 	KeyboardAvoidingView,
 	Platform,
+	Pressable,
 } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import PhoneSignup from "@/components/client/PhoneSignup";
-import { Link } from "expo-router";
+import PhoneSignup from "@/components/shared/PhoneSignup";
+import { Link, router } from "expo-router";
 import SocialSignIn from "@/components/client/SocialSignIn";
 
 const SignUp = () => {
@@ -41,7 +42,7 @@ const SignUp = () => {
 						</View>
 						<View className="flex-1">
 							<View className="mb-6">
-								<PhoneSignup />
+								<PhoneSignup userType="service" />
 							</View>
 							<View className="items-center mb-3">
 								<Text className="text-center text-sm text-[#99a2b3]">or</Text>
@@ -57,6 +58,16 @@ const SignUp = () => {
 									</Link>{" "}
 									now.
 								</Text>
+							</View>
+							<View className="mt-2 flex-row items-center justify-center">
+								<Text className=" text-xs large:text-sm text-center text-support">
+									Not a service provider?{" "}
+								</Text>
+								<Pressable onPress={() => router.back()}>
+									<Text className="underline text-xs large:text-sm">
+										Register as a client
+									</Text>
+								</Pressable>
 							</View>
 						</View>
 					</View>

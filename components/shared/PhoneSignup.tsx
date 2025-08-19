@@ -19,11 +19,7 @@ const FormSchema = z.object({
 });
 type FormType = z.infer<typeof FormSchema>;
 
-const PhoneSignup = () => {
-	const { userType } = useTempStore();
-
-	console.log({ userType });
-
+const PhoneSignup = ({ userType }: { userType: "service" | "client" }) => {
 	const [show, setShow] = useState(false);
 	const [countryCode, setCountryCode] = useState("+234");
 	const [countryFlag, setCountryFlag] = useState("🇳🇬");
@@ -72,7 +68,9 @@ const PhoneSignup = () => {
 					},
 				}
 			);
-		} else {
+			return;
+		}
+		if (userType === "service") {
 			mutate(
 				{
 					type: "service",

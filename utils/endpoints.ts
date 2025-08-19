@@ -66,8 +66,10 @@ class API {
 	}): Promise<AxiosResponse<any>> {
 		try {
 			const endpoint = `/${
-				data.type === "client" ? "customer" : "service-provider"
-			}/create-password`;
+				data.type === "client"
+					? "customer/create-password"
+					: "service-provider/set-password"
+			}`;
 			const response = await baseInstance.post(endpoint, data.payload);
 			return response;
 		} catch (error) {
@@ -102,6 +104,21 @@ class API {
 			return Promise.reject(error);
 		}
 	}
+
+	async resendResetOTP(data: {
+		user_type: "SERVICE_PROVIDER" | "CUSTOMER";
+		user_id: string;
+		type: "EMAIL_VERIFICATION" | "PHONE_VERIFICATION";
+		reference: string;
+	}): Promise<AxiosResponse<any>> {
+		try {
+			const endpoint = `/auth/resend-otp`;
+			const response = await baseInstance.post(endpoint, data);
+			return response;
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	}
 	async forgotPassword(data: {
 		type: USERTYPE;
 		payload: { email: string };
@@ -125,6 +142,20 @@ class API {
 				data.type === "client" ? "customer" : "service-provider"
 			}/reset-password`;
 			const response = await baseInstance.post(endpoint, data.payload);
+			return response;
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	}
+	async changePassword(data: {
+		type: USERTYPE;
+		payload: { old_password: string; new_password: string };
+	}): Promise<AxiosResponse<any>> {
+		try {
+			const endpoint = `/${
+				data.type === "client" ? "customer" : "service-provider"
+			}/dashboard/change-password`;
+			const response = await authInstance.post(endpoint, data.payload);
 			return response;
 		} catch (error) {
 			return Promise.reject(error);
@@ -172,7 +203,7 @@ class API {
 	}
 	async registerVerificationDocs(data: FormData): Promise<AxiosResponse<any>> {
 		try {
-			const endpoint = `/service-providers/upload-verification-docs`;
+			const endpoint = `/service-provider/upload-verification-docs`;
 			const response = await baseInstance.post(endpoint, data, {
 				headers: {
 					"Content-Type": "multipart/form-data",
@@ -488,6 +519,50 @@ class API {
 		try {
 			const endpoint = `/services/${data.serviceId}`;
 			const response = await authInstance.put(endpoint, data.payload);
+			return response;
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	}
+
+	async fetchTransactions(): Promise<
+		AxiosResponse<
+			ApiResponse<{
+				transactions: any[];
+				pagination: {
+					totalRecords: number;
+					totalPages: number;
+					currentPage: number;
+					pageSize: number;
+				};
+			}>
+		>
+	> {
+		try {
+			const endpoint = `/wallet/transactions`;
+			const response = await authInstance.get(endpoint);
+			return response;
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	}
+	async fetchWallet(): Promise<
+		AxiosResponse<
+			ApiResponse<{
+				wallet: {
+					id: string;
+					user_id: string;
+					balance: string;
+					is_active: boolean;
+					created_at: string;
+					updated_at: string;
+				};
+			}>
+		>
+	> {
+		try {
+			const endpoint = `/wallet`;
+			const response = await authInstance.get(endpoint);
 			return response;
 		} catch (error) {
 			return Promise.reject(error);

@@ -25,7 +25,7 @@ import SelectDropdown from "react-native-select-dropdown";
 
 const FormSchema = z.object({
 	category_of_service: z.string(),
-	business_logo_or_passport_photo: z.object({
+	business_logo: z.object({
 		uri: z.string(),
 		type: z.string(),
 		name: z.string(),
@@ -53,7 +53,7 @@ const BusinessInformation = ({
 		resolver: zodResolver(FormSchema),
 	});
 
-	const bannerName = form.watch("business_logo_or_passport_photo")?.name ?? "";
+	const bannerName = form.watch("business_logo")?.name ?? "";
 
 	const { data: categories, isLoading } = useQuery({
 		queryKey: ["get service categories"],
@@ -81,11 +81,10 @@ const BusinessInformation = ({
 		formData.append("brief_introduction", val.brief_introduction);
 		formData.append("bio", val.bio);
 		formData.append("user_id", data.userId);
-		formData.append(
-			"business_logo_or_passport_photo",
-			val.business_logo_or_passport_photo.uri
-		);
+		formData.append("business_logo", val.business_logo as any);
 
+		console.log({ formData })
+		
 		mutate(formData, {
 			onSuccess: (res) => {
 				toast.success(res.data.message);
@@ -115,7 +114,9 @@ const BusinessInformation = ({
 							name="category_of_service"
 							render={({ field }) => (
 								<View className="space-y-[6px]">
-									<Text className="text-sm text-off-black">Service Category</Text>
+									<Text className="text-sm text-off-black">
+										Service Category
+									</Text>
 									<View>
 										<SelectDropdown
 											data={serviceCategories || []}
@@ -188,7 +189,7 @@ const BusinessInformation = ({
 					<View className="mb-5">
 						<Controller
 							control={form.control}
-							name="business_logo_or_passport_photo"
+							name="business_logo"
 							render={({ field }) => (
 								<View className="space-y-[6px]">
 									<Text className="text-sm text-off-black">
@@ -216,10 +217,9 @@ const BusinessInformation = ({
 								</View>
 							)}
 						/>
-						{form.formState.errors?.business_logo_or_passport_photo && (
+						{form.formState.errors?.business_logo && (
 							<Text className="text-xs text-red-400">
-								{form.formState.errors?.business_logo_or_passport_photo
-									.message ?? ""}
+								{form.formState.errors?.business_logo.message ?? ""}
 							</Text>
 						)}
 					</View>

@@ -11,14 +11,13 @@ import {
 	useEffect,
 	useState,
 } from "react";
-import useUserType from "@/hooks/useUserType";
 
 interface AuthContextType {
 	user: { token: string } | null;
-	userType: string | null;
+	userType: USERTYPE;
 	isLoading: boolean;
 	setUser: React.Dispatch<React.SetStateAction<{ token: string } | null>>;
-	setUserType: React.Dispatch<React.SetStateAction<string | null>>;
+	setUserType: React.Dispatch<React.SetStateAction<USERTYPE>>;
 	logout: VoidFunction;
 	handleLogin: (token: string) => void;
 }
@@ -26,9 +25,8 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
-	const { userType: OG_UserType } = useUserType();
 	const [user, setUser] = useState<{ token: string } | null>(null);
-	const [userType, setUserType] = useState<string | null>(null);
+	const [userType, setUserType] = useState<USERTYPE>(null);
 	const [isLoading, setIsLoading] = useState(true);
 	const { removeItem } = useAsyncStorage("user");
 
@@ -43,11 +41,11 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 	const loadUserData = async () => {
 		try {
 			const data = await AsyncStorage.getItem("user");
-			const type = await AsyncStorage.getItem("userType");
+			const type = await AsyncStorage.getItem("userType") as USERTYPE;
 			if (data) {
 				const result = JSON.parse(data);
 				setUser({ token: result.token });
-				setUserType(type || "client");
+				setUserType(type ?? null);
 			} else {
 				setUser({ token: "" });
 			}
@@ -67,9 +65,9 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 		if (!user?.token) {
 			// Redirect to auth if user is not logged in and trying to access protected routes
 			if (!inAuthGroup) {
-				if (OG_UserType === "client") {
+				if (userType === "client") {
 					router.replace("/clients/sign-in");
-				} else if (OG_UserType === "service") {
+				} else if (userType === "service") {
 					router.replace("/service-provider/sign-in");
 				}
 			}
@@ -81,7 +79,20 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 				router.replace("/service-provider/(tabs)");
 			}
 		}
-	}, [segments, navigationState?.key, user, userType]);
+	}, [segments, navigationState?.key, user, userType, isLoading]);
+
+	// Persist userType changes to AsyncStorage
+	useEffect(() => {
+		(async () => {
+			try {
+				if (userType === null) {
+					await AsyncStorage.removeItem("userType");
+				} else {
+					await AsyncStorage.setItem("userType", userType);
+				}
+			} catch {}
+		})();
+	}, [userType]);
 
 	async function handleLogin(token: string) {
 		setUser({ token: token });
@@ -91,6 +102,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 	async function logout() {
 		queryClient.clear();
 		await AsyncStorage.removeItem("user");
+		await AsyncStorage.removeItem("userType");
 		loadUserData();
 		console.log("calling");
 	}

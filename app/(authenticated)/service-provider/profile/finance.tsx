@@ -1,9 +1,13 @@
 import BackButton from "@/components/BackButton";
 import NoHistory from "@/components/client/history/NoHistory";
+import useTransactionHistory from "@/hooks/useTransactionHistory";
+import useWallet from "@/hooks/useWallet";
 import Copy from "@/svgs/Copy";
 import { cn, formatCurrency } from "@/utils";
+import { useQueryClient } from "@tanstack/react-query";
 import moment from "moment";
 import React from "react";
+import { RefreshControl } from "react-native";
 import { SectionList, Text, useWindowDimensions, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -35,6 +39,8 @@ const DATA = [
 ];
 
 function HeaderComponent() {
+	const { data, isLoading } = useWallet();
+
 	return (
 		<View className="flex-1 bg-white  pt-[18px]">
 			<View className="rounded-lg bg-[#F7EFDE] justify-center items-center py-4 mb-2">
@@ -43,7 +49,7 @@ function HeaderComponent() {
 				</View>
 				<View className="flex-row items-end">
 					<Text className="text-off-black text-4xl large:text-[42px] text-center font-bold">
-						{formatCurrency(0 || 0)}
+						{formatCurrency(data?.balance || 0)}
 					</Text>
 				</View>
 			</View>
@@ -91,6 +97,10 @@ function ItemComponent({ type }: ItemProps) {
 
 const Finance = () => {
 	const { height } = useWindowDimensions();
+	const { isLoading } = useWallet();
+	const { data, isLoading: isHistoryPending } = useTransactionHistory();
+
+	const queryClient = useQueryClient();
 	return (
 		<SafeAreaView className="flex-1 bg-white" edges={["bottom", "top"]}>
 			<View className="px-4 large:px-6 flex-1">
@@ -124,6 +134,19 @@ const Finance = () => {
 					contentContainerStyle={{
 						minHeight: height - 200,
 					}}
+					refreshControl={
+						<RefreshControl
+							refreshing={isLoading || isHistoryPending}
+							onRefresh={() => {
+								queryClient.invalidateQueries({
+									queryKey: ["get transaction history"],
+								});
+								queryClient.invalidateQueries({
+									queryKey: ["get wallet balance"],
+								});
+							}}
+						/>
+					}
 				/>
 			</View>
 		</SafeAreaView>

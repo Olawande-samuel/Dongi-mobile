@@ -1,8 +1,8 @@
 import EmailSignup from "@/components/client/EmailSignup";
 import EmailVerification from "@/components/client/EmailVerification";
 import FacialVerification from "@/components/client/FacialVerification";
-import SetupPassword from "@/components/client/SetupPassword";
-import SignUpHeader from "@/components/client/SignUpHeader";
+import SetupPassword from "@/components/shared/SetupPassword";
+import SignUpHeader from "@/components/shared/SignUpHeader";
 import Welcome from "@/components/Welcome";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";

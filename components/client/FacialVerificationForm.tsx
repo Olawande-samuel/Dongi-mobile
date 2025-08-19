@@ -13,7 +13,11 @@ import { toast } from "sonner-native";
 
 const { width, height } = Dimensions.get("window");
 
-const FacialVerificationForm = () => {
+const FacialVerificationForm = ({
+	setSteps,
+}: {
+	setSteps: React.Dispatch<React.SetStateAction<number>>;
+}) => {
 	const [facing] = useState<CameraType>("front");
 	const [permission, requestPermission] = useCameraPermissions();
 	const faceWidth = width * 0.8;
@@ -94,8 +98,8 @@ const FacialVerificationForm = () => {
 					const fileObject = {
 						uri: result.uri,
 						type: "image/jpeg",
-						name: Date.now(),
-						lastModified: Date.now(),
+						name: Date.now().toString(),
+						// lastModified: Date.now(),
 					};
 
 					console.log("File created:", fileObject);
@@ -117,14 +121,16 @@ const FacialVerificationForm = () => {
 			};
 			if (userFile) {
 				const formdata = new FormData();
+
 				formdata.append("user_id", phone.userId);
-				formdata.append("avatar", userFile);
+				formdata.append("avatar", userFile as any);
+
+				console.log({ formdata });
 
 				mutate(formdata, {
 					onSuccess: (res) => {
 						toast.success(res.data.message);
-						setItem("hasAccount", JSON.stringify(true));
-						router.push("/clients/sign-in/email");
+						setSteps((prev) => prev + 1);
 					},
 					onError: (err) => {
 						handleError(err);

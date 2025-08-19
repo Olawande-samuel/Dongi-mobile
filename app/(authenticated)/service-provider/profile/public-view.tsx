@@ -1,19 +1,29 @@
-import { View, Text, Pressable, Image } from "react-native";
+import { View, Text, Pressable, Image, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ScrollView } from "react-native-gesture-handler";
 import VendorProfile from "@/components/client/VendorProfile";
 import { useQuery } from "@tanstack/react-query";
 import { Api } from "@/utils/endpoints";
 import useUserInfo from "@/hooks/useUserInfo";
 import { Ionicons, Octicons } from "@expo/vector-icons";
 import { useNavigation } from "expo-router";
-import DoubleHeader from "@/components/client/DoubleHeader";
+import DoubleHeader from "@/components/shared/DoubleHeader";
 import BackButton from "@/components/BackButton";
 import { SIZES } from "@/utils/constants";
 import useServiceProviderUserInfo from "@/hooks/useServiceProviderUserInfo";
+import useServices from "@/hooks/useServices";
+import { IProviderService } from "@/types";
+import EmptyList from "@/svgs/EmptyList";
+import EmptyServices from "@/components/provider/Dashboard/EmptyServices";
 
-function ServiceComponent() {
+function ServiceComponent({
+	category_id,
+	created_at,
+	description,
+	name,
+	uuid,
+	images,
+}: IProviderService) {
 	return (
 		<View className="bg-white rounded-lg border-outer-light p-3 space-y-2">
 			<View>
@@ -25,37 +35,42 @@ function ServiceComponent() {
 			</View>
 			<View>
 				<Text className="text-sm large:text-base font-regular text-off-black">
-					Real estate survey assistance
+					{name || ""}
 				</Text>
-				<Text className="text-support text-xs large:text-sm font-regular">
-					Buy or survey a property in Nigeria, obtain survey papers and
-					engineering consultation.
+				<Text
+					className="text-support text-xs large:text-sm font-regular"
+					numberOfLines={3}
+				>
+					{description || ""}
 				</Text>
 			</View>
-			<Pressable>
-				<Text className="text-center text-primary text-xs large:text-sm font-regular">
+			<View>
+				<Text
+					disabled
+					className="text-center text-primary text-xs large:text-sm font-regular"
+				>
 					Request
 				</Text>
-			</Pressable>
+			</View>
 		</View>
 	);
 }
 
 const PublicProfile = () => {
 	const { data } = useServiceProviderUserInfo();
-	const navigation = useNavigation();
 
-	const { data: services, isLoading } = useQuery({
-		queryKey: ["get my services", data?.user?.uuid],
-		queryFn: () => Api.getProvidersServices(data?.user.uuid || ""),
+	const { isLoading, result } = useServices();
+
+	const { data: servicesByCategory } = useQuery({
+		queryKey: ["get my services by category", data?.user?.category_of_service],
+		queryFn: () =>
+			Api.getCategoryServices(data?.user?.category_of_service || ""),
 		enabled: !!data?.user.uuid,
 	});
 
-	console.log("user uuid", data?.user.id);
-	const result = services?.data?.data?.services;
-
-	console.log("48########", result);
-
+	const nameOfService = result?.find(
+		(item) => item.category_id === data?.user?.category_of_service
+	);
 	return (
 		<SafeAreaView className="flex-1 bg-white" edges={["bottom", "top"]}>
 			<View className="flex-row justify-between items-center pt-1 px-4 large:px-6">
@@ -88,8 +103,11 @@ const PublicProfile = () => {
 						</View>
 						<View className="flex-1 py-[6px] space-y-2 ">
 							<View>
-								<Text className="text-xs large:text-sm font-regular text-support mb-2">
-									{data?.user.brief_introduction || ""}
+								<Text
+									className="text-xs large:text-sm font-regular text-support mb-2"
+									numberOfLines={2}
+								>
+									{data?.user.bio || ""}
 								</Text>
 							</View>
 							<View className="flex-row justify-between">
@@ -126,9 +144,13 @@ const PublicProfile = () => {
 							Services
 						</Text>
 						<View className="bg-inner-background-light flex-1 p-2 rounded-lg">
-							{[...Array(3)].map((item, i) => (
-								<ServiceComponent key={i} />
-							))}
+							{!result || (result && result?.length === 0) ? (
+								<View className="flex-1 bg-white py-[18px] rounded-[9px]">
+									<EmptyServices />
+								</View>
+							) : (
+								result?.map((item, i) => <ServiceComponent key={i} {...item} />)
+							)}
 						</View>
 					</View>
 					<View className="mb-6">
@@ -136,11 +158,7 @@ const PublicProfile = () => {
 							Bio
 						</Text>
 						<Text className="text-xs large:text-sm text-support leading-5  large:leading-[22.4px] font-regular">
-							Navigating the real estate market can be overwhelming—but it
-							doesn’t have to be. As an experienced real estate consultant, I
-							specialize in helping clients buy and sell property with
-							confidence. I provide personalized advice, market analysis, and
-							negotiation strategies to ensure you get the best deal possible.
+							{data?.user?.brief_introduction || ""}
 						</Text>
 					</View>
 					<Pressable className="border-[0.5px] border-primary px-1 py-2 large:py-3 rounded mb-8">

@@ -37,8 +37,6 @@ const Index = () => {
 
 	const data = result?.data.flatMap((item) => item?.flatMap((item) => item));
 
-	console.log({ data, result });
-
 	return (
 		<SafeAreaView className="flex-1 bg-white">
 			<StatusBar />

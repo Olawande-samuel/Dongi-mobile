@@ -1,5 +1,5 @@
 import BackButton from "@/components/BackButton";
-import DoubleHeader from "@/components/client/DoubleHeader";
+import DoubleHeader from "@/components/shared/DoubleHeader";
 import { Stack } from "expo-router";
 import React from "react";
 

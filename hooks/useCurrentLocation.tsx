@@ -46,6 +46,7 @@ const useCurrentLocation = () => {
 	useEffect(() => { 
 		console.log("address changed")
 	}, [address])
+	
 	async function updateLocation(data?: GooglePlaceDetail) {
 		try {
 			setLoading(true);

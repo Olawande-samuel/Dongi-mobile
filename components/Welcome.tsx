@@ -1,12 +1,12 @@
-import { View, Text, Image } from "react-native";
-import React, { useEffect } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import useUserType from "@/hooks/useUserType";
-import { router } from "expo-router";
+import { useAuth } from "@/context/Auth";
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
+import { router } from "expo-router";
+import React, { useEffect } from "react";
+import { Image, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Welcome = () => {
-	const { userType } = useUserType();
+	const { userType } = useAuth();
 	const { setItem } = useAsyncStorage("hasAccount");
 
 	useEffect(() => {
@@ -22,9 +22,12 @@ const Welcome = () => {
 		return () => clearTimeout(timeout);
 	}, []);
 
+	const backgroundColorClass =
+		userType === "client" ? "bg-client-primary" : "bg-service-primary";
+
 	return (
-		<SafeAreaView className={`flex-1 bg-${userType}-primary`}>
-			<View className={`flex-1 bg-${userType}-primary justify-between`}>
+		<SafeAreaView className={`flex-1 ${backgroundColorClass}`}>
+			<View className={`flex-1 ${backgroundColorClass} justify-between`}>
 				<View />
 				<View className="items-center">
 					<Image

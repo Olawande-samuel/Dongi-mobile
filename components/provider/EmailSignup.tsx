@@ -3,7 +3,6 @@ import { View } from "react-native";
 import EmailSignupForm from "./EmailSignupForm";
 
 const EmailSignup = ({
-	steps,
 	setSteps,
 }: {
 	steps: number;

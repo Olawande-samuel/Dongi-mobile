@@ -1,10 +1,10 @@
 import { View, Text } from "react-native";
 import React from "react";
-import useUserType from "@/hooks/useUserType";
 import Svg, { Mask, Path } from "react-native-svg";
+import { useAuth } from "@/context/Auth";
 
 const Services = ({ isActive }: { isActive: boolean }) => {
-	const { userType } = useUserType();
+	const { userType } = useAuth();
     const color = userType === "client" ? "#18658B" : "#E4AE1B";
 
 	return (

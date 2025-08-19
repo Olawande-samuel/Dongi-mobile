@@ -6,12 +6,7 @@ import { ActivityIndicator, Image, Pressable, Text, View } from "react-native";
 
 const HomeUserInfo = () => {
 	const { data, isLoading } = useUserInfo();
-
-	const location = useLocation(
-		data?.user.latitude || 0,
-		data?.user.longitude || 0
-	);
-
+	console.log({ data });
 	// if (isLoading) {
 	// 	return (
 	// 		<View className="mb-4">

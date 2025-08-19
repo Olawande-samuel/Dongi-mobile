@@ -1,8 +1,7 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
-import { useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/context/Auth";
-import { router } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 
 const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 

@@ -5,16 +5,17 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import ResetPasswordForm from "@/components/client/ResetPasswordForm";
 import { OtpInput } from "react-native-otp-entry";
-import useUserType from "@/hooks/useUserType";
+
 import StyledButton from "@/components/StyledButton";
 import BackButton from "@/components/BackButton";
 import { FormType } from "../_layout";
 import { useMutation } from "@tanstack/react-query";
 import { Api } from "@/utils/endpoints";
 import { useGlobalContext } from "@/providers/GlobalStateProvider";
+import { useAuth } from "@/context/Auth";
 
 const OTPVerification = () => {
-	const { userType } = useUserType();
+	const { userType } = useAuth();
 	const { setIsLoading } = useGlobalContext();
 
 	const form = useFormContext<FormType>();

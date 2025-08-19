@@ -1,9 +1,10 @@
-import useUserType from "@/hooks/useUserType";
+
+import { useAuth } from "@/context/Auth";
 import * as React from "react";
 import Svg, { Path } from "react-native-svg";
 
 function History({ isActive }: { isActive: boolean }) {
-	const { userType } = useUserType();
+	const { userType } = useAuth();
 	const color = userType === "client" ? "#18658B" : "#E4AE1B";
 	return (
 		<Svg

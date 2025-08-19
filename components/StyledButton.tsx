@@ -1,13 +1,12 @@
-import useUserType from "@/hooks/useUserType";
+import { useAuth } from "@/context/Auth";
 import { useTempStore } from "@/store/temp-user-store";
 import { cn } from "@/utils";
 import React from "react";
 import {
-	Pressable,
-	Text,
-	StyleSheet,
-	PressableProps,
 	ActivityIndicator,
+	Pressable,
+	PressableProps,
+	Text,
 } from "react-native";
 
 interface StyledButtonProps extends PressableProps {
@@ -25,7 +24,7 @@ const StyledButton: React.FC<StyledButtonProps> = ({
 	isLoading,
 	...props
 }) => {
-	const { userType } = useUserType();
+	const { userType } = useAuth();
 	const { userType: tempUserType } = useTempStore();
 
 	const user_type = tempUserType || userType;

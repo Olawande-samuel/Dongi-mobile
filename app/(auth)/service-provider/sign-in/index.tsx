@@ -34,7 +34,7 @@ const PhoneSignIn = () => {
 					<View className="mb-6">
 						<Text className="text-muted text-center text-sm large:text-base">
 							Don't have an account?{" "}
-							<Link href="/clients/sign-up">
+							<Link href="/service-provider/sign-up">
 								<Text className="text-primary">Sign up</Text>
 							</Link>{" "}
 							now.

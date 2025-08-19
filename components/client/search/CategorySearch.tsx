@@ -131,8 +131,7 @@ const CategorySearch = ({
 										className="w-[18px] h-[18px] mr-[6px]"
 									/>
 									<Text className="mr-[2px] text-sm font-regular text-off-black">
-										{/* {data?.user?.location || ""} */}
-										{address}
+										{address || data?.user?.location || ""}
 									</Text>
 									<View>
 										<Feather name="x" size={18} color="#1A1B23" />

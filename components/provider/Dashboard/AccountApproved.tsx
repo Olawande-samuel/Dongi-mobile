@@ -8,6 +8,7 @@ import {
 	BottomSheetScrollView,
 	useBottomSheetModal,
 } from "@gorhom/bottom-sheet";
+import { Link } from "expo-router";
 import React, { useCallback, useMemo } from "react";
 import { Pressable, Text, View } from "react-native";
 
@@ -81,7 +82,9 @@ function AccountApproved({
 												Fund your wallet
 											</Text>
 										</View>
-										<AntDesign name="arrowright" size={24} color="#E4AE1B" />
+										<Link href="/service-provider/(tabs)">
+											<AntDesign name="arrowright" size={24} color="#E4AE1B" />
+										</Link>
 									</View>
 									<View className="flex-row justify-between items-center">
 										<View className="flex-row ">
@@ -90,7 +93,9 @@ function AccountApproved({
 												Create at least one service
 											</Text>
 										</View>
-										<AntDesign name="arrowright" size={24} color="#E4AE1B" />
+										<Link href="/service-provider/(tabs)/services">
+											<AntDesign name="arrowright" size={24} color="#E4AE1B" />
+										</Link>
 									</View>
 									<View className="flex-row justify-between items-center">
 										<View className="flex-row ">
@@ -99,7 +104,9 @@ function AccountApproved({
 												Review your public profile
 											</Text>
 										</View>
-										<AntDesign name="arrowright" size={24} color="#E4AE1B" />
+										<Link href="/service-provider/profile">
+											<AntDesign name="arrowright" size={24} color="#E4AE1B" />
+										</Link>
 									</View>
 								</View>
 							</View>

@@ -1,10 +1,8 @@
-import { View, Text, Pressable, Image } from "react-native";
 import React from "react";
-import { Link } from "expo-router";
-import useUserType from "@/hooks/useUserType";
+import { Image, Pressable, Text, View } from "react-native";
 
 const SocialSignIn = ({ isLogin = false }: { isLogin: boolean }) => {
-	const { userType } = useUserType();
+	// const { userType } = useUserType();
 	return (
 		<View className="space-y-2">
 			<Pressable className="mb-2 flex-row items-center bg-[#1FB4FF1A] rounded px-1 py-[10px] justify-center">

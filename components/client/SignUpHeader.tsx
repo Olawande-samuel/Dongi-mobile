@@ -1,9 +1,9 @@
 import { View, Text, Pressable } from "react-native";
 import React, { PropsWithChildren } from "react";
 import { Ionicons } from "@expo/vector-icons";
-import useUserType from "@/hooks/useUserType";
 import { router } from "expo-router";
 import { cn } from "@/utils";
+import { useAuth } from "@/context/Auth";
 
 interface Props extends PropsWithChildren {
 	steps: number;
@@ -18,7 +18,7 @@ const SignUpHeader = ({
 	children,
 	totalSteps = 4,
 }: Props) => {
-	const { userType } = useUserType();
+	const { userType } = useAuth();
 
 	return (
 		<View className="flex-1">

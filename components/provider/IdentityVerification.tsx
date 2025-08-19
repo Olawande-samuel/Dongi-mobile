@@ -14,17 +14,26 @@ import { z } from "zod";
 import StyledButton from "../StyledButton";
 import { ScrollView } from "react-native";
 import { KeyboardAvoidingView } from "react-native";
+import useTempUser from "@/hooks/useTempUser";
 
 const FormSchema = z.object({
-	means_of_verification: z.string().min(2, { message: "Required" }),
+	means_of_verification: z.string({ required_error: "This field is required" }),
 	// means_of_verification_file: z.object({
 	// 	uri: z.string(),
 	// 	name: z.string(),
 	// 	mimeType: z.string(),
 	// 	size: z.number(),
 	// }),
-	means_of_verification_file: z.instanceof(File),
-	certificate_of_expertise_file: z.instanceof(File),
+	means_of_verification_file: z.object({
+		uri: z.string(),
+		type: z.string(),
+		name: z.string(),
+	}),
+	certificate_of_expertise_file: z.object({
+		uri: z.string(),
+		type: z.string(),
+		name: z.string(),
+	}),
 });
 
 type FormType = z.infer<typeof FormSchema>;
@@ -43,7 +52,10 @@ const IdentityVerification = ({
 		resolver: zodResolver(FormSchema),
 	});
 
-	const means_of_verification =
+	const { data } = useTempUser();
+
+	const means_of_verification = form.watch("means_of_verification");
+	const means_of_verification_file =
 		form.watch("means_of_verification_file")?.name ?? "";
 	const certificate_of_expertise =
 		form.watch("certificate_of_expertise_file")?.name ?? "";
@@ -59,15 +71,17 @@ const IdentityVerification = ({
 		formData.append("means_of_verification", val.means_of_verification);
 		formData.append(
 			"means_of_verification_file",
-			val.means_of_verification_file,
+			val.means_of_verification_file as any,
 			val.means_of_verification_file.name
 		);
 		formData.append(
 			"certificate_of_expertise_file",
-			val.certificate_of_expertise_file,
+			val.certificate_of_expertise_file as any,
 			val.certificate_of_expertise_file.name
 		);
+		formData.append("user_id", data.userId);
 
+		console.log({ formData });
 		mutate(formData, {
 			onSuccess: (res) => {
 				toast.success(res.data.message);
@@ -101,8 +115,9 @@ const IdentityVerification = ({
 										<SelectDropdown
 											data={[
 												{ title: "Driver's License", value: "DRIVERS_LICENSE" },
-												{ title: "NIN", value: "NIN" },
-												{ title: "Other", value: "OTHER" },
+												{ title: "National ID", value: "NATIONAL_ID_CARD" },
+												{ title: "VOTERS ID", value: "VOTERS_ID" },
+												{ title: "Passport", value: "PASSPORT" },
 											]}
 											onSelect={(selectedItem) => {
 												field.onChange(selectedItem.value);
@@ -175,7 +190,7 @@ const IdentityVerification = ({
 							render={({ field }) => (
 								<View className="space-y-[6px]">
 									<Text className="text-sm text-off-black">
-										{means_of_verification || "Upload document"}
+										{"Upload ID document "}
 									</Text>
 									<Pressable
 										onPress={async () => {
@@ -192,6 +207,11 @@ const IdentityVerification = ({
 											color="#676b83"
 											className="mb-[6px]"
 										/>
+										{means_of_verification_file && (
+											<Text className="text-muted text-base text-center font-regular">
+												{means_of_verification_file}
+											</Text>
+										)}
 									</Pressable>
 								</View>
 							)}
@@ -214,7 +234,8 @@ const IdentityVerification = ({
 									</Text>
 									<Pressable
 										onPress={async () => {
-											const result = await pickDocument();
+											const result = await pickImage();
+											console.log({ result });
 											if (result) {
 												field.onChange(result);
 											}

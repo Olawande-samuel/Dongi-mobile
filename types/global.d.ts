@@ -32,6 +32,8 @@ type CustomerRegistrationPayload = {
 	email: string;
 	gender: string;
 	location: string;
+	latitude: number;
+	longitude: number;
 };
 type CreatePasswordPayload = {
 	user_id: string;
@@ -43,12 +45,19 @@ type ResetPasswordPayload = {
 	new_password: string;
 };
 type ResendToken = {
-	type: string;
+	type: "PHONE_VERIFICATION" | "EMAIL_VERIFICATION";
 	user_id: string;
-	phone: string;
+	phone?: string;
+	email?: string;
 };
 type VerifyEmail = {
 	user_id: string;
 	email: string;
 	code: string;
 };
+
+interface ApiResponse<T = any> {
+	status: boolean;
+	message: string;
+	data: T;
+}

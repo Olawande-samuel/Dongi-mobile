@@ -8,7 +8,8 @@ import {
 import React from "react";
 import Success from "@/svgs/Success";
 import StyledButton from "./StyledButton";
-import useUserType from "@/hooks/useUserType";
+import { useAuth } from "@/context/Auth";
+
 
 function ReviewComplete({
 	modalVisible,
@@ -17,7 +18,7 @@ function ReviewComplete({
 	modalVisible: boolean;
 	setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-	const { userType } = useUserType();
+	const { userType } = useAuth();
 	return (
 		<Modal
 			animationType="slide"

@@ -1,6 +1,5 @@
 import Welcome from "@/components/Welcome";
 import { useAuth } from "@/context/Auth";
-import useUserType from "@/hooks/useUserType";
 import { useTempStore } from "@/store/temp-user-store";
 import { UserType } from "@/types";
 import { useResponseInterceptor } from "@/utils/axiosSetup";
@@ -9,17 +8,16 @@ import { Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
-	const { user, userType, isLoading } = useAuth();
-	const { userType: user_type } = useUserType();
-
+	const { user, userType, isLoading, setUserType } = useAuth(); //logged in user
+	// const { userType: user_type } = useUserType();
 
 	useResponseInterceptor();
 
-	const { setUserType } = useTempStore();
+	const { setUserType: setTempUserType } = useTempStore(); //user type for onboarding
 
 	async function storeUserType(val: UserType) {
 		try {
-			// await AsyncStorage.setItem("userType", val);
+			setTempUserType(val);
 			setUserType(val);
 			if (val === "client") {
 				router.push("/(auth)/clients/sign-up");
@@ -37,10 +35,12 @@ export default function Index() {
 	}
 
 	if (!user) {
-		if (user_type === "client") {
+		if (userType === "client") {
 			return <Redirect href="/(auth)/clients/sign-in/email" />;
 		}
-		return <Redirect href="/(auth)/service-provider/sign-in/email" />;
+		if (userType === "service") {
+			return <Redirect href="/(auth)/service-provider/sign-in/email" />;
+		}
 	}
 
 	if (user && userType === "service") {
