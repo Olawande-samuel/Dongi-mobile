@@ -1,6 +1,5 @@
-import { useAuth } from "@/context/Auth";
-import { useTempStore } from "@/store/temp-user-store";
 import { cn } from "@/utils";
+import { usePathname } from "expo-router";
 import React from "react";
 import {
 	ActivityIndicator,
@@ -24,10 +23,13 @@ const StyledButton: React.FC<StyledButtonProps> = ({
 	isLoading,
 	...props
 }) => {
-	const { userType } = useAuth();
-	const { userType: tempUserType } = useTempStore();
+	// const { userType } = useAuth();
+	const pathname = usePathname();
+	const userType = pathname.includes("client") ? "client" : "service";
 
-	const user_type = tempUserType || userType;
+	// const { userType: tempUserType } = useTempStore();
+
+	// const user_type = tempUserType || userType;
 
 	return (
 		<Pressable
@@ -35,7 +37,7 @@ const StyledButton: React.FC<StyledButtonProps> = ({
 			onPress={onPress}
 			className={cn(
 				` rounded px-1 py-2 large:py-[10px] mt-auto justify-center items-center`,
-				user_type === "service" ? "bg-service-primary" : "bg-primary",
+				userType === "service" ? "bg-service-primary" : "bg-primary",
 				className
 			)}
 		>

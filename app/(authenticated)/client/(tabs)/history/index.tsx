@@ -84,7 +84,7 @@ const History = () => {
 					/>
 				)
 			}
-			keyExtractor={(item, index) => String(item.id + index)}
+			keyExtractor={(item, index) => String(item.uuid + index)}
 			renderSectionHeader={({ section: { title } }) => (
 				<View className="py-2 relative mb-4">
 					<Text className="text-support text-center text-sm leading-[17.64px]">

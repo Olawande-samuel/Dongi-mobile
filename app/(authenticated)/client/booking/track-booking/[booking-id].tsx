@@ -38,7 +38,8 @@ const Track = () => {
 		(item) => item.uuid === serviceId
 	);
 
-	const result = data?.data?.data;
+	const bookingInfo = data?.data?.data;
+
 	const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 	const bottomSheetReviewModalRef = useRef<BottomSheetModal>(null);
 	const [modalVisible, setModalVisible] = useState(false);
@@ -64,7 +65,7 @@ const Track = () => {
 	}, [data?.data.data.status]);
 
 	console.log({
-		result,
+		bookingInfo,
 		serviceInfo,
 		services: services?.data?.data?.services,
 	});
@@ -86,7 +87,7 @@ const Track = () => {
 									<Text className="text-support text-sm font-regular mr-4">
 										Status
 									</Text>
-									<StatusPill title={result?.status || ""} />
+									<StatusPill title={bookingInfo?.status || ""} />
 								</View>
 								<View className="flex-row justify-between items-center">
 									<Text className="text-support text-sm font-regular mr-4">
@@ -102,7 +103,7 @@ const Track = () => {
 										Date Requested
 									</Text>
 									<Text className="font-regular text-sm text-off-black text-right">
-										{moment(result?.created_at).format("DD MMM • hh:mmA")}
+										{moment(bookingInfo?.created_at).format("DD MMM • hh:mmA")}
 									</Text>
 								</View>
 							</View>
@@ -124,7 +125,7 @@ const Track = () => {
 												className="w-[18px] h-[18px] mr-[6px]"
 											/>
 											<Text className="flex-1 text-base">
-												{result?.location || ""}
+												{bookingInfo?.location || ""}
 											</Text>
 											{/* <TextInput
 												placeholder="Island Lagos, Nigeria"
@@ -139,7 +140,7 @@ const Track = () => {
 										</Text>
 										<View className="flex-row border p-2 border-inner-background-light">
 											<Text className="flex-1 text-base text-off-black placeholder:text-off-black">
-												{result?.deadline || ""}
+												{bookingInfo?.deadline || ""}
 											</Text>
 										</View>
 									</View>
@@ -149,7 +150,7 @@ const Track = () => {
 										</Text>
 										<View className="flex-row border p-2 border-inner-background-light h-[158px]">
 											<Text className="flex-1 text-off-black placeholder:text-off-black text-base">
-												{result?.message || ""}
+												{bookingInfo?.message || ""}
 											</Text>
 										</View>
 									</View>

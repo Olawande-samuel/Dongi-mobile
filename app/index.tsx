@@ -1,9 +1,8 @@
-import Welcome from "@/components/Welcome";
 import { useAuth } from "@/context/Auth";
 import { useTempStore } from "@/store/temp-user-store";
 import { UserType } from "@/types";
-import { useResponseInterceptor } from "@/utils/axiosSetup";
-import { Redirect, router } from "expo-router";
+import { router } from "expo-router";
+import { useEffect } from "react";
 import { Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -11,14 +10,10 @@ export default function Index() {
 	const { user, userType, isLoading, setUserType } = useAuth(); //logged in user
 	// const { userType: user_type } = useUserType();
 
-	useResponseInterceptor();
-
 	const { setUserType: setTempUserType } = useTempStore(); //user type for onboarding
 
 	async function storeUserType(val: UserType) {
 		try {
-			setTempUserType(val);
-			setUserType(val);
 			if (val === "client") {
 				router.push("/(auth)/clients/sign-up");
 			} else {
@@ -30,26 +25,32 @@ export default function Index() {
 		}
 	}
 
-	if (isLoading) {
-		return <Welcome />;
-	}
+	useEffect(() => {
+		// if (!user) {
+		// 	router.push("/(auth)/service-provider/sign-in/email");
+		// }
+	}, [user]);
 
-	if (!user) {
-		if (userType === "client") {
-			return <Redirect href="/(auth)/clients/sign-in/email" />;
-		}
-		if (userType === "service") {
-			return <Redirect href="/(auth)/service-provider/sign-in/email" />;
-		}
-	}
+	// if (isLoading) {
+	// 	return <Welcome />;
+	// }
 
-	if (user && userType === "service") {
-		return <Redirect href="/service-provider/(tabs)" />;
-	}
+	// if (!user) {
+	// 	if (userType === "client") {
+	// 		return <Redirect href="/(auth)/clients/sign-in/email" />;
+	// 	}
+	// 	if (userType === "service") {
+	// 	return <Redirect href="/(auth)/service-provider/sign-in/email" />;
+	// 	}
+	// }
 
-	if (user && userType === "client") {
-		return <Redirect href="/client/(tabs)" />;
-	}
+	// if (user && userType === "service") {
+	// 	return <Redirect href="/service-provider/(tabs)" />;
+	// }
+
+	// if (user && userType === "client") {
+	// 	return <Redirect href="/client/(tabs)" />;
+	// }
 
 	return (
 		<SafeAreaView className="flex-1 px-6 bg-white" edges={["top"]}>

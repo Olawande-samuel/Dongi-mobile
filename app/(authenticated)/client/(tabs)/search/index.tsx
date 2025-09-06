@@ -26,7 +26,7 @@ const Search = () => {
 
 	const categoryItems = [
 		...(data?.data?.data?.categories.filter(
-			(item) => item.status === "active"
+			(item) => item.status === "ACTIVE"
 		) || []),
 		{
 			name: "Customized Services",

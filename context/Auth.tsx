@@ -1,9 +1,8 @@
 import AsyncStorage, {
 	useAsyncStorage,
 } from "@react-native-async-storage/async-storage";
-import useCustomAsyncStorage from "@/hooks/useAsyncStorage";
 import { useQueryClient } from "@tanstack/react-query";
-import { router, useRootNavigationState, useSegments } from "expo-router";
+import { usePathname } from "expo-router";
 import {
 	createContext,
 	PropsWithChildren,
@@ -17,106 +16,88 @@ interface AuthContextType {
 	userType: USERTYPE;
 	isLoading: boolean;
 	setUser: React.Dispatch<React.SetStateAction<{ token: string } | null>>;
-	setUserType: React.Dispatch<React.SetStateAction<USERTYPE>>;
+	setUserType: (value: string, callback?: any) => Promise<void>;
 	logout: VoidFunction;
-	handleLogin: (token: string) => void;
+	handleLoginToken: (token: string) => void;
+	isAuthenticated: boolean;
+	userRoute: "service" | "client" | null;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
 	const [user, setUser] = useState<{ token: string } | null>(null);
-	const [userType, setUserType] = useState<USERTYPE>(null);
 	const [isLoading, setIsLoading] = useState(true);
-	const { removeItem } = useAsyncStorage("user");
+	const [loginUserType, setLoginUserType] = useState<USERTYPE | null>(null);
+	const pathname = usePathname();
 
-	const { getItem } = useCustomAsyncStorage();
-	const isReturningUser = getItem("hasAccount");
+	const { getItem, setItem: setUserType } = useAsyncStorage("userType");
+
+	useEffect(() => {
+		async function getUserType() {
+			const userType = await getItem();
+			if (userType) {
+				setLoginUserType(userType as USERTYPE);
+			}
+		}
+
+		getUserType();
+	}, [getItem]);
+
+	const userRoute = pathname.includes("/client")
+		? "client"
+		: pathname.includes("/service-provider")
+		? "service"
+		: null;
 
 	const queryClient = useQueryClient();
 
-	const segments = useSegments();
-	const navigationState = useRootNavigationState();
-
-	const loadUserData = async () => {
+	const checkAuthState = async () => {
 		try {
-			const data = await AsyncStorage.getItem("user");
-			const type = await AsyncStorage.getItem("userType") as USERTYPE;
-			if (data) {
-				const result = JSON.parse(data);
+			const user = await AsyncStorage.getItem("user");
+			if (user) {
+				const result = JSON.parse(user);
 				setUser({ token: result.token });
-				setUserType(type ?? null);
 			} else {
-				setUser({ token: "" });
+				setUser(null);
 			}
 		} catch (error) {
+			console.log({ error });
 		} finally {
 			setIsLoading(false);
 		}
 	};
+
 	useEffect(() => {
-		loadUserData();
+		// AsyncStorage.removeItem("userType");
+		// Check if user is already logged in when app starts
+		checkAuthState();
 	}, []);
 
-	useEffect(() => {
-		if (!navigationState?.key || isLoading) return;
-
-		const inAuthGroup = segments[0] === "(auth)";
-		if (!user?.token) {
-			// Redirect to auth if user is not logged in and trying to access protected routes
-			if (!inAuthGroup) {
-				if (userType === "client") {
-					router.replace("/clients/sign-in");
-				} else if (userType === "service") {
-					router.replace("/service-provider/sign-in");
-				}
-			}
-		} else if (user && inAuthGroup) {
-			// Redirect to dashboard if user is logged in and trying to access auth routes
-			if (userType === "client") {
-				router.replace("/client/(tabs)");
-			} else if (userType === "service") {
-				router.replace("/service-provider/(tabs)");
-			}
-		}
-	}, [segments, navigationState?.key, user, userType, isLoading]);
-
-	// Persist userType changes to AsyncStorage
-	useEffect(() => {
-		(async () => {
-			try {
-				if (userType === null) {
-					await AsyncStorage.removeItem("userType");
-				} else {
-					await AsyncStorage.setItem("userType", userType);
-				}
-			} catch {}
-		})();
-	}, [userType]);
-
-	async function handleLogin(token: string) {
+	async function handleLoginToken(token: string) {
 		setUser({ token: token });
-		loadUserData();
+		checkAuthState();
 	}
 
 	async function logout() {
 		queryClient.clear();
 		await AsyncStorage.removeItem("user");
 		await AsyncStorage.removeItem("userType");
-		loadUserData();
-		console.log("calling");
+		checkAuthState();
 	}
 
 	return (
 		<AuthContext.Provider
 			value={{
 				user,
-				userType,
+				userRoute,
+				userType: loginUserType || null,
 				isLoading,
 				setUser,
 				setUserType,
 				logout,
-				handleLogin,
+				handleLoginToken,
+				isAuthenticated: !!user,
 			}}
 		>
 			{children}

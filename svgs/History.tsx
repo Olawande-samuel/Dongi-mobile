@@ -4,8 +4,8 @@ import * as React from "react";
 import Svg, { Path } from "react-native-svg";
 
 function History({ isActive }: { isActive: boolean }) {
-	const { userType } = useAuth();
-	const color = userType === "client" ? "#18658B" : "#E4AE1B";
+	const { userRoute } = useAuth();
+	const color = userRoute === "client" ? "#18658B" : "#E4AE1B";
 	return (
 		<Svg
 			width={25}

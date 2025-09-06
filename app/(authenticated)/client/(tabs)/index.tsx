@@ -1,6 +1,7 @@
 import HomeContent from "@/components/client/dashboard/HomeContent";
 import ServiceCard from "@/components/client/dashboard/ServiceCard";
 import OngoingCard from "@/components/client/history/OngoingCard";
+import useExpoNotifications from "@/hooks/useExpoNotifications";
 import { IProviderService, OngoingRequest } from "@/types";
 import { Api } from "@/utils/endpoints";
 import { useQuery } from "@tanstack/react-query";
@@ -16,11 +17,15 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Home = () => {
+	// const { expoPushToken } = useExpoNotifications();
+
+	// console.log({ expoPushToken });
+
 	const [tab, setTab] = useState(1);
 
 	const { data: services, isLoading } = useQuery({
-		queryKey: ["fetch services"],
-		queryFn: Api.getServices,
+		queryKey: ["fetch all services"],
+		queryFn: () => Api.searchService({}),
 	});
 
 	const { data: ongoingRequestData, isLoading: isOngoingRequestLoading } =

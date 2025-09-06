@@ -13,9 +13,11 @@ import { OtpInput } from "react-native-otp-entry";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { toast } from "sonner-native";
 import ResendVerificationOtp from "../shared/ResendVerificationOTP";
+import { usePathname } from "expo-router";
 
 const PhoneOTPVerification = () => {
 	const { userType } = useTempStore();
+	const pathname = usePathname();
 	const [otp, setOtp] = useState("");
 	const { data } = useTempUser();
 	const globalContext = useGlobalContext();
@@ -31,7 +33,7 @@ const PhoneOTPVerification = () => {
 	});
 
 	function verifyOtp() {
-		if (userType === "client") {
+		if (pathname.includes("/clients")) {
 			mutate(
 				{
 					type: "client",

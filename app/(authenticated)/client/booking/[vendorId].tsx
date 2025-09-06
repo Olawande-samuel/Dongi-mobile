@@ -16,15 +16,9 @@ import {
 	useBottomSheetModal,
 } from "@gorhom/bottom-sheet";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { router, useLocalSearchParams } from "expo-router";
-import React, {
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from "react";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
 	ActivityIndicator,
@@ -52,10 +46,7 @@ interface ServiceProps extends ICategoryServices {
 }
 
 function ServiceComponent({
-	provider,
 	name,
-	images,
-	starting_price,
 	description,
 	handlePresentModalPress,
 }: ServiceProps) {
@@ -121,8 +112,9 @@ const VendorBooking = () => {
 							<ActivityIndicator />
 						) : (
 							<>
-								<View className="flex-1 bg-white ">
+								<View className="flex-1 bg-white pb-10">
 									{serviceInfo && <VendorProfile {...serviceInfo} />}
+
 									<Pressable
 										onPress={handlePresentModalPress}
 										className="mb-6 py-3 px-1 bg-off-black rounded"
@@ -149,12 +141,7 @@ const VendorBooking = () => {
 											Bio
 										</Text>
 										<Text className="text-sm text-support leading-[22.4px] font-regular">
-											Navigating the real estate market can be overwhelming—but
-											it doesn’t have to be. As an experienced real estate
-											consultant, I specialize in helping clients buy and sell
-											property with confidence. I provide personalized advice,
-											market analysis, and negotiation strategies to ensure you
-											get the best deal possible.
+											{serviceInfo?.description}
 										</Text>
 									</View>
 									<Pressable
@@ -198,16 +185,17 @@ function RequestService({
 }) {
 	const { dismiss } = useBottomSheetModal();
 	const { data, isLoading } = useUserInfo();
-	const { address, updateLocation, location } = useCurrentLocation();
+	const { updateLocation } = useCurrentLocation();
 	const { setIsLoading } = useGlobalContext();
+	const queryClient = useQueryClient();
 
-	console.log({ address, location });
+	// console.log({ address, location });
 	const form = useForm({
 		defaultValues: {
 			deadline: "",
-			location: data?.user.location || "",
-			latitude: location?.coords.latitude || 0,
-			longitude: location?.coords.longitude || 0,
+			location: data?.user?.location || "",
+			latitude: Number(data?.user?.latitude) || 0,
+			longitude: Number(data?.user?.longitude) || 0,
 			message: "",
 		},
 		resolver: zodResolver(FormSchema),
@@ -215,13 +203,9 @@ function RequestService({
 
 	useEffect(() => {
 		if (data?.user.location) {
-			if (address) {
-				form.setValue("location", address);
-				return;
-			}
 			form.setValue("location", data.user.location);
 		}
-	}, [data, address]);
+	}, [data?.user]);
 
 	const handleSheetChanges = useCallback((index: number) => {
 		console.log("handleSheetChanges", index);
@@ -231,7 +215,7 @@ function RequestService({
 		dismiss();
 	}, [dismiss]);
 
-	const snapPoints = useMemo(() => ["35%", "45%", "75"], []);
+	const snapPoints = useMemo(() => ["80%"], []);
 
 	const { mutate } = useMutation({
 		mutationFn: Api.requestService,
@@ -245,7 +229,10 @@ function RequestService({
 			{
 				onSuccess: (res) => {
 					toast.success(res.data.message);
-					router.push("/client/(tabs)/index");
+					queryClient.invalidateQueries({
+						queryKey: ["fetch ongoing requests"],
+					});
+					router.push("/(authenticated)/client/(tabs)");
 				},
 				onError: (err) => {
 					handleError(err);
@@ -285,80 +272,85 @@ function RequestService({
 					</Pressable>
 				</View>
 				<View className="space-y-5 px-6 mb-[149px]">
-					<TouchableOpacity
-						onPress={() => router.push("/client/change-location")}
-					>
-						<Text className="text-sm text-off-black font-regular mb-[6px]">
-							Where are you located?
-						</Text>
-						<View className="flex-row items-center border p-2 border-inner-background-light">
-							<Image
-								source={require("../../../../assets/images/location.png")}
-								width={18}
-								height={18}
-								resizeMode="contain"
-								className="w-[18px] h-[18px] mr-[6px]"
-							/>
-							<Text className="flex-1 text-base">
-								{address || data?.user.location || ""}
+					<View>
+						<TouchableOpacity
+							onPress={() => router.push("/client/change-location")}
+						>
+							<Text className="text-sm text-off-black font-regular mb-[6px]">
+								Where are you located?
 							</Text>
-							{/* <TextInput
+							<View className="flex-row items-center border p-2 border-inner-background-light">
+								<Image
+									source={require("../../../../assets/images/location.png")}
+									width={18}
+									height={18}
+									resizeMode="contain"
+									className="w-[18px] h-[18px] mr-[6px]"
+								/>
+								<Text className="flex-1 text-base">
+									{data?.user?.location || ""}
+								</Text>
+								{/* <TextInput
 								placeholder="Island Lagos, Nigeria"
 								className="flex-1 text-base"
 							/> */}
-						</View>
-					</TouchableOpacity>
-					<Controller
-						control={form.control}
-						name="deadline"
-						render={({ field }) => (
-							<View>
-								<Text className="text-sm text-off-black font-regular mb-[6px]">
-									How soon do you need this?
-								</Text>
-								<View className="flex-row border p-2 border-inner-background-light">
-									<TextInput
-										placeholder="In 3 days"
-										className="flex-1 text-base text-muted placeholder:text-muted"
-										onChangeText={field.onChange}
-										value={field.value}
-									/>
-								</View>
-								{form.formState.errors?.deadline && (
-									<Text className="text-xs text-red-400">
-										{form.formState.errors?.deadline.message ?? ""}
-									</Text>
-								)}
 							</View>
-						)}
-					/>
-
-					<Controller
-						control={form.control}
-						name="message"
-						render={({ field }) => (
-							<View>
-								<Text className="text-sm text-off-black font-regular mb-[6px]">
-									Message
-								</Text>
-								<View className="flex-row border p-2 border-inner-background-light h-[158px]">
-									<TextInput
-										placeholder="I want to fix ..."
-										className="flex-1 text-muted placeholder:text-muted text-base"
-										multiline
-										textAlignVertical="top"
-										onChangeText={field.onChange}
-										value={field.value}
-									/>
-								</View>
-								{form.formState.errors?.message && (
-									<Text className="text-xs text-red-400">
-										{form.formState.errors?.message.message ?? ""}
+						</TouchableOpacity>
+					</View>
+					<View>
+						<Controller
+							control={form.control}
+							name="deadline"
+							render={({ field }) => (
+								<View>
+									<Text className="text-sm text-off-black font-regular mb-[6px]">
+										How soon do you need this?
 									</Text>
-								)}
-							</View>
-						)}
-					/>
+									<View className="flex-row border p-2 border-inner-background-light">
+										<TextInput
+											placeholder="In 3 days"
+											className="flex-1 text-base text-muted placeholder:text-muted"
+											onChangeText={field.onChange}
+											value={field.value}
+										/>
+									</View>
+									{form.formState.errors?.deadline && (
+										<Text className="text-xs text-red-400">
+											{form.formState.errors?.deadline.message ?? ""}
+										</Text>
+									)}
+								</View>
+							)}
+						/>
+					</View>
+					<View>
+						<Controller
+							control={form.control}
+							name="message"
+							render={({ field }) => (
+								<View>
+									<Text className="text-sm text-off-black font-regular mb-[6px]">
+										Message
+									</Text>
+									<View className="flex-row border p-2 border-inner-background-light h-[158px]">
+										<TextInput
+											placeholder="I want to fix ..."
+											className="flex-1 text-muted placeholder:text-muted text-base"
+											multiline
+											textAlignVertical="top"
+											onChangeText={field.onChange}
+											value={field.value}
+										/>
+									</View>
+									{form.formState.errors?.message && (
+										<Text className="text-xs text-red-400">
+											{form.formState.errors?.message.message ?? ""}
+										</Text>
+									)}
+								</View>
+							)}
+						/>
+					</View>
 				</View>
 				<View className="mt-auto px-6 mb-2">
 					<Pressable

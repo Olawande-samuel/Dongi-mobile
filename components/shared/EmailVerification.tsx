@@ -11,6 +11,7 @@ import { toast } from "sonner-native";
 import StyledButton from "../StyledButton";
 import ResendOtp from "./ResendOtp";
 import ResendVerificationOtp from "./ResendVerificationOTP";
+import { usePathname } from "expo-router";
 
 const EmailVerification = ({
 	nextStep,
@@ -20,7 +21,9 @@ const EmailVerification = ({
 	const [otp, setOtp] = useState("");
 	const { data } = useTempUser();
 	const globalContext = useGlobalContext();
-	const { userType } = useTempStore();
+	
+	const pathname = usePathname();
+	const userType = pathname.includes("/clients") ? "client" : "service";
 
 	const { setIsLoading } = globalContext;
 

@@ -1,7 +1,11 @@
 import HomeTopComponent from "@/components/provider/Dashboard/HomeTopComponent";
 import PendingRequestCard from "@/components/provider/Dashboard/PendingRequestsCard";
 import RequestCard from "@/components/provider/Dashboard/RequestCard";
-import { OngoingRequest, ServiceProviderOngoingRequest, ServiceProviderPendingRequest } from "@/types";
+import useExpoNotifications from "@/hooks/useExpoNotifications";
+import {
+	ServiceProviderOngoingRequest,
+	ServiceProviderPendingRequest,
+} from "@/types";
 import { SIZES } from "@/utils/constants";
 import { Api } from "@/utils/endpoints";
 import { useQueries, useQueryClient } from "@tanstack/react-query";
@@ -10,6 +14,8 @@ import { FlatList, RefreshControl, StatusBar } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Index = () => {
+	// const { expoPushToken } = useExpoNotifications();
+
 	const [tab, setTab] = useState(1);
 	const queryClient = useQueryClient();
 
@@ -44,7 +50,10 @@ const Index = () => {
 				data={result.data[tab - 1] || []}
 				renderItem={({ item }) =>
 					tab === 1 ? (
-						<RequestCard activeTab={tab} {...(item as ServiceProviderOngoingRequest)} />
+						<RequestCard
+							activeTab={tab}
+							{...(item as ServiceProviderOngoingRequest)}
+						/>
 					) : (
 						<PendingRequestCard
 							activeTab={tab}

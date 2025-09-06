@@ -21,8 +21,11 @@ const VendorProfile = ({
 			</View>
 			<View className="flex-1 py-[6px] space-y-2 ">
 				<View>
-					<Text className="text-sm font-regular text-support mb-2">
-						{description || ""}
+					<Text
+						className="text-sm font-regular text-support mb-2"
+						numberOfLines={4}
+					>
+						{provider?.bio || description || ""}
 					</Text>
 				</View>
 				<View className="flex-row justify-between">

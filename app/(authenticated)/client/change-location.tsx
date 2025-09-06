@@ -30,7 +30,7 @@ const LocationForm = React.memo(function LocationForm() {
 		// update location with coordinates and address
 		const result = await updateLocation(data);
 
-		console.log({ result });
+		console.log({ result, data });
 		// invalidate location queries: userProfile
 	}
 	return (
@@ -133,6 +133,7 @@ const ChangeLocation = () => {
 						style={{
 							flex: 1,
 						}}
+						keyboardShouldPersistTaps="always"
 						contentContainerStyle={{
 							justifyContent: "space-between",
 						}}

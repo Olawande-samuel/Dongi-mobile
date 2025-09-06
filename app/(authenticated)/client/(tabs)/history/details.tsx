@@ -1,8 +1,6 @@
-import { View, Text, ScrollView, Image, TextInput } from "react-native";
-import React from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Entypo } from "@expo/vector-icons";
 import HistoryDetailUserCard from "@/components/client/history/HistoryDetailUserCard";
+import React from "react";
+import { ScrollView, Text, TextInput, View } from "react-native";
 
 const Details = () => {
 	return (

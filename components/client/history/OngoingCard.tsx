@@ -12,7 +12,7 @@ const OngoingCard = ({
 	id,
 	uuid,
 	service_id,
-	provider_id
+	provider_id,
 }: OngoingRequest) => {
 	console.log({ uuid });
 	return (
@@ -28,6 +28,13 @@ const OngoingCard = ({
 					},
 				})
 			}
+			style={{
+				elevation: 1,
+				shadowColor: "#000",
+				shadowOffset: { width: 0, height: 1 },
+				shadowOpacity: 0.15,
+				shadowRadius: 2,
+			}}
 			className="p-3 rounded-lg bg-white border border-outer-light mb-4"
 		>
 			<View>
@@ -64,7 +71,10 @@ const OngoingCard = ({
 								resizeMode="contain"
 								className="w-[18px] h-[18px] mr-[6px]"
 							/>
-							<Text className="font-regular text-sm text-off-black">
+							<Text
+								className="font-regular max-w-[150px] text-sm text-off-black"
+								numberOfLines={1}
+							>
 								{location || ""}
 							</Text>
 						</View>

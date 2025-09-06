@@ -1,7 +1,7 @@
-import { useAuth } from "@/context/Auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
+import axios, { isAxiosError } from "axios";
+import { router } from "expo-router";
+import { Alert } from "react-native";
 
 const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 
@@ -38,24 +38,41 @@ authInstance.interceptors.request.use(
 	}
 );
 
-export const useResponseInterceptor = () => {
-	const queryClient = useQueryClient();
-	const { logout, userType } = useAuth();
+authInstance.interceptors.response.use(
+	(response) => {
+		console.log({ response });
+		return response;
+	},
+	async (error) => {
+		if (isAxiosError(error)) {
+			if (error.status === 403) {
+				try {
+					const userType = await AsyncStorage.getItem("userType");
+					await AsyncStorage.multiRemove(["user", "userType"]);
 
-	authInstance.interceptors.response.use(
-		(response) => {
-			return response;
-		},
-		(error) => {
-			if (
-				error.response?.data.message === "Session expired, kindly login again"
-			) {
-				queryClient.clear();
-				logout();
+					if (userType === "client") {
+						router.replace("/(auth)/clients/sign-in");
+					} else if (userType === "service") {
+						router.replace("/(auth)/service-provider/sign-in");
+					}
+
+					// Show alert after navigation
+					setTimeout(() => {
+						Alert.alert(
+							"Session Expired",
+							"Your session has expired. Please log in again.",
+							[{ text: "OK" }],
+							{ cancelable: false }
+						);
+					}, 100);
+				} catch (error) {
+					console.error("Error during logout:", error);
+				}
 			}
-			return Promise.reject(error);
 		}
-	);
-};
+		console.log("interceptor error", { error });
+		return Promise.reject(error);
+	}
+);
 
 export { authInstance, baseInstance };

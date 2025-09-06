@@ -1,4 +1,10 @@
-import { SplashScreen, Stack } from "expo-router";
+import {
+	useRouter,
+	SplashScreen,
+	Stack,
+	usePathname,
+	useSegments,
+} from "expo-router";
 import {
 	useFonts,
 	PlusJakartaSans_200ExtraLight,
@@ -25,9 +31,11 @@ import QueryProvider from "@/providers/QueryProvider";
 import GlobalStateProvider from "@/providers/GlobalStateProvider";
 import React from "react";
 import "react-native-get-random-values";
-import { AuthProvider } from "@/context/Auth";
+import { AuthProvider, useAuth } from "@/context/Auth";
 
 function AppEntry() {
+	const pathname = usePathname();
+	console.log({ pathname });
 	return (
 		<>
 			<StatusBar style="dark" />
@@ -37,7 +45,8 @@ function AppEntry() {
 		</>
 	);
 }
-export default function RootLayout() {
+
+function RootLayoutNav() {
 	let [fontsLoaded] = useFonts({
 		PlusJakartaSans_200ExtraLight,
 		PlusJakartaSans_300Light,
@@ -54,6 +63,11 @@ export default function RootLayout() {
 		PlusJakartaSans_700Bold_Italic,
 		PlusJakartaSans_800ExtraBold_Italic,
 	});
+
+	const { isAuthenticated, isLoading, userType } = useAuth();
+	const segments = useSegments();
+	const router = useRouter();
+
 	useEffect(() => {
 		async function prepareApp() {
 			await SplashScreen.preventAutoHideAsync();
@@ -64,16 +78,46 @@ export default function RootLayout() {
 		prepareApp();
 	}, [fontsLoaded]);
 
-	if (!fontsLoaded) {
+	console.log({ userType });
+	useEffect(() => {
+		if (isLoading) return;
+		const inAuthGroup = segments[0] === "(auth)";
+		const isAuthenticatedGroup = segments[0] === "(authenticated)";
+
+		if (!isAuthenticated && !inAuthGroup) {
+			router.replace("/");
+		} else if (isAuthenticated && inAuthGroup) {
+			if (userType === "client") {
+				router.replace("/(authenticated)/client");
+			} else if (userType === "service") {
+				router.replace("/(authenticated)/service-provider");
+			}
+		}
+	}, [isAuthenticated, segments, isLoading]);
+
+	if (!fontsLoaded || isLoading) {
 		return null;
 	}
+	return (
+		<>
+			<StatusBar style="dark" />
+			<Stack screenOptions={{ headerShown: false }}>
+				<Stack.Screen name="(auth)" />
+				<Stack.Screen name="(authenticated)/client" />
+				<Stack.Screen name="(authenticated)/service-provider" />
+			</Stack>
+		</>
+	);
+}
+
+export default function RootLayout() {
 	return (
 		<QueryProvider>
 			<AuthProvider>
 				<GestureHandlerRootView style={{ flex: 1 }}>
 					<GlobalStateProvider>
 						<BottomSheetModalProvider>
-							<AppEntry />
+							<RootLayoutNav />
 							<Toaster position="top-center" />
 						</BottomSheetModalProvider>
 					</GlobalStateProvider>

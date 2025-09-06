@@ -1,7 +1,7 @@
 import { View, Text, Pressable } from "react-native";
 import React, { PropsWithChildren } from "react";
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { router, usePathname } from "expo-router";
 import { cn } from "@/utils";
 import { useAuth } from "@/context/Auth";
 
@@ -18,7 +18,8 @@ const SignUpHeader = ({
 	children,
 	totalSteps = 4,
 }: Props) => {
-	const { userType } = useAuth();
+	const pathname = usePathname();
+	const userType = pathname.includes("/clients") ? "client" : "service";
 
 	return (
 		<View className="flex-1">

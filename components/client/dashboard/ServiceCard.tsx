@@ -66,12 +66,12 @@ const ServiceCard = ({
 					</View>
 				</View>
 				<View className="flex-row justify-between items-center">
-					<View>
+					{/* <View>
 						<Text className="mb-1 text-muted text-xs">Starting From</Text>
 						<Text className="text-sm text-off-black">
 							{formatCurrency(starting_price || 0) || ""}
 						</Text>
-					</View>
+					</View> */}
 					<View>
 						<Text className="mb-1 text-muted text-xs">Customers</Text>
 						<Text className="text-sm text-off-black">12</Text>

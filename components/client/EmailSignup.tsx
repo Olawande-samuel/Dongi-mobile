@@ -185,18 +185,13 @@ const EmailForm = () => {
 						placeholder="Search"
 						onFail={(error) => {
 							console.log("failed", error);
-							// TODO:REMOVE THIS IMPORTANT
-							form.setValue("location", "Lekki, Lagos");
-							form.setValue("latitude", 87.7749);
-							form.setValue("longitude", 22.4194);
-
 							toast.error("An error occurred fetching your location");
 						}}
+						fetchDetails
 						onPress={(data, detail) => {
-							console.log({ data, detail });
 							form.setValue("location", data.description);
-							form.setValue("latitude", detail?.location.latitude);
-							form.setValue("longitude", detail?.location.longitude);
+							form.setValue("latitude", detail?.geometry.location.lat);
+							form.setValue("longitude", detail?.geometry.location.lng);
 						}}
 						query={{
 							key: process.env.EXPO_PUBLIC_GOOGLE_API,
@@ -278,6 +273,7 @@ function EmailSignup({
 						style={{
 							flex: 1,
 						}}
+						keyboardShouldPersistTaps="always"
 						contentContainerStyle={{
 							justifyContent: "space-between",
 						}}

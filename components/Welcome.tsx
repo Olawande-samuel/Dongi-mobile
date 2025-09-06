@@ -1,21 +1,25 @@
 import { useAuth } from "@/context/Auth";
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
-import { router } from "expo-router";
+import { router, usePathname } from "expo-router";
 import React, { useEffect } from "react";
 import { Image, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Welcome = () => {
-	const { userType } = useAuth();
+	const { user } = useAuth();
 	const { setItem } = useAsyncStorage("hasAccount");
+	const pathname = usePathname();
+	const userType = pathname.includes("/clients") ? "client" : "service";
 
 	useEffect(() => {
 		const timeout = setTimeout(() => {
 			setItem(JSON.stringify(true));
-			if (userType === "client") {
-				router.push("/client");
-			} else {
-				router.push("/service-provider");
+			if (user) {
+				if (pathname.includes("/clients")) {
+					router.push("/client");
+				} else {
+					router.push("/service-provider");
+				}
 			}
 		}, 4000);
 

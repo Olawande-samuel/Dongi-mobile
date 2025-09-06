@@ -13,6 +13,8 @@ import { toast } from "sonner-native";
 import { handleError } from "@/utils";
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import { useAuth } from "@/context/Auth";
+import PasswordInput from "../PasswordInput";
+import { usePathname } from "expo-router";
 
 const FormSchema = z
 	.object({
@@ -43,10 +45,12 @@ const SetupPassword = ({
 	const { setItem } = useAsyncStorage("user");
 	const { setItem: setUserType } = useAsyncStorage("userType");
 	const globalContext = useGlobalContext();
-	const { handleLogin } = useAuth();
+	const { handleLoginToken } = useAuth();
 
 	const { data } = useTempUser();
-	const { userType } = useTempStore();
+
+	const pathname = usePathname();
+	const userType = pathname.includes("/clients") ? "client" : "service";
 
 	const form = useForm<FormType>({
 		defaultValues: {
@@ -84,7 +88,7 @@ const SetupPassword = ({
 							};
 							setItem(JSON.stringify(value));
 							setUserType("service");
-							handleLogin(res.data.data.token);
+							handleLoginToken(res.data.data.token);
 							nextStep((prev) => prev + 1);
 						}
 					}
@@ -107,12 +111,10 @@ const SetupPassword = ({
 								<Text className="text-sm text-off-black">
 									Create your password
 								</Text>
-								<TextInput
-									secureTextEntry
+								<PasswordInput
 									placeholder="********"
 									value={field.value}
 									onChangeText={field.onChange}
-									textContentType="password"
 									className="p-2 text-muted text-base rounded border border-inner-light"
 								/>
 							</View>
@@ -131,12 +133,10 @@ const SetupPassword = ({
 						render={({ field }) => (
 							<View className="space-y-[6px]">
 								<Text className="text-sm text-off-black">Confirm Password</Text>
-								<TextInput
-									secureTextEntry
+								<PasswordInput
 									placeholder="********"
 									value={field.value}
 									onChangeText={field.onChange}
-									textContentType="password"
 									className="p-2 text-muted text-base rounded border border-inner-light"
 								/>
 							</View>

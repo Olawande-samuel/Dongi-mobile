@@ -5,7 +5,7 @@ import React from "react";
 import { Image, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const PhoneSignIn = () => {
+const EmailSignIn = () => {
 	return (
 		<SafeAreaView edges={["top", "bottom"]} className="bg-white flex-1 px-6">
 			<ScrollView
@@ -46,4 +46,4 @@ const PhoneSignIn = () => {
 	);
 };
 
-export default PhoneSignIn;
+export default EmailSignIn;

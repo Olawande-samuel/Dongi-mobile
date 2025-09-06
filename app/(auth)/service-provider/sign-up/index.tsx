@@ -63,7 +63,7 @@ const SignUp = () => {
 								<Text className=" text-xs large:text-sm text-center text-support">
 									Not a service provider?{" "}
 								</Text>
-								<Pressable onPress={() => router.back()}>
+								<Pressable onPress={() => router.push("/clients/sign-up")}>
 									<Text className="underline text-xs large:text-sm">
 										Register as a client
 									</Text>

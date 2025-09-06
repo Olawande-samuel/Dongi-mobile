@@ -1,3 +1,4 @@
+import useCurrentLocation from "@/hooks/useCurrentLocation";
 import useLocation from "@/hooks/useLocation";
 import useUserInfo from "@/hooks/useUserInfo";
 import { router } from "expo-router";
@@ -6,7 +7,7 @@ import { ActivityIndicator, Image, Pressable, Text, View } from "react-native";
 
 const HomeUserInfo = () => {
 	const { data, isLoading } = useUserInfo();
-	console.log({ data });
+
 	// if (isLoading) {
 	// 	return (
 	// 		<View className="mb-4">
@@ -15,7 +16,6 @@ const HomeUserInfo = () => {
 	// 	);
 	// }
 
-	console.log({ data });
 	return (
 		<View className="flex-row items-center mb-4">
 			<Text className="mr-4 font-semibold text-base large:text-lg text-black">

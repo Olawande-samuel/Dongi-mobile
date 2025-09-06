@@ -1,8 +1,10 @@
-import { View, Text } from "react-native";
-import React, { useEffect, useState } from "react";
+import { useGlobalContext } from "@/providers/GlobalStateProvider";
+import { Api } from "@/utils/endpoints";
+import { useMutation } from "@tanstack/react-query";
 import * as Location from "expo-location";
+import { useEffect, useState } from "react";
+import { GooglePlaceDetail } from "react-native-google-places-autocomplete";
 import { getAddressFromCoordinates } from "./useLocation";
-import { GooglePlaceData, GooglePlaceDetail } from "react-native-google-places-autocomplete";
 
 const useCurrentLocation = () => {
 	const [errorMsg, setErrorMsg] = useState("");
@@ -10,7 +12,15 @@ const useCurrentLocation = () => {
 	const [location, setLocation] = useState<Location.LocationObject | null>(
 		null
 	);
+	const { setIsLoading } = useGlobalContext();
 	const [address, setAddress] = useState<string | null>(null);
+
+	const { mutate } = useMutation({
+		mutationFn: Api.updateUserLocation,
+		mutationKey: ["update user location"],
+		onMutate: () => setIsLoading(true),
+		onSettled: () => setIsLoading(false),
+	});
 
 	useEffect(() => {
 		(async () => {
@@ -24,6 +34,7 @@ const useCurrentLocation = () => {
 				let currentLocation = await Location.getCurrentPositionAsync({
 					accuracy: Location.Accuracy.Balanced,
 				});
+
 				setLocation(currentLocation);
 
 				const locationFormat = await getAddressFromCoordinates(
@@ -43,10 +54,10 @@ const useCurrentLocation = () => {
 		})();
 	}, []);
 
-	useEffect(() => { 
-		console.log("address changed")
-	}, [address])
-	
+	useEffect(() => {
+		console.log("address changed");
+	}, [address]);
+
 	async function updateLocation(data?: GooglePlaceDetail) {
 		try {
 			setLoading(true);
@@ -59,6 +70,11 @@ const useCurrentLocation = () => {
 				} as Location.LocationObject;
 				setLocation(currentLocation);
 				setAddress(data.formatted_address);
+				mutate({
+					latitude: currentLocation.coords.latitude,
+					longitude: currentLocation.coords.longitude,
+					location: data.formatted_address,
+				});
 				return data.formatted_address;
 			} else {
 				const currentLocation = await Location.getCurrentPositionAsync({

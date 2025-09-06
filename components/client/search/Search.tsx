@@ -1,46 +1,9 @@
-import { View, Text, Image, Pressable, ScrollView } from "react-native";
-import React, { useState } from "react";
-
+import React from "react";
+import { Image, Pressable, ScrollView, Text, View } from "react-native";
+import { cn } from "@/utils";
 import { Feather } from "@expo/vector-icons";
 import SearchBar from "../dashboard/SearchBar";
-import { cn } from "@/utils";
-import { IService } from "@/types";
-import CategoryServiceSearchBar from "../dashboard/CategoryServiceSearchBar";
 
-const categoryItems = [
-	{
-		id: 1,
-		name: "Mechanical Services",
-	},
-	{
-		id: 2,
-		name: "Electrical Services",
-	},
-	{
-		id: 3,
-		name: "Automobile Repairs",
-	},
-	{
-		id: 4,
-		name: "Technical/Phone",
-	},
-	{
-		id: 5,
-		name: "Computer/IT Services",
-	},
-	{
-		id: 6,
-		name: "Plumbing/Boreholes",
-	},
-	{
-		id: 7,
-		name: "TV/Cable Services",
-	},
-	{
-		id: 8,
-		name: "Customized Services",
-	},
-];
 function Tab({
 	isActive,
 	title,
@@ -79,11 +42,7 @@ interface Props {
 	searchValue: string;
 }
 
-const Search = ({
-	activeTab,
-	setActiveTab,
-	searchValue,
-}: Props) => {
+const Search = ({ activeTab, setActiveTab, searchValue }: Props) => {
 	return (
 		<View>
 			<View className="py-6 border-b border-outer-light px-6">

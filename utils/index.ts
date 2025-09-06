@@ -54,7 +54,9 @@ export function groupByDate<T extends IDatesOptions>(
 		if (item.created_at) return item.created_at;
 		return "";
 	};
+
 	const groupedData: { [date: string]: T[] } = {};
+
 	data.forEach((item) => {
 		const date = moment(extractDate(item)).format("YYYY-MM-DD");
 		if (date !== "Invalid date") {

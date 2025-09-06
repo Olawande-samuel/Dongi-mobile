@@ -568,6 +568,31 @@ class API {
 			return Promise.reject(error);
 		}
 	}
+	async updateUserLocation(data: {
+		location: string;
+		latitude: number;
+		longitude: number;
+	}): Promise<AxiosResponse<ApiResponse<any>>> {
+		try {
+			const endpoint = `/user/update-location`;
+			const response = await authInstance.post(endpoint, data);
+			return response;
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	}
+
+	async saveExpoNotificationToken(data: {
+		expo_token: string;
+	}): Promise<AxiosResponse<ApiResponse<any>>> {
+		try {
+			const endpoint = `/user/device-token`;
+			const response = await authInstance.post(endpoint, data);
+			return response;
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	}
 }
 
 export const Api = new API();

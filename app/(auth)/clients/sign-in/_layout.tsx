@@ -6,7 +6,7 @@ const SignInLayout = () => {
 	return (
 		<Stack screenOptions={{ headerShown: false }}>
 			<Stack.Screen name="index" />
-			<Stack.Screen name="email/index" />
+			{/* <Stack.Screen name="email/index" /> */}
 		</Stack>
 	);
 };

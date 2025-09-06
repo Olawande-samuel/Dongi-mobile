@@ -53,6 +53,7 @@ const ProfileLayout = () => {
 					},
 					headerLeft: () => <BackButton />,
 					headerShadowVisible: false,
+					headerShown: false,
 				}}
 			/>
 			<Stack.Screen

@@ -5,14 +5,13 @@ import { Api } from "@/utils/endpoints";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import { useMutation } from "@tanstack/react-query";
-import { Link, router } from "expo-router";
-import React, { useEffect } from "react";
+import { Link } from "expo-router";
+import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Text, TextInput, View } from "react-native";
 import { z } from "zod";
-import StyledButton from "../StyledButton";
-import { useTempStore } from "@/store/temp-user-store";
 import PasswordInput from "../PasswordInput";
+import StyledButton from "../StyledButton";
 
 const FormSchema = z.object({
 	email: z.string().trim().email(),
@@ -25,7 +24,7 @@ const EmailSignInForm = ({ userType }: { userType: USERTYPE }) => {
 	const { setItem } = useAsyncStorage("user");
 	const { setItem: setUserType } = useAsyncStorage("userType");
 
-	const { handleLogin } = useAuth();
+	const { handleLoginToken } = useAuth();
 
 	const { setIsLoading } = useGlobalContext();
 
@@ -43,8 +42,6 @@ const EmailSignInForm = ({ userType }: { userType: USERTYPE }) => {
 		onSettled: () => setIsLoading(false),
 	});
 
-	console.log(form.formState.errors, form.getValues());
-
 	function submit(val: FormType) {
 		mutate(
 			{
@@ -57,14 +54,17 @@ const EmailSignInForm = ({ userType }: { userType: USERTYPE }) => {
 						token: res.data.data.token,
 						user: res.data.data.user,
 					};
+					// store in async storage
 					setItem(JSON.stringify(value));
 
 					if (userType === "client") {
 						setUserType("client");
+						// setAuthUserType("client");
 					} else {
 						setUserType("service");
+						// setAuthUserType("service");
 					}
-					handleLogin(res.data.data.token);
+					handleLoginToken(res.data.data.token);
 				},
 				onError: (err) => {
 					handleError(err);

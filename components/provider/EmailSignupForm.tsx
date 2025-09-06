@@ -1,35 +1,33 @@
-import {
-	View,
-	Text,
-	TextInput,
-	Pressable,
-	KeyboardAvoidingView,
-	TouchableWithoutFeedback,
-	Keyboard,
-	FlatList,
-} from "react-native";
-import React, { useEffect, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import React from "react";
 import {
 	Controller,
 	FormProvider,
 	useForm,
 	useFormContext,
 } from "react-hook-form";
+import {
+	FlatList,
+	Keyboard,
+	KeyboardAvoidingView,
+	Text,
+	TextInput,
+	TouchableWithoutFeedback,
+	View
+} from "react-native";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import StyledButton from "../StyledButton";
-
+import useTempUser from "@/hooks/useTempUser";
 import { useGlobalContext } from "@/providers/GlobalStateProvider";
-import { useMutation } from "@tanstack/react-query";
-import { Api } from "@/utils/endpoints";
-import { toast } from "sonner-native";
 import { handleError } from "@/utils";
+import { Api } from "@/utils/endpoints";
+import { EvilIcons } from "@expo/vector-icons";
+import { useAsyncStorage } from "@react-native-async-storage/async-storage";
+import { useMutation } from "@tanstack/react-query";
 import { Platform } from "react-native";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import { EvilIcons } from "@expo/vector-icons";
 import SelectDropdown from "react-native-select-dropdown";
-import useTempUser from "@/hooks/useTempUser";
-import { useAsyncStorage } from "@react-native-async-storage/async-storage";
+import { toast } from "sonner-native";
 
 const FormSchema = z.object({
 	firstname: z.string().min(2, "First Name is required").trim(),
@@ -41,12 +39,16 @@ const FormSchema = z.object({
 	businessName: z.string(),
 	gender: z.union([z.literal("MALE"), z.literal("FEMALE"), z.literal("OTHER")]),
 	location: z.string(),
+	latitude: z.number(),
+	longitude: z.number(),
 });
 
 type FormType = z.infer<typeof FormSchema>;
 
 function EmailForm() {
 	const form = useFormContext();
+
+	console.log(form.formState.errors);
 	return (
 		<View className="flex-1">
 			<View className="flex-row mb-5 gap-4">
@@ -200,15 +202,18 @@ function EmailForm() {
 			<View className="mb-5 flex-1">
 				<View className="space-y-[6px]">
 					<Text className="text-sm text-off-black">Location</Text>
-					<View>
+					<View className="min-h-[200px]">
 						<GooglePlacesAutocomplete
 							placeholder="Search"
 							onFail={(error) => {
 								console.log("failed", error);
 								toast.error("An error occurred fetching your location");
 							}}
-							onPress={(data) => {
+							fetchDetails
+							onPress={(data, detail) => {
 								form.setValue("location", data.description);
+								form.setValue("latitude", detail?.geometry.location.lat);
+								form.setValue("longitude", detail?.geometry.location.lng);
 							}}
 							query={{
 								key: process.env.EXPO_PUBLIC_GOOGLE_API,
@@ -290,6 +295,7 @@ const EmailSignupForm = ({
 							ListHeaderComponent={() => <EmailForm />}
 							renderItem={() => null}
 							showsVerticalScrollIndicator={false}
+							keyboardShouldPersistTaps="always"
 						/>
 					</TouchableWithoutFeedback>
 				</KeyboardAvoidingView>

@@ -18,7 +18,7 @@ export interface ICategoryServices {
 	id: number;
 	images: string[];
 	name: string;
-	provider: { name: string; image: string };
+	provider: { name: string; image: string; bio: string };
 	provider_id: string;
 	starting_price: string;
 	status: string;
@@ -209,7 +209,7 @@ export interface IProviderService {
 	id: number;
 	images: string[];
 	name: string;
-	provider: { name: string; image: string };
+	provider: { name: string; image: string; bio:string };
 	provider_id: string;
 	starting_price: string;
 	status: string;

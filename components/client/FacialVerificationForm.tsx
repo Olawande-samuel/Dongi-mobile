@@ -129,6 +129,7 @@ const FacialVerificationForm = ({
 
 				mutate(formdata, {
 					onSuccess: (res) => {
+						console.log({ uploadResponse: res });
 						toast.success(res.data.message);
 						setSteps((prev) => prev + 1);
 					},
