@@ -15,6 +15,7 @@ import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import { useAuth } from "@/context/Auth";
 import PasswordInput from "../PasswordInput";
 import { usePathname } from "expo-router";
+import { useRouter } from "expo-router";
 
 const FormSchema = z
 	.object({
@@ -46,6 +47,7 @@ const SetupPassword = ({
 	const { setItem: setUserType } = useAsyncStorage("userType");
 	const globalContext = useGlobalContext();
 	const { handleLoginToken } = useAuth();
+	const router = useRouter()
 
 	const { data } = useTempUser();
 
@@ -82,14 +84,15 @@ const SetupPassword = ({
 					} else {
 						// For service providers, store user info before going to next step
 						if (res?.data?.data) {
-							const value = {
-								token: res.data.data.token,
-								user: res.data.data.user,
-							};
-							setItem(JSON.stringify(value));
-							setUserType("service");
-							handleLoginToken(res.data.data.token);
-							nextStep((prev) => prev + 1);
+							// const value = {
+							// 	token: res.data.data.token,
+							// 	user: res.data.data.user,
+							// };
+							// setItem(JSON.stringify(value));
+							// setUserType("service");
+							// handleLoginToken(res.data.data.token);
+							// nextStep((prev) => prev + 1);
+							router.replace("/service-provider/sign-in")
 						}
 					}
 				},

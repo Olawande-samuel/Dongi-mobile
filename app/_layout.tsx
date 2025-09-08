@@ -79,6 +79,7 @@ function RootLayoutNav() {
 	}, [fontsLoaded]);
 
 	console.log({ userType });
+	
 	useEffect(() => {
 		if (isLoading) return;
 		const inAuthGroup = segments[0] === "(auth)";

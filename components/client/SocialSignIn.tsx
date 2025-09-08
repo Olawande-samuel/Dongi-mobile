@@ -5,7 +5,7 @@ const SocialSignIn = ({ isLogin = false }: { isLogin: boolean }) => {
 	// const { userType } = useUserType();
 	return (
 		<View className="space-y-2">
-			<Pressable className="mb-2 flex-row items-center bg-[#1FB4FF1A] rounded px-1 py-[10px] justify-center">
+			{/* <Pressable className="mb-2 flex-row items-center bg-[#1FB4FF1A] rounded px-1 py-[10px] justify-center">
 				<Image
 					source={require("../../assets/images/apple.png")}
 					className="large:w-6 large:h-6 w-4 h-4 mr-3 "
@@ -13,7 +13,7 @@ const SocialSignIn = ({ isLogin = false }: { isLogin: boolean }) => {
 				<Text className="text-primary text-sm large:text-base">
 					{isLogin ? "Sign in" : "Sign up"} with Apple
 				</Text>
-			</Pressable>
+			</Pressable> */}
 			<Pressable className="mb-2 flex-row items-center bg-[#1FB4FF1A] rounded px-1 py-[10px] justify-center">
 				<Image
 					source={require("../../assets/images/google.png")}
