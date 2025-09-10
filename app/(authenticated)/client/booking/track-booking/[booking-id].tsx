@@ -22,8 +22,6 @@ const Track = () => {
 	const serviceId = params?.["service_id"];
 	const providerId = params?.["provider_id"];
 
-	console.log({ params });
-
 	const { data, isLoading } = useQuery({
 		queryKey: ["get request detail", bookingId as string],
 		queryFn: () => Api.getRequestById(bookingId as string),
@@ -56,19 +54,11 @@ const Track = () => {
 		setModalVisible(true);
 	}, []);
 
-	console.log("request status", data?.data?.data?.status);
-
 	useEffect(() => {
-		if (data?.data?.data?.status === "completed") {
+		if (bookingInfo?.status === "completed") {
 			handlePresentModalPress();
 		}
 	}, [data?.data.data.status]);
-
-	console.log({
-		bookingInfo,
-		serviceInfo,
-		services: services?.data?.data?.services,
-	});
 
 	return (
 		<SafeAreaView className="flex-1 bg-white" edges={["bottom"]}>
@@ -80,7 +70,7 @@ const Track = () => {
 					>
 						<View className="flex-1 bg-white">
 							<View className="mb-6">
-								<VendorProfile />
+								{serviceInfo && <VendorProfile {...serviceInfo} />}
 							</View>
 							<View className="space-y-3 mb-6">
 								<View className="flex-row justify-between items-center">
@@ -94,7 +84,7 @@ const Track = () => {
 										Request Type
 									</Text>
 									<Text className="font-regular text-sm text-off-black text-right">
-										Real estate survey assistance
+										{serviceInfo?.name || ""}
 									</Text>
 								</View>
 
@@ -160,6 +150,8 @@ const Track = () => {
 						<ConfirmService
 							compRef={bottomSheetModalRef}
 							openRatings={handlePresentReviewModalPress}
+							providerName={bookingInfo?.provider?.name || ""}
+							serviceName={serviceInfo?.name || ""}
 						/>
 						<ReviewService
 							compRef={bottomSheetReviewModalRef}

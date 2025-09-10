@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
 import * as Location from "expo-location";
-import Geocoding from "react-native-geocoding";
+import { useEffect, useState } from "react";
 
 // Initialize with your API key
 // Geocoding.init(process.env.EXPO_PUBLIC_GOOGLE_API || "");

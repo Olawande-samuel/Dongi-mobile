@@ -99,7 +99,12 @@ const VendorBooking = () => {
 				<BottomSheetModalProvider>
 					<View className="flex-row justify-between items-center px-6 py-3">
 						<BackButton />
-						<DoubleHeader title={serviceInfo?.provider.name} subtitle={""} />
+						<DoubleHeader
+							title={`${serviceInfo?.provider.firstname || ""} ${
+								serviceInfo?.provider?.lastname || ""
+							}`}
+							subtitle={""}
+						/>
 						<Pressable onPress={() => router.back()}>
 							<Octicons name="share-android" size={24} color="#676B83" />
 						</Pressable>

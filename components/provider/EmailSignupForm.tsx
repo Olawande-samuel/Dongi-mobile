@@ -13,7 +13,7 @@ import {
 	Text,
 	TextInput,
 	TouchableWithoutFeedback,
-	View
+	View,
 } from "react-native";
 import { z } from "zod";
 import StyledButton from "../StyledButton";
@@ -32,6 +32,7 @@ import { toast } from "sonner-native";
 const FormSchema = z.object({
 	firstname: z.string().min(2, "First Name is required").trim(),
 	lastname: z.string().min(2, "Last Name is required").trim(),
+	middlename: z.string().min(2, "Middle Name is required").trim(),
 	email: z
 		.string()
 		.email()
@@ -73,12 +74,12 @@ function EmailForm() {
 				<View className="flex-1">
 					<Controller
 						control={form.control}
-						name="lastname"
+						name="middlename"
 						render={({ field }) => (
 							<View className="space-y-[6px]">
-								<Text className="text-sm text-off-black">Last Name</Text>
+								<Text className="text-sm text-off-black">Middle Name</Text>
 								<TextInput
-									placeholder="Enter last name"
+									placeholder="Enter middle name"
 									value={field.value}
 									onChangeText={field.onChange}
 									className="p-2 text-muted text-base rounded border border-inner-light"
@@ -87,6 +88,23 @@ function EmailForm() {
 						)}
 					/>
 				</View>
+			</View>
+			<View className="flex-1">
+				<Controller
+					control={form.control}
+					name="lastname"
+					render={({ field }) => (
+						<View className="space-y-[6px]">
+							<Text className="text-sm text-off-black">Last Name</Text>
+							<TextInput
+								placeholder="Enter last name"
+								value={field.value}
+								onChangeText={field.onChange}
+								className="p-2 text-muted text-base rounded border border-inner-light"
+							/>
+						</View>
+					)}
+				/>
 			</View>
 			<View className="mb-5">
 				<Controller
@@ -251,6 +269,7 @@ const EmailSignupForm = ({
 		defaultValues: {
 			firstname: "",
 			lastname: "",
+			middlename: "",
 			businessName: "",
 			location: "",
 		},

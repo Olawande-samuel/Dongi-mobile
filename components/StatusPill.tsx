@@ -17,6 +17,8 @@ const StatusPill = ({
 				return "bg-success-100";
 			case "cancelled":
 				return "bg-danger-100";
+			case "accepted":
+				return "bg-success-100";
 			default:
 				return "bg-gray-100";
 		}
@@ -29,6 +31,8 @@ const StatusPill = ({
 				return "bg-success-500";
 			case "cancelled":
 				return "bg-danger-500";
+			case "accepted":
+				return "bg-success-500";
 			default:
 				return "bg-gray-100";
 		}

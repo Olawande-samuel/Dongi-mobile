@@ -1,4 +1,5 @@
 import { IProviderService } from "@/types";
+import { cn } from "@/utils";
 import { router } from "expo-router";
 import { Image, Pressable, Text, View } from "react-native";
 
@@ -12,12 +13,37 @@ function ServiceComponent({
 }: IProviderService) {
 	return (
 		<View className="bg-white rounded-lg border-outer-light p-3 space-y-2">
-			<View>
-				<Image
-					source={require("../../../assets/images/client/preview_1.png")}
-					className="w-full h-24 large:h-[120px] rounded"
-					resizeMode="cover"
-				/>
+			<View
+				className=""
+				style={{
+					flexDirection: images.length > 1 ? "row" : "column",
+				}}
+			>
+				{!images ? (
+					<Image
+						source={require("../../../assets/images/client/preview_1.png")}
+						className="w-full h-24 large:h-[120px] rounded"
+						resizeMode="cover"
+					/>
+				) : images?.length > 1 ? (
+					images.map((item, index) => (
+						<Image
+							key={index}
+							source={{ uri: item }}
+							className={cn("h-24 large:h-[120px] rounded")}
+							style={{
+								width: `${100 / images.length}%`,
+							}}
+							resizeMode="cover"
+						/>
+					))
+				) : (
+					<Image
+						source={{ uri: images[0] }}
+						className="w-full h-24 large:h-[120px] rounded"
+						resizeMode="cover"
+					/>
+				)}
 			</View>
 			<View>
 				<Text className="text-sm large:text-base font-regular text-off-black">

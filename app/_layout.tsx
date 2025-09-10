@@ -33,19 +33,6 @@ import React from "react";
 import "react-native-get-random-values";
 import { AuthProvider, useAuth } from "@/context/Auth";
 
-function AppEntry() {
-	const pathname = usePathname();
-	console.log({ pathname });
-	return (
-		<>
-			<StatusBar style="dark" />
-			<Stack screenOptions={{ headerShown: false }}>
-				<Stack.Screen name="index" />
-			</Stack>
-		</>
-	);
-}
-
 function RootLayoutNav() {
 	let [fontsLoaded] = useFonts({
 		PlusJakartaSans_200ExtraLight,
@@ -65,6 +52,8 @@ function RootLayoutNav() {
 	});
 
 	const { isAuthenticated, isLoading, userType } = useAuth();
+
+	console.log({ isAuthenticated });
 	const segments = useSegments();
 	const router = useRouter();
 
@@ -79,7 +68,7 @@ function RootLayoutNav() {
 	}, [fontsLoaded]);
 
 	console.log({ userType });
-	
+
 	useEffect(() => {
 		if (isLoading) return;
 		const inAuthGroup = segments[0] === "(auth)";
@@ -96,13 +85,14 @@ function RootLayoutNav() {
 		}
 	}, [isAuthenticated, segments, isLoading]);
 
-	if (!fontsLoaded || isLoading) {
+	if (!fontsLoaded) {
 		return null;
 	}
 	return (
 		<>
 			<StatusBar style="dark" />
 			<Stack screenOptions={{ headerShown: false }}>
+				<Stack.Screen name="index" />
 				<Stack.Screen name="(auth)" />
 				<Stack.Screen name="(authenticated)/client" />
 				<Stack.Screen name="(authenticated)/service-provider" />

@@ -5,8 +5,6 @@ import { Alert } from "react-native";
 
 const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 
-console.log({ BASE_URL });
-
 const baseInstance = axios.create({
 	baseURL: BASE_URL,
 	headers: {
@@ -40,7 +38,6 @@ authInstance.interceptors.request.use(
 
 authInstance.interceptors.response.use(
 	(response) => {
-		console.log({ response });
 		return response;
 	},
 	async (error) => {

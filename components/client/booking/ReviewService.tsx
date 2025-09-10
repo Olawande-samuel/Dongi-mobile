@@ -9,7 +9,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { AirbnbRating } from "react-native-ratings";
 import StyledButton from "@/components/StyledButton";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Api } from "@/utils/endpoints";
 import { useGlobalContext } from "@/providers/GlobalStateProvider";
 import { z } from "zod";
@@ -52,11 +52,18 @@ function ReviewService({
 		resolver: zodResolver(FormSchema),
 	});
 
+	const { data, isLoading } = useQuery({
+		queryKey: ["get request detail", bookingId as string],
+		queryFn: () => Api.getRequestById(bookingId as string),
+	});
+
 	const { mutate } = useMutation({
 		mutationFn: Api.rateService,
 		onMutate: () => setIsLoading(true),
 		onSettled: () => setIsLoading(false),
 	});
+
+	const bookingInfo = data?.data?.data;
 
 	function handleSubmit(val: FormType) {
 		mutate(
@@ -108,7 +115,7 @@ function ReviewService({
 							render={({ field }) => (
 								<View className="mb-5">
 									<Text className="text-center text-base font-regular mb-2">
-										Rate your experience with John Musa
+										{`Rate your experience with ${bookingInfo?.provider?.name}`}
 									</Text>
 									<View className="flex-row justify-center gap-x-1">
 										<AirbnbRating

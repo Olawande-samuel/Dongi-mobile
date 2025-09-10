@@ -1,8 +1,10 @@
 import AppModal from "@/components/AppModal";
 import StatusPill from "@/components/StatusPill";
+import useDistance from "@/hooks/useDistance";
+import useServiceProviderUserInfo from "@/hooks/useServiceProviderUserInfo";
 import { handleError } from "@/utils";
 import { Api } from "@/utils/endpoints";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import moment from "moment";
 import React, { useState } from "react";
@@ -20,6 +22,9 @@ const NewRequest = () => {
 	const [modalVisible, setModalVisible] = useState(false);
 	const [acceptanceModalVisible, setAcceptanceModalVisible] = useState(false);
 	const [rejectionModalVisible, setRejectionModalVisible] = useState(false);
+	const { data: provider } = useServiceProviderUserInfo();
+
+	const queryClient = useQueryClient();
 
 	const params = useLocalSearchParams();
 
@@ -27,8 +32,22 @@ const NewRequest = () => {
 		queryKey: ["get request by id", params.requestId as string],
 		queryFn: () => Api.getRequestById(params.requestId as string),
 	});
-
 	const result = data?.data?.data;
+
+	// get all services
+	const { data: service, isLoading: isServiceLoading } = useQuery({
+		queryKey: ["get provider service", result?.provider_id],
+		queryFn: () => Api.getServiceById(result?.service_id as string),
+	});
+
+	const { distance } = useDistance({
+		origin: provider?.user.location as string,
+		destination: result?.customer?.location as string,
+	});
+
+	const serviceInfo = service?.data?.data;
+
+	// filter by service id
 
 	const { mutate, isPending } = useMutation({
 		mutationFn: Api.acceptServiceRequest,
@@ -36,9 +55,13 @@ const NewRequest = () => {
 			handleError(err);
 		},
 		onSuccess: (res) => {
+			queryClient.invalidateQueries({
+				queryKey: ["get provider user info"],
+			});
 			setModalVisible(true);
 		},
 	});
+
 	const { mutate: rejectMutation, isPending: isRejectPending } = useMutation({
 		mutationFn: Api.rejectServiceRequest,
 		onError: (err) => {
@@ -57,12 +80,13 @@ const NewRequest = () => {
 		setRejectionModalVisible(true);
 	}
 
+	console.log({ serviceInfo, result });
 	return (
 		<SafeAreaView className="flex-1 bg-white" edges={["bottom"]}>
 			{isLoading ? (
 				<ActivityIndicator />
 			) : (
-				<ScrollView className="flex-1 bg-white px-6 pb-4 gap-x-3">
+				<ScrollView className="flex-1 bg-white px-6 pb-6 gap-x-3">
 					<View className="mt-9 mb-6">
 						<View className="flex-row justify-between gap-4 mb-[10px]">
 							<View className="flex-row items-center max-w-[65%]">
@@ -74,11 +98,14 @@ const NewRequest = () => {
 								<View className="ml-2 space-y-1">
 									<Text
 										className="text-sm large:text-base font-regular text-off-black"
-										// numberOfLines={1}
-										// ellipsizeMode="tail"
+										numberOfLines={1}
+										ellipsizeMode="tail"
 									>
-										{result?.provider_id || ""}
+										{`${result?.customer?.first_name || ""} ${
+											result?.customer?.last_name || ""
+										}`}
 									</Text>
+									<Text>{result?.service?.name || ""}</Text>
 								</View>
 							</View>
 							<View className="space-y-1">
@@ -91,7 +118,9 @@ const NewRequest = () => {
 										className="w-[18px] h-[18px] mr-[6px]"
 									/>
 									<Text className="font-regular text-xs large:text-sm text-off-black">
-										{result?.location || ""}
+										{result?.status === "PENDING"
+											? distance
+											: result?.customer?.location || ""}
 									</Text>
 								</View>
 								<Text className="text-xs text-end font-regular text-primaryII">
@@ -112,7 +141,7 @@ const NewRequest = () => {
 								Request Type
 							</Text>
 							<Text className="font-regular text-xs large:text-sm text-off-black text-right">
-								Real estate survey assistance
+								{serviceInfo?.name || ""}
 							</Text>
 						</View>
 
@@ -142,7 +171,9 @@ const NewRequest = () => {
 									className="w-[18px] h-[18px] mr-[6px]"
 								/>
 								<Text className="flex-1 text-sm large:text-base">
-									{result?.location || ""}
+									{result?.status === "PENDING"
+										? distance
+										: result?.customer?.location || ""}
 								</Text>
 							</View>
 						</View>
@@ -167,39 +198,48 @@ const NewRequest = () => {
 							</View>
 						</View>
 					</View>
-					<View className="mb-6 flex-row space-x-3">
-						<Pressable
-							onPress={acceptRequest}
-							className="bg-success-500 py-2 large:py-[10px] flex-1 px-1 rounded border-[0.5px] border-primary"
-						>
-							<Text className="text-center text-white text-sm large:text-base font-regular">
-								Accept Request
-							</Text>
-						</Pressable>
-						<Pressable
-							onPress={rejectRequest}
-							className="bg-white border-[0.5px] border-support flex-1 py-2 large:py-[10px] px-1 rounded"
-						>
-							<Text className="text-center text-support text-sm large:text-base font-regular">
-								Deny Request
-							</Text>
-						</Pressable>
-					</View>
+					{result?.status === "PENDING" && (
+						<View className="mb-6  flex-row space-x-3">
+							<Pressable
+								onPress={acceptRequest}
+								className="bg-success-500 py-2 large:py-[10px] flex-1 px-1 rounded border-[0.5px] border-primary"
+							>
+								<Text className="text-center text-white text-sm large:text-base font-regular">
+									Accept Request
+								</Text>
+							</Pressable>
+							<Pressable
+								onPress={rejectRequest}
+								className="bg-white border-[0.5px] border-support flex-1 py-2 large:py-[10px] px-1 rounded"
+							>
+								<Text className="text-center text-support text-sm large:text-base font-regular">
+									Deny Request
+								</Text>
+							</Pressable>
+						</View>
+					)}
 					<AppModal
 						modalVisible={modalVisible}
 						setModalVisible={setModalVisible}
-						title={`Congratulations you have accepted ${
-							result?.customer_id || ""
-						}’s request`}
-						onPress={() => setModalVisible(false)}
+						title={`Congratulations you have accepted ${`${
+							result?.customer?.first_name || ""
+						} ${
+							result?.customer?.last_name || ""
+						}`}’s request. You can now view their location`}
+						onPress={() => {
+							setAcceptanceModalVisible(false);
+							setModalVisible(false);
+						}}
 					/>
 					{/* confirm acceptance modal*/}
 					<AppModal
 						modalVisible={acceptanceModalVisible}
 						setModalVisible={setAcceptanceModalVisible}
-						title={`Are you sure you want to accept ${
-							result?.customer_id || ""
-						}’s request? You'll be charge an acceptance fee`}
+						title={`Are you sure you want to accept ${`${
+							result?.customer?.first_name || ""
+						} ${
+							result?.customer?.last_name || ""
+						}`}’s request? You'll be charge an acceptance fee`}
 						onPress={() => mutate(params.requestId as string)}
 						loading={isPending}
 					/>
@@ -207,11 +247,11 @@ const NewRequest = () => {
 					<AppModal
 						modalVisible={rejectionModalVisible}
 						setModalVisible={setRejectionModalVisible}
-						title={`Are you sure you want to reject ${
-							result?.customer_id || ""
-						}’s request?`}
+						title={`Are you sure you want to reject ${`${
+							result?.customer?.first_name || ""
+						} ${result?.customer?.last_name || ""}`}’s request?`}
 						onPress={() => rejectMutation(params.requestId as string)}
-						loading={isPending}
+						loading={isRejectPending}
 						type="warning"
 					/>
 				</ScrollView>

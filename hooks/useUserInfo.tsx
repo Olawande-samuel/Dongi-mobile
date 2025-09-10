@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 
 const useUserInfo = () => {
 	const { data, isLoading, error } = useQuery({
-		queryKey: ["get user info a"],
+		queryKey: ["get user info"],
 		queryFn: () => Api.getUserProfile(),
 	});
 

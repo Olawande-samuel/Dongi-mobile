@@ -10,20 +10,30 @@ import { Ionicons } from "@expo/vector-icons";
 import Delivery from "@/svgs/Delivery";
 import StatusPill from "@/components/StatusPill";
 import { useLocalSearchParams } from "expo-router";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Api } from "@/utils/endpoints";
 import moment from "moment";
+import { useGlobalContext } from "@/providers/GlobalStateProvider";
+import { toast } from "sonner-native";
+import { handleError } from "@/utils";
+
+interface Props {
+	compRef: React.RefObject<BottomSheetModal>;
+	openRatings: VoidFunction;
+	providerName: string;
+	serviceName: string;
+}
 
 function ConfirmService({
 	compRef,
 	openRatings,
-}: {
-	compRef: React.RefObject<BottomSheetModal>;
-	openRatings: VoidFunction;
-}) {
+	providerName,
+	serviceName,
+}: Props) {
 	const { dismiss } = useBottomSheetModal();
 	const snapPoints = useMemo(() => ["90%"], []);
 
+	const { setIsLoading } = useGlobalContext();
 	const params = useLocalSearchParams();
 	const bookingId = params?.["booking-id"];
 
@@ -38,7 +48,25 @@ function ConfirmService({
 		dismiss();
 	}, [dismiss]);
 
-	console.log("result", result);
+	const { mutate, isPending } = useMutation({
+		mutationFn: Api.confirmServiceCompletion,
+		mutationKey: ["confirm completion", bookingId],
+		onMutate: () => setIsLoading(true),
+		onSettled: () => setIsLoading(false),
+	});
+
+	function confirmCompletion() {
+		mutate(bookingId as string, {
+			onSuccess: () => {
+				toast.success("Request completed successfully!");
+				openRatings();
+			},
+			onError: (err) => {
+				handleError(err);
+			},
+		});
+	}
+
 	return (
 		<BottomSheetModal
 			index={1}
@@ -71,7 +99,7 @@ function ConfirmService({
 					</View>
 					<View className="px-6">
 						<Text className="text-center text-lg font-semibold text-off-black leading-[22.68px]">
-							{`John Musa has completed your Real estate survey assistance service`}
+							{`${providerName} has completed your ${serviceName} service`}
 						</Text>
 						<View className="justify-center items-center mb-6">
 							<Delivery isServiceProvider={false} />
@@ -87,7 +115,7 @@ function ConfirmService({
 								</View>
 								<View className="space-y-1 flex-1">
 									<Text className="text-base font-regular text-off-black">
-										John Musa
+										{providerName}
 									</Text>
 									{/* <Text className="text-xs font-regular text-support">
 										Real estate agent
@@ -113,7 +141,7 @@ function ConfirmService({
 									Request Type
 								</Text>
 								<Text className="font-regular text-sm text-off-black text-right">
-									Real estate survey assistance
+									{serviceName}
 								</Text>
 							</View>
 							<View className="flex-row justify-between items-center">
@@ -145,7 +173,7 @@ function ConfirmService({
 				</View>
 				<View className="mt-auto px-6 mb-2 flex-row gap-x-3">
 					<Pressable
-						onPress={openRatings}
+						onPress={confirmCompletion}
 						className="bg-success-500 py-[10px] flex-1 px-1 rounded border-[0.5px] border-primary"
 					>
 						<Text className="text-center text-white text-base font-regular">

@@ -12,16 +12,34 @@ export interface IService {
 }
 
 export interface ICategoryServices {
-	category_id: string;
+	average_rating: number;
+	category: {
+		uuid: string;
+		name: string;
+		description: string;
+		image: string;
+		status: string;
+	};
 	created_at: string;
 	description: string;
 	id: number;
 	images: string[];
 	name: string;
-	provider: { name: string; image: string; bio: string };
-	provider_id: string;
-	starting_price: string;
+	provider: {
+		uuid: string;
+		business_name: string;
+		business_logo: string;
+		latitude: string;
+		longitude: string;
+		firstname: string;
+		lastname: string;
+	};
 	status: string;
+	total_completed: number;
+	total_ratings: number;
+	total_rejected: number;
+	total_requests: number;
+	unique_customers: number;
 	updated_at: string;
 	uuid: string;
 }
@@ -134,20 +152,85 @@ export interface ICompletedRequest {
 	};
 }
 
+// export interface IRequestInfo {
+// 	created_at: string;
+// 	customer_id: string;
+// 	deadline: string;
+// 	id: 11;
+// 	latitude: string;
+// 	location: string;
+// 	longitude: string;
+// 	message: string;
+// 	provider_id: string;
+// 	service_id: string;
+// 	status: string;
+// 	updated_at: string;
+// 	uuid: string;
+// 	provider: {
+// 		name: string;
+// 		image: string;
+// 		email: string;
+// 		location: string;
+// 	};
+// }
+
 export interface IRequestInfo {
-	created_at: string;
+	uuid: string;
 	customer_id: string;
-	deadline: string;
-	id: 11;
-	latitude: string;
-	location: string;
-	longitude: string;
-	message: string;
 	provider_id: string;
 	service_id: string;
+	deadline: string;
+	message: string;
 	status: string;
+	created_at: string;
 	updated_at: string;
-	uuid: string;
+	provider: {
+		uuid: string;
+		first_name: string;
+		last_name: string;
+		business_name: string;
+		image: string;
+		category_of_service: string;
+		brief_introduction: string;
+	};
+	service: {
+		uuid: string;
+		name: string;
+		description: string;
+		images: string[];
+	};
+	customer: {
+		uuid: string;
+		first_name: string;
+		last_name: string;
+		phone: string;
+		email: string;
+		location: string;
+		latitude: string;
+		longitude: string;
+	};
+}
+
+export interface IClient {
+	user: {
+		id: number;
+		uuid: string;
+		phone: string;
+		email: string;
+		firstname: string;
+		lastname: string;
+		gender: string;
+		location: string;
+		latitude: string;
+		longitude: string;
+		password: string;
+		email_verified_at: string;
+		phone_verified_at: string;
+		facial_verification_url: string;
+		flagged: boolean;
+		created_at: string;
+		updated_at: string;
+	};
 }
 export interface IUser {
 	user: {
@@ -209,7 +292,7 @@ export interface IProviderService {
 	id: number;
 	images: string[];
 	name: string;
-	provider: { name: string; image: string; bio:string };
+	provider: { name: string; image: string; bio: string };
 	provider_id: string;
 	starting_price: string;
 	status: string;

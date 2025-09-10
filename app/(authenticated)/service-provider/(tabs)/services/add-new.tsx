@@ -5,6 +5,8 @@ import {
 	Pressable,
 	KeyboardAvoidingView,
 	Platform,
+	Image,
+	Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -33,11 +35,16 @@ const FormSchema = z.object({
 		.string()
 		.max(600, "Description should not be more than 500 characters")
 		.trim(),
-	images: z.object({
-		uri: z.string(),
-		type: z.string(),
-		name: z.string(),
-	}),
+	images: z
+		.array(
+			z.object({
+				uri: z.string(),
+				type: z.string(),
+				name: z.string(),
+			})
+		)
+		.min(1, "At least one image is required")
+		.max(3, "Maximum of three images"),
 });
 
 type FormType = z.infer<typeof FormSchema>;
@@ -55,11 +62,12 @@ const AddNewService = () => {
 		defaultValues: {
 			name: "",
 			description: "",
+			images: [],
 		},
 		resolver: zodResolver(FormSchema),
 	});
 
-	const bannerName = form.watch("images")?.name ?? "";
+	const images = form.watch("images") || [];
 
 	const { mutate } = useMutation({
 		mutationFn: Api.createNewService,
@@ -88,11 +96,25 @@ const AddNewService = () => {
 		if (userInfo?.user?.category_of_service) {
 			const payload = {
 				...val,
-				images: [val.images.uri],
+				images: val.images,
 				category_id: userInfo.user.category_of_service,
 			};
-			console.log({ payload });
-			mutate(payload);
+			const formData = new FormData();
+			formData.append("category_id", userInfo.user.category_of_service);
+			formData.append("name", val.name);
+			formData.append("description", val.description);
+
+			// Append each image to FormData
+			val.images.forEach((image, index) => {
+				formData.append(
+					"service_images",
+					image as any,
+					`service_profile_${index}`
+				);
+			});
+
+			console.log({ payload, formData });
+			mutate(formData);
 		}
 	}
 
@@ -181,7 +203,7 @@ const AddNewService = () => {
 												onPress={async () => {
 													const result = await pickImage();
 													if (result) {
-														field.onChange(result);
+														field.onChange([...images, result]);
 													}
 												}}
 												className="relative border border-inner-light rounded py-[19px] px-2 justify-center items-center"
@@ -193,7 +215,11 @@ const AddNewService = () => {
 													className="mb-[6px]"
 												/>
 												<Text className=" text-muted text-sm large:text-base text-center font-regular ">
-													{bannerName ?? "Upload your business banner"}
+													{images.length > 0
+														? `${images.length} image${
+																images.length > 1 ? "s" : ""
+														  } selected`
+														: "Upload your business banner"}
 												</Text>
 											</Pressable>
 										</View>

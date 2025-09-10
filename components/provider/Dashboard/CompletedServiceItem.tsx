@@ -15,9 +15,9 @@ const CompletedServiceItem = ({ id, uuid }: Props) => {
 		<Pressable
 			onPress={() =>
 				router.push({
-					pathname: "/service-provider/history/[serviceId]",
+					pathname: "/service-provider/history/[requestId]",
 					params: {
-						serviceId: uuid,
+						requestId: uuid,
 					},
 				})
 			}

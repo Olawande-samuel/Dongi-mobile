@@ -1,5 +1,6 @@
 import {
 	ICategoryServices,
+	IClient,
 	ICompletedRequest,
 	IProviderService,
 	IRequestInfo,
@@ -223,7 +224,7 @@ class API {
 			return Promise.reject(error);
 		}
 	}
-	async getUserProfile(): Promise<AxiosResponse<{ data: IUser }>> {
+	async getUserProfile(): Promise<AxiosResponse<{ data: IClient }>> {
 		try {
 			const endpoint = `/customer/dashboard/profile`;
 			const response = await authInstance.get(endpoint);
@@ -470,7 +471,7 @@ class API {
 		}>
 	> {
 		try {
-			const endpoint = `/services`;
+			const endpoint = `/services/provider`;
 			const response = await authInstance.get(endpoint);
 			// console.log({ response: JSON.stringify(response, null, 2) });
 			return response;
@@ -484,23 +485,21 @@ class API {
 		}>
 	> {
 		try {
-			const endpoint = `/services/${serviceId}`;
+			const endpoint = `/services/${serviceId}/provider`;
 			const response = await authInstance.get(endpoint);
 			return response;
 		} catch (error) {
 			return Promise.reject(error);
 		}
 	}
-	async createNewService(data: {
-		category_id: string;
-		description: string;
-		starting_price?: number;
-		name: string;
-		images: string[];
-	}): Promise<AxiosResponse<any>> {
+	async createNewService(data: FormData): Promise<AxiosResponse<any>> {
 		try {
 			const endpoint = `/services`;
-			const response = await authInstance.post(endpoint, data);
+			const response = await authInstance.post(endpoint, data, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+				},
+			});
 			return response;
 		} catch (error) {
 			return Promise.reject(error);
@@ -588,6 +587,18 @@ class API {
 		try {
 			const endpoint = `/user/device-token`;
 			const response = await authInstance.post(endpoint, data);
+			return response;
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	}
+
+	async confirmServiceCompletion(
+		requestId: string
+	): Promise<AxiosResponse<ApiResponse<any>>> {
+		try {
+			const endpoint = `requests/${requestId}/confirm-completion`;
+			const response = await authInstance.post(endpoint, {});
 			return response;
 		} catch (error) {
 			return Promise.reject(error);

@@ -6,7 +6,7 @@ import SignOutConfirmModal from "@/components/client/profile/SignOutConfirmModal
 import useUserInfo from "@/hooks/useUserInfo";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import React, { useCallback, useRef } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { Image, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const profile = require("../../../../../assets/images/client/profile/profile.png");
@@ -35,11 +35,15 @@ const Profile = () => {
 				className="flex-1 bg-white border-t border-outer-light pt-[18px] px-6"
 			>
 				<View className="flex-row gap-x-3 mb-[36px]">
-					<View className="w-[60px] h-[60px] rounded-full bg-primary">
-						<Text className="uppercase text-[42px] font-bold text-white text-center ">
-							{data?.user.firstname.charAt(0) || "D"}
-						</Text>
-					</View>
+					{data?.user?.facial_verification_url ? (
+						<Image source={{ uri: data?.user?.facial_verification_url }} width={60} height={60} className="rounded-full" />
+					) : (
+						<View className="w-[60px] h-[60px] rounded-full bg-primary">
+							<Text className="uppercase text-[42px] font-bold text-white text-center ">
+								{data?.user.firstname.charAt(0) || "D"}
+							</Text>
+						</View>
+					)}
 					<View>
 						<Text className="text-base font-semibold text-off-black mb-2">
 							{`${data?.user.firstname || ""} ${data?.user.lastname || ""}`}

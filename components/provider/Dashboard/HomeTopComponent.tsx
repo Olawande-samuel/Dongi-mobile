@@ -1,20 +1,18 @@
-import * as Clipboard from "expo-clipboard";
 import HomeTabs from "@/components/client/dashboard/HomeTabs";
-import HomeUserInfo from "@/components/client/dashboard/HomeUserInfo";
-import useUserInfo from "@/hooks/useUserInfo";
+import useServiceProviderUserInfo from "@/hooks/useServiceProviderUserInfo";
 import Copy from "@/svgs/Copy";
 import Star from "@/svgs/Star";
 import Users from "@/svgs/Users";
 import { formatCurrency } from "@/utils";
 import { SIZES } from "@/utils/constants";
-import { AntDesign, FontAwesome6 } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import * as Clipboard from "expo-clipboard";
 import { router } from "expo-router";
 import React, { useEffect, useRef } from "react";
 import { Pressable, Text, View } from "react-native";
-import AccountApproved from "./AccountApproved";
 import { toast } from "sonner-native";
-import useServiceProviderUserInfo from "@/hooks/useServiceProviderUserInfo";
+import AccountApproved from "./AccountApproved";
 import ProviderHomeUserInfo from "./ProviderHomeUserInfo";
 
 const HomeTopComponent = ({
@@ -29,13 +27,12 @@ const HomeTopComponent = ({
 	totalPending: number;
 }) => {
 	const { data, isLoading } = useServiceProviderUserInfo();
-
-	console.log({ data });
 	const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
 	useEffect(() => {
 		bottomSheetModalRef.current?.present();
 	}, []);
+
 	return (
 		<View className="">
 			<View className="mb-[18px]">

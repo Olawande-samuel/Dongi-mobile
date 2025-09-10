@@ -9,6 +9,7 @@ import useServiceProviderUserInfo from "@/hooks/useServiceProviderUserInfo";
 const Index = () => {
 	const { data, isLoading } = useServiceProviderUserInfo();
 
+	console.log({ data });
 	return (
 		<SafeAreaView className="flex-1 bg-white " edges={["top"]}>
 			<View className="flex-1 px-4 large:px-6">
@@ -18,11 +19,20 @@ const Index = () => {
 						<Text className="text-muted font-regular text-xs large:text-sm w-[110px]">
 							Profile Picture
 						</Text>
-						<View className="w-14 large:w-[60px] h-14 large:h-[60px] items-center justify-center rounded-full bg-primary">
-							<Text className="uppercase text-[36px] large:text-[42px] font-bold text-white text-center ">
-								{data?.user?.firstname.charAt(0) || "D"}
-							</Text>
-						</View>
+						{data?.user?.business_logo ? (
+							<Image
+								source={{ uri: data?.user?.business_logo }}
+								width={42}
+								height={42}
+								className="rounded-full"
+							/>
+						) : (
+							<View className="w-14 large:w-[60px] h-14 large:h-[60px] items-center justify-center rounded-full bg-primary">
+								<Text className="uppercase text-[36px] large:text-[42px] font-bold text-white text-center ">
+									{data?.user?.firstname.charAt(0) || "D"}
+								</Text>
+							</View>
+						)}
 					</View>
 					<View className="space-y-5">
 						<View className="flex-row items-center gap-x-6">

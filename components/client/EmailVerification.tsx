@@ -1,7 +1,7 @@
 import useTempUser from "@/hooks/useTempUser";
 import { useGlobalContext } from "@/providers/GlobalStateProvider";
 import { useTempStore } from "@/store/temp-user-store";
-import { handleError } from "@/utils";
+import { handleError, maskEmail } from "@/utils";
 import { Api } from "@/utils/endpoints";
 import { useMutation } from "@tanstack/react-query";
 import React, { useState } from "react";
@@ -32,19 +32,7 @@ const EmailVerification = ({
 		onSettled: () => setIsLoading(false),
 	});
 
-	function maskEmail(val: string) {
-		if (val) {
-			const [name, domain] = val.split("@");
-			const maskedName =
-				name.length <= 4
-					? name
-					: `${name.slice(0, 2)}${"*".repeat(name.length - 4)}${name.slice(
-							-2
-					  )}`;
-			return `${maskedName}@${domain}`;
-		}
-		return "";
-	}
+
 
 	function handleSubmit() {
 		if (!otp) {

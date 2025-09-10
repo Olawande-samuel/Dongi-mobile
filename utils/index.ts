@@ -101,3 +101,15 @@ export const CATEGORY_IMAGE_MAP: { [key: string]: any } = {
 	"Customized Services": require("../assets/images/custom.png"),
 	"TV/Cable Services": require("../assets/images/tv.png"),
 };
+
+export function maskEmail(val: string) {
+	if (val) {
+		const [name, domain] = val.split("@");
+		const maskedName =
+			name.length <= 4
+				? name
+				: `${name.slice(0, 2)}${"*".repeat(name.length - 4)}${name.slice(-2)}`;
+		return `${maskedName}@${domain}`;
+	}
+	return "";
+}

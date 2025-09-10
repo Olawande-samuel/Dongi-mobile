@@ -2,7 +2,7 @@ import HomeContent from "@/components/client/dashboard/HomeContent";
 import ServiceCard from "@/components/client/dashboard/ServiceCard";
 import OngoingCard from "@/components/client/history/OngoingCard";
 import useExpoNotifications from "@/hooks/useExpoNotifications";
-import { IProviderService, OngoingRequest } from "@/types";
+import { ICategoryServices, IProviderService, OngoingRequest } from "@/types";
 import { Api } from "@/utils/endpoints";
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
@@ -48,7 +48,7 @@ const Home = () => {
 					tab === 1 ? (
 						<OngoingCard {...(item as OngoingRequest)} />
 					) : (
-						<ServiceCard {...(item as IProviderService)} />
+						<ServiceCard {...(item as ICategoryServices)} />
 					)
 				}
 				ListHeaderComponent={<HomeContent tab={tab} setTab={setTab} />}
@@ -65,7 +65,7 @@ const Home = () => {
 						/>
 					)
 				}
-				keyExtractor={(item) => item.toString()}
+				keyExtractor={(item, index) => index.toString()}
 				contentContainerStyle={{
 					paddingHorizontal: 24,
 				}}

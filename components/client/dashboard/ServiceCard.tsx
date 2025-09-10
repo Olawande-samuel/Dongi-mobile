@@ -6,12 +6,13 @@ import { ICategoryServices } from "@/types";
 import { formatCurrency } from "@/utils";
 
 const ServiceCard = ({
-	category_id,
-	provider_id,
+	category,
 	name,
-	starting_price,
 	provider,
 	uuid,
+	images,
+	unique_customers,
+	average_rating
 }: ICategoryServices) => {
 	return (
 		<Pressable
@@ -19,9 +20,9 @@ const ServiceCard = ({
 				router.push({
 					pathname: "/client/booking/[vendorId]",
 					params: {
-						vendorId: provider_id,
+						vendorId: provider.uuid,
 						serviceId: uuid,
-						categoryId: category_id,
+						categoryId: category.uuid,
 					},
 				})
 			}
@@ -30,40 +31,43 @@ const ServiceCard = ({
 				<View className="flex-row mb-[10px]">
 					<View className="w-[44px] h-[44px] mr-2">
 						<Image
-							source={require("../../../assets/images/client/temp_user.png")}
+							source={
+								provider?.business_logo
+									? { uri: provider?.business_logo }
+									: require("../../../assets/images/client/temp_user.png")
+							}
 							className="w-[44px] h-[44px] rounded-full"
 							resizeMode="cover"
 						/>
 					</View>
 					<View>
 						<Text className="mb-1 text-base text-off-black">
-							{provider?.name || ""}
+							{`${provider?.firstname || ""} ${provider?.lastname || ""} ` ||
+								""}
 						</Text>
 						<Text className="text-sm text-muted">{name || ""}</Text>
 					</View>
 				</View>
 				<View className="flex-row gap-[2px] mb-[10px]">
-					<View className="flex-1">
-						<Image
-							source={require("../../../assets/images/client/preview_1.png")}
-							className="h-[80px] w-full"
-							resizeMode="cover"
-						/>
-					</View>
-					<View className="flex-1">
-						<Image
-							source={require("../../../assets/images/client/preview_2.png")}
-							className="h-[80px] w-full"
-							resizeMode="cover"
-						/>
-					</View>
-					<View className="flex-1">
-						<Image
-							source={require("../../../assets/images/client/preview_3.png")}
-							className="h-[80px] w-full"
-							resizeMode="cover"
-						/>
-					</View>
+					{images?.length > 0 ? (
+						images.slice(0, 3).map((item, index) => (
+							<View className="flex-1" key={index}>
+								<Image
+									source={{ uri: item }}
+									className="h-[80px] w-full"
+									resizeMode="cover"
+								/>
+							</View>
+						))
+					) : (
+						<View className="flex-1">
+							<Image
+								source={require("../../../assets/images/client/preview_2.png")}
+								className="h-[80px] w-full"
+								resizeMode="cover"
+							/>
+						</View>
+					)}
 				</View>
 				<View className="flex-row justify-between items-center">
 					{/* <View>
@@ -74,13 +78,13 @@ const ServiceCard = ({
 					</View> */}
 					<View>
 						<Text className="mb-1 text-muted text-xs">Customers</Text>
-						<Text className="text-sm text-off-black">12</Text>
+						<Text className="text-sm text-off-black">{unique_customers}</Text>
 					</View>
 					<View>
 						<Text className="mb-1 text-muted text-xs">Rating</Text>
 						<View className="flex-row">
 							<Ionicons name="star" color="#FFCE31" />
-							<Text className="text-sm text-off-black">4.5</Text>
+							<Text className="text-sm text-off-black">{average_rating}</Text>
 						</View>
 					</View>
 					<Pressable className="py-[5px] px-[13px] bg-light rounded-[99px]">

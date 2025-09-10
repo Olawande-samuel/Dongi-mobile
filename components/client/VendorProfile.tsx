@@ -4,16 +4,16 @@ import { Ionicons } from "@expo/vector-icons";
 import { ICategoryServices } from "@/types";
 import { formatCurrency } from "@/utils";
 
-const VendorProfile = ({
-	provider,
-	description,
-	starting_price,
-}: ICategoryServices) => {
+const VendorProfile = ({ provider, description }: ICategoryServices) => {
 	return (
 		<View className="flex-row mb-5">
 			<View className="mr-4">
 				<Image
-					source={require("../../assets/images/client/temp_user.png")}
+					source={
+						provider.business_logo
+							? { uri: provider.business_logo }
+							: require("../../assets/images/client/temp_user.png")
+					}
 					className="w-[100px] h-[100px] rounded-full"
 					width={100}
 					height={100}
@@ -25,7 +25,7 @@ const VendorProfile = ({
 						className="text-sm font-regular text-support mb-2"
 						numberOfLines={4}
 					>
-						{provider?.bio || description || ""}
+						{description || ""}
 					</Text>
 				</View>
 				<View className="flex-row justify-between">

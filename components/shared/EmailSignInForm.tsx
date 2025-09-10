@@ -12,6 +12,7 @@ import { Text, TextInput, View } from "react-native";
 import { z } from "zod";
 import PasswordInput from "../PasswordInput";
 import StyledButton from "../StyledButton";
+import { useRouter } from "expo-router";
 
 const FormSchema = z.object({
 	email: z.string().trim().email(),
@@ -23,6 +24,7 @@ type FormType = z.infer<typeof FormSchema>;
 const EmailSignInForm = ({ userType }: { userType: USERTYPE }) => {
 	const { setItem } = useAsyncStorage("user");
 	const { setItem: setUserType } = useAsyncStorage("userType");
+	const router = useRouter();
 
 	const { handleLoginToken } = useAuth();
 
@@ -56,15 +58,17 @@ const EmailSignInForm = ({ userType }: { userType: USERTYPE }) => {
 					};
 					// store in async storage
 					setItem(JSON.stringify(value));
+					handleLoginToken(res.data.data.token);
 
 					if (userType === "client") {
 						setUserType("client");
+						router.push("/(authenticated)/client/(tabs)")
 						// setAuthUserType("client");
 					} else {
 						setUserType("service");
+						router.push("/(authenticated)/service-provider/(tabs)");
 						// setAuthUserType("service");
 					}
-					handleLoginToken(res.data.data.token);
 				},
 				onError: (err) => {
 					handleError(err);

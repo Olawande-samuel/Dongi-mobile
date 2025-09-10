@@ -1,22 +1,20 @@
+import React from "react";
 import {
-	View,
-	Text,
+	ActivityIndicator,
 	Image,
 	Pressable,
 	ScrollView,
-	ActivityIndicator,
+	Text,
+	View,
 } from "react-native";
-import React, { useState } from "react";
 
-import { Feather } from "@expo/vector-icons";
-import SearchBar from "../dashboard/SearchBar";
-import { cn } from "@/utils";
-import { IService } from "@/types";
-import CategoryServiceSearchBar from "../dashboard/CategoryServiceSearchBar";
-import { router } from "expo-router";
-import useUserInfo from "@/hooks/useUserInfo";
-import useUserLocation from "@/hooks/useUserLocation";
 import useCurrentLocation from "@/hooks/useCurrentLocation";
+import useUserInfo from "@/hooks/useUserInfo";
+import { IService } from "@/types";
+import { cn } from "@/utils";
+import { Feather } from "@expo/vector-icons";
+import { router } from "expo-router";
+import CategoryServiceSearchBar from "../dashboard/CategoryServiceSearchBar";
 
 const categoryItems = [
 	{
