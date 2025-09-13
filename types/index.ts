@@ -5,6 +5,7 @@ export interface IService {
 	description: string;
 	id: number;
 	image: string;
+	imageUrl: string;
 	name: string;
 	status: string;
 	updated_at: string;
@@ -176,6 +177,10 @@ export interface ICompletedRequest {
 
 export interface IRequestInfo {
 	uuid: string;
+	completed_at: string | null;
+	customer_confirmed_at: string | null;
+	customer_rejected_at: string | null;
+	is_confirmed_completed: string | null;
 	customer_id: string;
 	provider_id: string;
 	service_id: string;

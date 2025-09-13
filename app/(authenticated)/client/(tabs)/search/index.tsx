@@ -30,11 +30,13 @@ const Search = () => {
 		) || []),
 		{
 			name: "Customized Services",
-			id: "",
-			uuid:"custom_services"
+			id: "custom",
+			uuid: "custom_services",
+			imageUrl: "",
 		},
 	];
 
+	console.log({ categoryItems });
 	return (
 		<SafeAreaView className="flex-1 bg-white px-4 large:px-6 " edges={["top"]}>
 			<ScrollView
@@ -64,7 +66,11 @@ const Search = () => {
 							>
 								<View className="h-[154px] w-full  max-w-[162px] mb-2 rounded-lg border-[0.5px] border-primary">
 									<Image
-										source={CATEGORY_IMAGE_MAP[item.name]}
+										source={
+											item.id === "custom"
+												? CATEGORY_IMAGE_MAP[item.name]
+												: { uri: item.imageUrl }
+										}
 										className="max-w-[162px] h-[154px]"
 										resizeMode="cover"
 									/>

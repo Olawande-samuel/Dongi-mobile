@@ -63,7 +63,7 @@ const HomeCategory = () => {
 						>
 							<View className="h-[100px] mb-2 rounded-lg border-[0.5px] border-primary">
 								<Image
-									source={CATEGORY_IMAGE_MAP[item.name]}
+									source={{uri: item.imageUrl}}
 									className="w-[99px] h-[100px] rounded-lg "
 									resizeMode="cover"
 								/>

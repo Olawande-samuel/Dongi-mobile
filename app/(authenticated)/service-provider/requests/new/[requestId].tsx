@@ -58,6 +58,9 @@ const NewRequest = () => {
 			queryClient.invalidateQueries({
 				queryKey: ["get provider user info"],
 			});
+			queryClient.invalidateQueries({
+				queryKey: ["get request by id", params.requestId as string],
+			});
 			setModalVisible(true);
 		},
 	});
@@ -68,7 +71,13 @@ const NewRequest = () => {
 			handleError(err);
 		},
 		onSuccess: (res) => {
-			setModalVisible(true);
+			queryClient.invalidateQueries({
+				queryKey: ["get provider user info"],
+			});
+			queryClient.invalidateQueries({
+				queryKey: ["get request by id", params.requestId as string],
+			});
+			// setModalVisible(true);
 		},
 	});
 

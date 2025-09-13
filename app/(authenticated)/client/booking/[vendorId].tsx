@@ -5,7 +5,7 @@ import useCurrentLocation from "@/hooks/useCurrentLocation";
 import useUserInfo from "@/hooks/useUserInfo";
 import { useGlobalContext } from "@/providers/GlobalStateProvider";
 import { ICategoryServices } from "@/types";
-import { handleError } from "@/utils";
+import { cn, handleError } from "@/utils";
 import { Api } from "@/utils/endpoints";
 import { Ionicons, Octicons } from "@expo/vector-icons";
 import {
@@ -49,15 +49,36 @@ function ServiceComponent({
 	name,
 	description,
 	handlePresentModalPress,
+	images,
 }: ServiceProps) {
 	return (
 		<View className="bg-white rounded-lg border-outer-light p-3 space-y-2">
 			<View>
-				<Image
-					source={require("../../../../assets/images/client/preview_1.png")}
-					className="w-full h-[120px] rounded"
-					resizeMode="cover"
-				/>
+				{!images ? (
+					<Image
+						source={require("../../../../assets/images/client/preview_1.png")}
+						className="w-full h-[120px] rounded"
+						resizeMode="cover"
+					/>
+				) : images?.length > 1 ? (
+					images.map((item, index) => (
+						<Image
+							key={index}
+							source={{ uri: item }}
+							className={cn("h-24 large:h-[120px] rounded")}
+							style={{
+								width: `${100 / images.length}%`,
+							}}
+							resizeMode="cover"
+						/>
+					))
+				) : (
+					<Image
+						source={{ uri: images[0] }}
+						className="w-full h-24 large:h-[120px] rounded"
+						resizeMode="cover"
+					/>
+				)}
 			</View>
 			<View>
 				<Text className="text-base font-regular text-off-black">

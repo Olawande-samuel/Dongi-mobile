@@ -20,6 +20,12 @@ const Welcome = () => {
 				} else {
 					router.push("/service-provider");
 				}
+			} else {
+				if (pathname.includes("/clients")) {
+					router.push("/(auth)/clients/sign-in");
+				} else {
+					router.push("/(auth)/service-provider/sign-in");
+				}
 			}
 		}, 4000);
 

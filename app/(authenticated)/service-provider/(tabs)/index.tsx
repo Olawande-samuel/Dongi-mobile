@@ -43,7 +43,7 @@ const Index = () => {
 	});
 
 	const data = result?.data.flatMap((item) => item?.flatMap((item) => item));
-	
+
 	return (
 		<SafeAreaView className="flex-1 bg-white">
 			<StatusBar />
@@ -84,6 +84,9 @@ const Index = () => {
 							});
 							queryClient.invalidateQueries({
 								queryKey: ["get provider ongoing requests"],
+							});
+							queryClient.invalidateQueries({
+								queryKey: ["get provider user info"],
 							});
 						}}
 					/>

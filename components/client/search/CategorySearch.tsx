@@ -55,11 +55,13 @@ function Tab({
 	title,
 	setActiveTab,
 	id,
+	image,
 }: {
 	isActive: boolean;
 	title: string;
 	setActiveTab: React.Dispatch<React.SetStateAction<number>>;
 	id: number;
+	image: string;
 }) {
 	return (
 		<Pressable
@@ -153,12 +155,14 @@ const CategorySearch = ({
 						id={1}
 						isActive={activeTab === 1}
 						setActiveTab={setActiveTab}
+						image=''
 					/>
 					{categoryItems.map((item) => (
 						<Tab
 							key={item.id}
 							title={item.name}
 							id={item.id + 1}
+							image={item.image}
 							setActiveTab={setActiveTab}
 							isActive={activeTab === item.id + 1}
 						/>

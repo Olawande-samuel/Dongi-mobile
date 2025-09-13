@@ -4,7 +4,12 @@ import { Ionicons } from "@expo/vector-icons";
 import { ICategoryServices } from "@/types";
 import { formatCurrency } from "@/utils";
 
-const VendorProfile = ({ provider, description }: ICategoryServices) => {
+const VendorProfile = ({
+	provider,
+	description,
+	unique_customers,
+	average_rating,
+}: ICategoryServices) => {
 	return (
 		<View className="flex-row mb-5">
 			<View className="mr-4">
@@ -41,13 +46,15 @@ const VendorProfile = ({ provider, description }: ICategoryServices) => {
 						<Text className="text-xs font-regular mb-1 text-muted">
 							Customers
 						</Text>
-						<Text className="text-sm text-center text-off-black">245</Text>
+						<Text className="text-sm text-center text-off-black">
+							{unique_customers || 0}
+						</Text>
 					</View>
 					<View>
 						<Text className="text-xs font-regular mb-1 text-muted">Rating</Text>
 						<View className="flex-row">
 							<Ionicons name="star" color="#FFCE31" />
-							<Text className="text-sm text-off-black">4.5</Text>
+							<Text className="text-sm text-off-black">{average_rating}</Text>
 						</View>
 					</View>
 				</View>

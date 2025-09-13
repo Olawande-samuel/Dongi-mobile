@@ -89,7 +89,7 @@ function EmailForm() {
 					/>
 				</View>
 			</View>
-			<View className="flex-1">
+			<View className="flex-1 mb-5">
 				<Controller
 					control={form.control}
 					name="lastname"
