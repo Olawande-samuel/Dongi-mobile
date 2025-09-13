@@ -12,25 +12,6 @@ import React, { useState } from "react";
 import { SectionList, Text, useWindowDimensions, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const DATA = [
-	{
-		title: "Main dishes",
-		data: ["Pizza", "Burger", "Risotto"],
-	},
-	{
-		title: "Sides",
-		data: ["French Fries", "Onion Rings", "Fried Shrimps"],
-	},
-	{
-		title: "Drinks",
-		data: ["Water", "Coke", "Beer"],
-	},
-	{
-		title: "Desserts",
-		data: ["Cheese Cake", "Ice Cream"],
-	},
-];
-
 const History = () => {
 	const [tab, setTab] = useState(1);
 	const { height } = useWindowDimensions();
@@ -44,7 +25,7 @@ const History = () => {
 		queryFn: Api.getProviderOngoingRequests,
 	});
 
-	console.log({ data: data?.data });
+	console.log({ ongoing: ongoingServices?.data.data?.requests });
 	// const services =
 	// 	tab === 1 ? data?.data?.data.requests : ongoingServices?.data.data.requests;
 

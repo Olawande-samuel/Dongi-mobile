@@ -11,6 +11,7 @@ import React, { useState } from "react";
 import {
 	ActivityIndicator,
 	Image,
+	Linking,
 	Pressable,
 	ScrollView,
 	Text,
@@ -89,7 +90,14 @@ const NewRequest = () => {
 		setRejectionModalVisible(true);
 	}
 
-	console.log({ serviceInfo, result });
+	async function handleContactPress(val: string) {
+		const isSupported = await Linking.canOpenURL(val);
+		if (isSupported) {
+			Linking.openURL(val);
+		} else {
+			console.log("Action not supported");
+		}
+	}
 	return (
 		<SafeAreaView className="flex-1 bg-white" edges={["bottom"]}>
 			{isLoading ? (
@@ -98,7 +106,7 @@ const NewRequest = () => {
 				<ScrollView className="flex-1 bg-white px-6 pb-6 gap-x-3">
 					<View className="mt-9 mb-6">
 						<View className="flex-row justify-between gap-4 mb-[10px]">
-							<View className="flex-row items-center max-w-[65%]">
+							<View className="flex-row items-center max-w-[60%]">
 								<Image
 									className="h-9 w-9 large:h-[42px] large:w-[42px] rounded-full"
 									source={require("../../../../../assets/images/client/temp_user_sq.png")}
@@ -117,7 +125,7 @@ const NewRequest = () => {
 									<Text>{result?.service?.name || ""}</Text>
 								</View>
 							</View>
-							<View className="space-y-1">
+							<View className="space-y-1 max-w-[40%]">
 								<View className="flex-row items-center justify-end">
 									<Image
 										source={require("../../../../../assets/images/location.png")}
@@ -126,7 +134,11 @@ const NewRequest = () => {
 										resizeMode="contain"
 										className="w-[18px] h-[18px] mr-[6px]"
 									/>
-									<Text className="font-regular text-xs large:text-sm text-off-black">
+									<Text
+										className="font-regular text-xs large:text-sm text-off-black"
+										numberOfLines={2}
+										ellipsizeMode="tail"
+									>
 										{result?.status === "PENDING"
 											? distance
 											: result?.customer?.location || ""}
@@ -162,6 +174,22 @@ const NewRequest = () => {
 								{moment(result?.created_at).format("DD MMM • hh:mmA")}
 							</Text>
 						</View>
+						{result?.status === "ACCEPTED" && (
+							<View className="flex-row justify-between items-center">
+								<Text className="text-support text-xs large:text-sm font-regular mr-4">
+									Client's contact
+								</Text>
+								<Pressable
+									onPress={() =>
+										handleContactPress(`tel:${result?.customer?.phone}`)
+									}
+								>
+									<Text className="font-regular text-xs large:text-sm text-off-black text-right">
+										{result?.customer?.phone}
+									</Text>
+								</Pressable>
+							</View>
+						)}
 					</View>
 					<View className="space-y-5 py-3 mb-[14px] ">
 						<Text className="text-xs large:text-sm text-off-black font-regular">

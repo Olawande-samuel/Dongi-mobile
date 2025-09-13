@@ -32,6 +32,7 @@ const useExpoNotifications = () => {
 		mutationKey: ["save expo notification"],
 		onMutate: () => setIsLoading(true),
 		onError: () => setIsLoading(false),
+		onSettled: () => setIsLoading(false),
 	});
 
 	async function registerForPushNotificationsAsync() {

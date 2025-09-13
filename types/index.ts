@@ -206,6 +206,7 @@ export interface IRequestInfo {
 	};
 	customer: {
 		uuid: string;
+		name?: string;
 		first_name: string;
 		last_name: string;
 		phone: string;

@@ -1,11 +1,9 @@
 import HomeTopComponent from "@/components/provider/Dashboard/HomeTopComponent";
 import PendingRequestCard from "@/components/provider/Dashboard/PendingRequestsCard";
 import RequestCard from "@/components/provider/Dashboard/RequestCard";
-import useDistance from "@/hooks/useDistance";
 import useExpoNotifications from "@/hooks/useExpoNotifications";
 import {
-	ServiceProviderOngoingRequest,
-	ServiceProviderPendingRequest,
+	IRequestInfo
 } from "@/types";
 import { SIZES } from "@/utils/constants";
 import { Api } from "@/utils/endpoints";
@@ -15,7 +13,7 @@ import { FlatList, RefreshControl, StatusBar } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Index = () => {
-	// const { expoPushToken } = useExpoNotifications();
+	const { expoPushToken } = useExpoNotifications();
 
 	const [tab, setTab] = useState(1);
 	const queryClient = useQueryClient();
@@ -27,7 +25,7 @@ const Index = () => {
 				queryFn: Api.getProviderOngoingRequests,
 			},
 			{
-				queryKey: ["get provider pending requests"],
+				queryKey: ["get provider pending requestss"],
 				queryFn: Api.getProviderPendingRequests,
 			},
 		],
@@ -44,6 +42,7 @@ const Index = () => {
 
 	const data = result?.data.flatMap((item) => item?.flatMap((item) => item));
 
+	console.log("ongoing",result?.data?.[0])
 	return (
 		<SafeAreaView className="flex-1 bg-white">
 			<StatusBar />
@@ -51,15 +50,9 @@ const Index = () => {
 				data={result.data[tab - 1] || []}
 				renderItem={({ item }) =>
 					tab === 1 ? (
-						<RequestCard
-							activeTab={tab}
-							{...(item as ServiceProviderOngoingRequest)}
-						/>
+						<RequestCard activeTab={tab} {...(item as IRequestInfo)} />
 					) : (
-						<PendingRequestCard
-							activeTab={tab}
-							{...(item as ServiceProviderPendingRequest)}
-						/>
+						<PendingRequestCard activeTab={tab} {...(item as IRequestInfo)} />
 					)
 				}
 				ListHeaderComponent={
@@ -70,7 +63,7 @@ const Index = () => {
 						totalPending={result.data?.[1]?.length || 0}
 					/>
 				}
-				keyExtractor={(item, index) => item?.id?.toString() || index.toString()}
+				keyExtractor={(item, index) => item?.uuid?.toString() || index.toString()}
 				contentContainerStyle={{
 					paddingHorizontal: SIZES.height > 700 ? 24 : 16,
 				}}

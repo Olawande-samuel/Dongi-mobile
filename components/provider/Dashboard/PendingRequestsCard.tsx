@@ -1,13 +1,13 @@
 import useDistance from "@/hooks/useDistance";
 import useServiceProviderUserInfo from "@/hooks/useServiceProviderUserInfo";
-import { ServiceProviderPendingRequest } from "@/types";
+import { ICategoryServices, IRequestInfo } from "@/types";
 import { maskEmail } from "@/utils";
 import { router } from "expo-router";
 import moment from "moment";
 import React from "react";
 import { Image, Pressable, Text, View } from "react-native";
 
-interface Props extends ServiceProviderPendingRequest {
+interface Props extends IRequestInfo {
 	activeTab: number;
 }
 
@@ -29,7 +29,7 @@ const PendingRequestCard = ({
 	return (
 		<Pressable
 			onPress={() =>
-		router.push({
+				router.push({
 					pathname:
 						activeTab === 1
 							? "/(authenticated)/service-provider/requests/view/[requestId]"
@@ -54,7 +54,7 @@ const PendingRequestCard = ({
 								numberOfLines={1}
 								ellipsizeMode="tail"
 							>
-								{customer?.name || ""}
+								{`${customer?.first_name || ""} ${customer?.last_name}`}
 							</Text>
 							<Text
 								className="text-[10px] large:text-xs font-regular text-support"

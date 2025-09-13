@@ -388,7 +388,7 @@ class API {
 	async getProviderPendingRequests(): Promise<
 		AxiosResponse<{
 			data: {
-				requests: ServiceProviderPendingRequest[];
+				requests: IRequestInfo[];
 			};
 		}>
 	> {
@@ -403,7 +403,7 @@ class API {
 	async getProviderOngoingRequests(): Promise<
 		AxiosResponse<{
 			data: {
-				requests: ServiceProviderOngoingRequest[];
+				requests: IRequestInfo[];
 			};
 		}>
 	> {
@@ -598,6 +598,18 @@ class API {
 	): Promise<AxiosResponse<ApiResponse<any>>> {
 		try {
 			const endpoint = `requests/${requestId}/confirm-completion`;
+			const response = await authInstance.post(endpoint, {});
+			return response;
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	}
+
+	async providerConfirmServiceCompletion(
+		requestId: string
+	): Promise<AxiosResponse<ApiResponse<any>>> {
+		try {
+			const endpoint = `requests/${requestId}/complete`;
 			const response = await authInstance.post(endpoint, {});
 			return response;
 		} catch (error) {

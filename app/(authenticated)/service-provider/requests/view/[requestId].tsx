@@ -27,7 +27,7 @@ const Ongoing = () => {
 	const { setIsLoading } = useGlobalContext();
 
 	const { mutate, isPending } = useMutation({
-		mutationFn: Api.confirmServiceCompletion,
+		mutationFn: Api.providerConfirmServiceCompletion,
 		onSuccess: (res) => {
 			console.log({ res });
 			setModalVisible(true);
@@ -53,24 +53,29 @@ const Ongoing = () => {
 			>
 				<View className="py-6 border-b border-outer-light mb-3">
 					<View className="flex-row justify-between gap-x-4 flex-wrap mb-[10px]">
-						<View className="flex-row items-center">
+						<View className="flex-row items-center max-w-[50%]">
 							<Image
 								className="h-[42px] w-[42px] rounded-full"
 								source={require("../../../../../assets/images/client/temp_user_sq.png")}
 								resizeMode="cover"
 							/>
 							<View className="ml-2 space-y-1">
-								<Text className="text-sm large:text-base font-regular text-off-black">
-									{`${result?.customer?.first_name || ""} ${
-										result?.customer?.last_name || ""
-									}`}
+								<Text
+									className="text-sm large:text-base font-regular text-off-black"
+									numberOfLines={2}
+									ellipsizeMode="tail"
+								>
+									{result?.customer?.name ||
+										`${result?.customer?.first_name || ""} ${
+											result?.customer?.last_name || ""
+										}`}
 								</Text>
 								<Text className="text-[10px] large:text-xs font-regular text-support">
 									{result?.customer?.phone || ""}
 								</Text>
 							</View>
 						</View>
-						<View className="space-y-1">
+						<View className="space-y-1 max-w-[50%]">
 							<View className="flex-row items-center justify-end">
 								<Image
 									source={require("../../../../../assets/images/location.png")}

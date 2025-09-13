@@ -17,7 +17,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Home = () => {
-	// const { expoPushToken } = useExpoNotifications();
+	const { expoPushToken } = useExpoNotifications();
 
 	// console.log({ expoPushToken });
 
