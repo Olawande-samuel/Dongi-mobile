@@ -46,7 +46,6 @@ const PhoneSignup = ({ userType }: { userType: "service" | "client" }) => {
 	});
 
 	function handleSubmit(val: FormType) {
-		console.log({ val });
 		if (userType === "client") {
 			mutate(
 				{
@@ -78,20 +77,17 @@ const PhoneSignup = ({ userType }: { userType: "service" | "client" }) => {
 				},
 				{
 					onSuccess: (res) => {
-						console.log({ res });
-
 						toast.success(res.data.message);
 
 						const tempUser = {
 							phone: countryCode.concat(val.phone),
 							userId: res.data.data.user.uuid ?? "",
 						};
-						console.log({ tempUser });
+
 						setItem("tempUser", JSON.stringify(tempUser));
 						router.push("/service-provider/phone-verification");
 					},
 					onError: (err) => {
-						console.log(err);
 						toast.error(err.message);
 						handleError(err);
 					},

@@ -9,7 +9,6 @@ import useServiceProviderUserInfo from "@/hooks/useServiceProviderUserInfo";
 const Index = () => {
 	const { data, isLoading } = useServiceProviderUserInfo();
 
-	console.log({ data });
 	return (
 		<SafeAreaView className="flex-1 bg-white " edges={["top"]}>
 			<View className="flex-1 px-4 large:px-6">

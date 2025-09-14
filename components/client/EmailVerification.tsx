@@ -32,8 +32,6 @@ const EmailVerification = ({
 		onSettled: () => setIsLoading(false),
 	});
 
-
-
 	function handleSubmit() {
 		if (!otp) {
 			toast.error("Enter OTP to continue");
@@ -51,7 +49,6 @@ const EmailVerification = ({
 				},
 				{
 					onSuccess: (res) => {
-						console.log({ res });
 						toast.success("Email Verified Successfully");
 						nextStep((prev) => prev + 1);
 					},
@@ -70,7 +67,6 @@ const EmailVerification = ({
 				},
 				{
 					onSuccess: (res) => {
-						console.log({ res });
 						toast.success("Email Verified Successfully");
 						nextStep((prev) => prev + 1);
 					},

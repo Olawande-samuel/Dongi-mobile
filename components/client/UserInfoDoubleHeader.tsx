@@ -10,7 +10,7 @@ interface props {
 }
 const UserInfoDoubleHeader = ({ title, subtitle }: props) => {
 	const params = useLocalSearchParams();
-	console.log("DOUBLE HEADER, ", params);
+
 	return (
 		<View>
 			<Text className="text-center text-base text-off-black font-regular">

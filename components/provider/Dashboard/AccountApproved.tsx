@@ -1,4 +1,5 @@
 import StyledButton from "@/components/StyledButton";
+import useServiceProviderUserInfo from "@/hooks/useServiceProviderUserInfo";
 import Checkmark from "@/svgs/CheckMark";
 import Copy from "@/svgs/Copy";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
@@ -17,6 +18,7 @@ function AccountApproved({
 }: {
 	compRef: React.RefObject<BottomSheetModal>;
 }) {
+
 	const { dismissAll } = useBottomSheetModal();
 	const snapPoints = useMemo(() => ["50%"], []);
 

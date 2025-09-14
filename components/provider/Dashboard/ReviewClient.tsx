@@ -9,7 +9,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { AirbnbRating } from "react-native-ratings";
 import StyledButton from "@/components/StyledButton";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Api } from "@/utils/endpoints";
 import { useGlobalContext } from "@/providers/GlobalStateProvider";
 import { z } from "zod";
@@ -18,7 +18,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner-native";
 
 const FormSchema = z.object({
-	rate: z.string(),
+	rate: z.number(),
 	message: z.string(),
 });
 
@@ -27,11 +27,13 @@ type FormType = z.infer<typeof FormSchema>;
 function ReviewClient({
 	compRef,
 	showCompletionModal,
-	clientId,
+	bookingId,
+	name,
 }: {
 	compRef: React.RefObject<BottomSheetModal>;
 	showCompletionModal: VoidFunction;
-	clientId: string;
+	bookingId: string;
+	name: string;
 }) {
 	const { dismissAll } = useBottomSheetModal();
 	const snapPoints = useMemo(() => ["50%"], []);
@@ -46,29 +48,34 @@ function ReviewClient({
 
 	const form = useForm<FormType>({
 		defaultValues: {
-			rate: "",
+			rate: 0,
 			message: "",
 		},
 		resolver: zodResolver(FormSchema),
 	});
 
 	const { mutate } = useMutation({
-		mutationFn: Api.rateService,
+		mutationFn: Api.rateClient,
 		onMutate: () => setIsLoading(true),
 		onSettled: () => setIsLoading(false),
 	});
 
+	const queryClient = useQueryClient();
+
 	function handleSubmit(val: FormType) {
-		// mutate(
-		// 	{ id: bookingId, payload: val },
-		// 	{
-		// 		onSuccess: (res) => {
-		// 			toast.success(res?.data?.message || "Rating submitted successfully");
-		// 			dismissAll();
-		// 			showCompletionModal();
-		// 		},
-		// 	}
-		// );
+		mutate(
+			{ id: bookingId, payload: val },
+			{
+				onSuccess: (res) => {
+					toast.success(res?.data?.message || "Rating submitted successfully");
+					queryClient.invalidateQueries({
+						queryKey: ["get request by id", bookingId as string],
+					});
+					dismissAll();
+					showCompletionModal();
+				},
+			}
+		);
 	}
 
 	return (
@@ -108,7 +115,7 @@ function ReviewClient({
 							render={({ field }) => (
 								<View className="mb-5">
 									<Text className="text-center text-base font-regular mb-2">
-										Rate your experience with John Musa
+										Rate your experience with {name || ""}
 									</Text>
 									<View className="flex-row justify-center gap-x-1">
 										<AirbnbRating
@@ -135,7 +142,7 @@ function ReviewClient({
 									</Text>
 									<View className="flex-row border p-2 border-inner-background-light h-[158px]">
 										<TextInput
-											placeholder="Mr John did a fantastic job ..."
+											placeholder={`e.g. ${name} did a fantastic job ...`}
 											className="flex-1 text-muted placeholder:text-muted text-base"
 											multiline
 											textAlignVertical="top"

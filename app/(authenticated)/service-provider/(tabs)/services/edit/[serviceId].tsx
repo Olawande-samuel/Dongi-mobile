@@ -77,8 +77,6 @@ const EditService = () => {
 		}
 	}, [data?.data?.data]);
 
-	console.log({ form: form.formState.errors });
-
 	const bannerName = form.watch("images")?.name ?? "";
 
 	const { mutate, isPending } = useMutation({

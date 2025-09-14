@@ -47,7 +47,7 @@ const SetupPassword = ({
 	const { setItem: setUserType } = useAsyncStorage("userType");
 	const globalContext = useGlobalContext();
 	const { handleLoginToken } = useAuth();
-	const router = useRouter()
+	const router = useRouter();
 
 	const { data } = useTempUser();
 
@@ -75,7 +75,6 @@ const SetupPassword = ({
 			{ type: userType, payload: { ...val, user_id: data.userId } },
 			{
 				onSuccess: (res) => {
-					console.log({ res });
 					toast.success("Password Set Successfully");
 					// INSERT_YOUR_CODE
 					if (userType === "client") {
@@ -92,7 +91,7 @@ const SetupPassword = ({
 							// setUserType("service");
 							// handleLoginToken(res.data.data.token);
 							// nextStep((prev) => prev + 1);
-							router.replace("/service-provider/sign-in")
+							router.replace("/service-provider/sign-in");
 						}
 					}
 				},

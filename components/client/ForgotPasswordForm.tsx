@@ -1,4 +1,3 @@
-
 import { useAuth } from "@/context/Auth";
 import { useGlobalContext } from "@/providers/GlobalStateProvider";
 import { handleError } from "@/utils";
@@ -41,7 +40,6 @@ const ForgotPasswordForm = () => {
 			},
 			{
 				onSuccess: (res) => {
-					console.log({ res });
 					router.push("/(auth)/reset-password");
 				},
 				onError: (err) => {

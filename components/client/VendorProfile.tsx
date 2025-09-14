@@ -1,24 +1,25 @@
-import { View, Text, Image } from "react-native";
-import React from "react";
+import { IProviderService } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
-import { ICategoryServices } from "@/types";
-import { formatCurrency } from "@/utils";
+import React from "react";
+import { Image, Text, View } from "react-native";
 
 const VendorProfile = ({
 	provider,
 	description,
 	unique_customers,
-	average_rating,
-}: ICategoryServices) => {
+	total_ratings,
+	category,
+}: IProviderService) => {
 	return (
 		<View className="flex-row mb-5">
 			<View className="mr-4">
 				<Image
-					source={
-						provider.business_logo
-							? { uri: provider.business_logo }
-							: require("../../assets/images/client/temp_user.png")
-					}
+					source={require("../../assets/images/client/temp_user.png")}
+					// source={
+					// 	provider?.business_logo
+					// 		? { uri: provider?.business_logo }
+					// 		: require("../../assets/images/client/temp_user.png")
+					// }
 					className="w-[100px] h-[100px] rounded-full"
 					width={100}
 					height={100}
@@ -54,7 +55,7 @@ const VendorProfile = ({
 						<Text className="text-xs font-regular mb-1 text-muted">Rating</Text>
 						<View className="flex-row">
 							<Ionicons name="star" color="#FFCE31" />
-							<Text className="text-sm text-off-black">{average_rating}</Text>
+							<Text className="text-sm text-off-black">{total_ratings}</Text>
 						</View>
 					</View>
 				</View>

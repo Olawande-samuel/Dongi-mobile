@@ -10,7 +10,6 @@ const TestFaceDetection = () => {
 	const [hasPermission, setHasPermission] = useState<boolean | null>(null);
 
 	async function requestPermission() {
-		console.log("clicked");
 		const { status } = await Camera.getCameraPermissionsAsync();
 		setHasPermission(status === "granted");
 	}

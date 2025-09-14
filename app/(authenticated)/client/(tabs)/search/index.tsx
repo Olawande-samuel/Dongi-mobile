@@ -17,8 +17,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const Search = () => {
 	const params = useLocalSearchParams();
 
-	console.log({ params });
-
 	const { data, isLoading } = useQuery({
 		queryKey: ["get client service categories"],
 		queryFn: Api.getClientServiceCategories,
@@ -36,7 +34,6 @@ const Search = () => {
 		},
 	];
 
-	console.log({ categoryItems });
 	return (
 		<SafeAreaView className="flex-1 bg-white px-4 large:px-6 " edges={["top"]}>
 			<ScrollView

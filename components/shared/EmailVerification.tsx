@@ -21,7 +21,7 @@ const EmailVerification = ({
 	const [otp, setOtp] = useState("");
 	const { data } = useTempUser();
 	const globalContext = useGlobalContext();
-	
+
 	const pathname = usePathname();
 	const userType = pathname.includes("/clients") ? "client" : "service";
 
@@ -64,7 +64,6 @@ const EmailVerification = ({
 				},
 				{
 					onSuccess: (res) => {
-						console.log({ res });
 						toast.success("Email Verified Successfully");
 						nextStep((prev) => prev + 1);
 					},
@@ -83,7 +82,6 @@ const EmailVerification = ({
 				},
 				{
 					onSuccess: (res) => {
-						console.log({ res });
 						toast.success("Email Verified Successfully");
 						nextStep((prev) => prev + 1);
 					},

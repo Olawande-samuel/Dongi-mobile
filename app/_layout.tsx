@@ -53,7 +53,6 @@ function RootLayoutNav() {
 
 	const { isAuthenticated, isLoading, userType } = useAuth();
 
-	console.log({ isAuthenticated });
 	const segments = useSegments();
 	const router = useRouter();
 
@@ -67,12 +66,10 @@ function RootLayoutNav() {
 		prepareApp();
 	}, [fontsLoaded]);
 
-	console.log({ userType });
-
 	useEffect(() => {
 		if (isLoading) return;
 		const inAuthGroup = segments[0] === "(auth)";
-		const isAuthenticatedGroup = segments[0] === "(authenticated)";
+		// const isAuthenticatedGroup = segments[0] === "(authenticated)";
 
 		if (!isAuthenticated && !inAuthGroup) {
 			router.replace("/");

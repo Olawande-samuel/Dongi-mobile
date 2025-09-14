@@ -30,7 +30,9 @@ const HomeTopComponent = ({
 	const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
 	useEffect(() => {
-		bottomSheetModalRef.current?.present();
+		if (!isLoading && !data?.wallet?.balance) {
+			bottomSheetModalRef.current?.present();
+		}
 	}, []);
 
 	return (

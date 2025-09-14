@@ -102,7 +102,6 @@ const CategorySearch = ({
 	const { data, isLoading } = useUserInfo();
 	const { location, address } = useCurrentLocation();
 
-	console.log({ data });
 	return (
 		<View>
 			<View className="py-6 border-b border-outer-light px-6">
@@ -155,7 +154,7 @@ const CategorySearch = ({
 						id={1}
 						isActive={activeTab === 1}
 						setActiveTab={setActiveTab}
-						image=''
+						image=""
 					/>
 					{categoryItems.map((item) => (
 						<Tab

@@ -25,7 +25,6 @@ const PendingRequestCard = ({
 		destination: customer.location,
 	});
 
-	console.log({ distance });
 	return (
 		<Pressable
 			onPress={() =>

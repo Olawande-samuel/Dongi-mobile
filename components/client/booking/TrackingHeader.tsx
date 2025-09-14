@@ -22,8 +22,10 @@ const TrackingHeader = (props: props) => {
 			<Text className="text-center text-base text-off-black font-regular">
 				Track Booking
 			</Text>
-			<Text className="text-center text-muted text-sm font-regular ">
-				{result?.status}
+			<Text className="text-center text-muted text-sm font-regular" >
+				{`${result?.provider?.first_name || ""} ${
+					result?.provider?.last_name || ""
+				}`}
 			</Text>
 		</View>
 	);

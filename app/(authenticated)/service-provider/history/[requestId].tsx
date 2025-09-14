@@ -1,21 +1,32 @@
-import BackButton from "@/components/BackButton";
-import ReviewService from "@/components/client/booking/ReviewService";
 import ReviewClient from "@/components/provider/Dashboard/ReviewClient";
 import ReviewComplete from "@/components/ReviewComplete";
 import RouteHeader from "@/components/shared/RouteHeader";
 import StatusPill from "@/components/StatusPill";
+import { Api } from "@/utils/endpoints";
 import {
 	BottomSheetModal,
 	BottomSheetModalProvider,
 } from "@gorhom/bottom-sheet";
+import { useQuery } from "@tanstack/react-query";
+import { useLocalSearchParams } from "expo-router";
+import moment from "moment";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Image, ScrollView, Text, TextInput, View } from "react-native";
+import { Image, ScrollView, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const ServiceId = () => {
 	const bottomSheetReviewModalRef = useRef<BottomSheetModal>(null);
 	const [modalVisible, setModalVisible] = useState(false);
+
+	const params = useLocalSearchParams();
+
+	const { data, isLoading } = useQuery({
+		queryKey: ["get request by id", params.requestId as string],
+		queryFn: () => Api.getRequestById(params.requestId as string),
+	});
+
+	const result = data?.data?.data;
 
 	const showCompletionModal = useCallback(() => {
 		setModalVisible(true);
@@ -41,7 +52,7 @@ const ServiceId = () => {
 						>
 							<View>
 								<View className="flex-row justify-between gap-x-4 flex-wrap mb-[10px]">
-									<View className="flex-row items-center">
+									<View className="flex-row items-center max-w-[50%]">
 										<Image
 											className=" h-9 large:h-[42px]  w-9 large:w-[42px] rounded-full"
 											source={require("../../../../assets/images/client/temp_user_sq.png")}
@@ -49,14 +60,14 @@ const ServiceId = () => {
 										/>
 										<View className="ml-2 space-y-1">
 											<Text className="text-sm large:text-base font-regular text-off-black">
-												Rebecca Anyaoku
+												{`${result?.customer?.first_name} ${result?.customer?.last_name}`}
 											</Text>
 											<Text className="text-[10px] large:text-xs font-regular text-support">
-												Real estate agent
+												{/* Real estate agent */}
 											</Text>
 										</View>
 									</View>
-									<View className="space-y-1">
+									<View className="space-y-1 max-w-[45%]">
 										<View className="flex-row items-center justify-end">
 											<Image
 												source={require("../../../../assets/images/location.png")}
@@ -65,12 +76,16 @@ const ServiceId = () => {
 												resizeMode="contain"
 												className="w-[18px] h-[18px] mr-[6px]"
 											/>
-											<Text className="font-regular text-xs large:text-sm text-off-black">
-												Lagos
+											<Text
+												className="font-regular text-xs large:text-sm text-off-black"
+												numberOfLines={1}
+												ellipsizeMode="tail"
+											>
+												{result?.location || ""}
 											</Text>
 										</View>
 										<Text className="text-xs text-end font-regular text-primaryII">
-											20 Nov • 08:30AM
+											{moment(result?.completed_at).format("DD MMM • hh:mmA")}
 										</Text>
 									</View>
 								</View>
@@ -81,7 +96,7 @@ const ServiceId = () => {
 										Request Type
 									</Text>
 									<Text className="font-regular text-xs large:text-sm text-off-black text-right">
-										Real estate survey assistance
+										{result?.service.name || ""}
 									</Text>
 								</View>
 								<View className="flex-row justify-between items-center">
@@ -89,7 +104,7 @@ const ServiceId = () => {
 										Date Requested
 									</Text>
 									<Text className="font-regular text-xs large:text-sm text-off-black text-right">
-										10 Nov. 11:30AM
+										{moment(result?.created_at).format("DD MMM • hh:mmA")}
 									</Text>
 								</View>
 							</View>
@@ -110,7 +125,7 @@ const ServiceId = () => {
 											className="w-[18px] h-[18px] mr-[6px]"
 										/>
 										<Text className="flex-1 text-sm large:text-base">
-											Island Lagos, Nigeria
+											{result?.location || ""}
 										</Text>
 									</View>
 								</View>
@@ -120,7 +135,7 @@ const ServiceId = () => {
 									</Text>
 									<View className="flex-row border p-2 border-inner-background-light">
 										<Text className="flex-1 text-sm large:text-base text-off-black placeholder:text-off-black">
-											In 3 days
+											{result?.deadline || ""}
 										</Text>
 									</View>
 								</View>
@@ -130,9 +145,7 @@ const ServiceId = () => {
 									</Text>
 									<View className="flex-row border p-2 border-inner-background-light ">
 										<Text className="flex-1 text-off-black placeholder:text-off-black text-sm large:text-base">
-											I’m planning to sell my property but need advice on
-											pricing and staging. Can you assist with marketing it to
-											attract potential buyers?
+											{result?.message || ""}
 										</Text>
 									</View>
 								</View>
@@ -142,14 +155,14 @@ const ServiceId = () => {
 									<Text className="text-support text-xs large:text-sm font-regular mr-4">
 										Status
 									</Text>
-									<StatusPill title="Completed" />
+									<StatusPill title={result?.status || ""} />
 								</View>
 								<View className="flex-row justify-between items-center">
 									<Text className="text-support text-xs large:text-sm font-regular mr-4">
 										Request Type
 									</Text>
 									<Text className="font-regular text-xs large:text-sm text-off-black text-right">
-										Real estate survey assistance
+										{result?.service?.name || ""}
 									</Text>
 								</View>
 
@@ -158,18 +171,24 @@ const ServiceId = () => {
 										Date Requested
 									</Text>
 									<Text className="font-regular text-xs large:text-sm text-off-black text-right">
-										20 Nov. 11:30AM
+										{moment(result?.created_at).format("DD MMM • hh:mmA")}
 									</Text>
 								</View>
 							</View>
 							<ReviewClient
 								compRef={bottomSheetReviewModalRef}
 								showCompletionModal={showCompletionModal}
-								clientId=""
+								bookingId={result?.uuid || ""}
+								name={`${result?.customer?.first_name || ""} ${
+									result?.customer?.last_name || ""
+								}`}
 							/>
 							<ReviewComplete
 								modalVisible={modalVisible}
 								setModalVisible={setModalVisible}
+								name={`${result?.customer?.first_name || ""} ${
+									result?.customer?.last_name || ""
+								}`}
 							/>
 						</ScrollView>
 					</View>

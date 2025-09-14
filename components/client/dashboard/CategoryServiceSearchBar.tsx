@@ -45,7 +45,6 @@ const CategoryServiceSearchBar = ({
 	});
 
 	function submit(val: FormType) {
-		console.log(val);
 		setSearchValue(val.search);
 	}
 	return (

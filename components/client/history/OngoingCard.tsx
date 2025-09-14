@@ -14,7 +14,6 @@ const OngoingCard = ({
 	service_id,
 	provider_id,
 }: OngoingRequest) => {
-	console.log({ uuid });
 	return (
 		<Pressable
 			onPress={() =>
@@ -47,7 +46,7 @@ const OngoingCard = ({
 					</Text>
 				</View>
 				<View className="flex-row justify-between gap-x-4 flex-wrap">
-					<View className="flex-row items-center">
+					<View className="flex-row items-center max-w-[50%]">
 						<Image
 							className="h-[42px] w-[42px] rounded-full"
 							source={require("../../../assets/images/client/temp_user_sq.png")}
@@ -57,12 +56,15 @@ const OngoingCard = ({
 							<Text className="text-base font-regular text-off-black">
 								{provider.name || ""}
 							</Text>
-							<Text className="text-xs font-regular text-support">
-								{/* Real estate agent */}
+							<Text
+								className="text-xs font-regular text-support"
+								numberOfLines={1}
+							>
+								Real estate agent
 							</Text>
 						</View>
 					</View>
-					<View className="space-y-1">
+					<View className="space-y-1 max-w-[45%]">
 						<View className="flex-row items-center justify-end">
 							<Image
 								source={require("../../../assets/images/location.png")}

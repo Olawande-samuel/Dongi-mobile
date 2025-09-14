@@ -62,7 +62,7 @@ const EmailSignInForm = ({ userType }: { userType: USERTYPE }) => {
 
 					if (userType === "client") {
 						setUserType("client");
-						router.push("/(authenticated)/client/(tabs)")
+						router.push("/(authenticated)/client/(tabs)");
 						// setAuthUserType("client");
 					} else {
 						setUserType("service");
@@ -89,7 +89,7 @@ const EmailSignInForm = ({ userType }: { userType: USERTYPE }) => {
 	// 			}
 	// 			// router.push("/(auth)/clients/sign-up");
 	// 		} catch (error) {
-	// 			console.log("Error storing data", error);
+	//
 	// 		}
 	// 	}
 	// 	storeUserType("service");

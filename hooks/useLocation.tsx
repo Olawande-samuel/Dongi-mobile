@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 // 		const parts = [res.name, res.street, res.subregion, res.region, res.country]
 // 			.filter(Boolean)
 // 			.join(", ");
-// 		console.log({ parts, res });
+//
 // 		return parts || null;
 // 	} catch (error) {
 // 		console.error("Error getting address:", error);
@@ -49,7 +49,7 @@ const useLocation = (latitude: number, longitude: number) => {
 	useEffect(() => {
 		if (latitude && longitude) {
 			const result = getAddressFromCoordinates(latitude, longitude);
-			// console.log({ result });
+			//
 		}
 	}, [latitude, longitude]);
 	return { location };

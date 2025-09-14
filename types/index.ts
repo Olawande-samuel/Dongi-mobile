@@ -128,29 +128,40 @@ export interface IServiceProviderCompletedRequest {
 	};
 }
 export interface ICompletedRequest {
-	id: number;
-	uuid: string;
-	provider_id: string;
-	customer_id: string;
-	service_id: string;
-	location: string;
-	latitude: string;
-	longitude: string;
-	deadline: string;
-	message: string;
-	status: string;
+	accepted_at: string;
+	completed_at: string;
 	created_at: string;
-	updated_at: string;
-	rating: {
-		total_rating: number;
-		average_rating: number;
-	};
-	provider: {
+	customer: {
 		name: string;
 		image: string;
 		email: string;
 		location: string;
 	};
+	customer_confirmed_at: string | null;
+	customer_id: string;
+	customer_rejected_at: string | null;
+	deadline: string;
+	id: number;
+	is_confirmed_completed: string | null;
+	location: string;
+	latitude: string;
+	longitude: string;
+	message: string;
+	provider_id: string;
+	service_id: string;
+	status: string;
+	uuid: string;
+	updated_at: string;
+	// rating: {
+	// 	total_rating: number;
+	// 	average_rating: number;
+	// };
+	// provider: {
+	// 	name: string;
+	// 	image: string;
+	// 	email: string;
+	// 	location: string;
+	// };
 }
 
 // export interface IRequestInfo {
@@ -191,12 +202,15 @@ export interface IRequestInfo {
 	updated_at: string;
 	provider: {
 		uuid: string;
+		name?: string;
 		first_name: string;
 		last_name: string;
 		business_name: string;
 		image: string;
 		category_of_service: string;
 		brief_introduction: string;
+		phone?: string;
+		email?: string;
 	};
 	service: {
 		uuid: string;
@@ -204,6 +218,9 @@ export interface IRequestInfo {
 		description: string;
 		images: string[];
 	};
+	latitude: string;
+	location: string;
+	longitude: string;
 	customer: {
 		uuid: string;
 		name?: string;
@@ -297,11 +314,23 @@ export interface IProviderService {
 	description: string;
 	id: number;
 	images: string[];
-	name: string;
 	provider: { name: string; image: string; bio: string };
+	category: {
+		description: string;
+		image: string;
+		name: string;
+		status: string;
+		uuid: string;
+	};
+	name: string;
 	provider_id: string;
 	starting_price: string;
 	status: string;
+	total_completed: number;
+	total_ratings: number;
+	total_rejected: number;
+	total_requests: number;
+	unique_customers: number;
 	updated_at: string;
 	uuid: string;
 }

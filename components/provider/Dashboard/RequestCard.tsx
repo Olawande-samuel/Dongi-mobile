@@ -16,7 +16,6 @@ const RequestCard = ({
 	activeTab,
 	service,
 }: Props) => {
-	console.log({ customer });
 	return (
 		<Pressable
 			onPress={() =>

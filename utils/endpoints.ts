@@ -360,6 +360,18 @@ class API {
 			return Promise.reject(error);
 		}
 	}
+	async rateClient(data: {
+		id: string;
+		payload: { rate: number; message: string };
+	}): Promise<AxiosResponse<any>> {
+		try {
+			const endpoint = `/requests/provider/rate/${data.id}`;
+			const response = await authInstance.post(endpoint, data.payload);
+			return response;
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	}
 
 	async searchService(query: {
 		query?: string;
@@ -473,7 +485,6 @@ class API {
 		try {
 			const endpoint = `/services/provider`;
 			const response = await authInstance.get(endpoint);
-			// console.log({ response: JSON.stringify(response, null, 2) });
 			return response;
 		} catch (error) {
 			return Promise.reject(error);

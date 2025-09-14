@@ -4,8 +4,9 @@ import OngoingCard from "@/components/client/history/OngoingCard";
 import useExpoNotifications from "@/hooks/useExpoNotifications";
 import { ICategoryServices, IProviderService, OngoingRequest } from "@/types";
 import { Api } from "@/utils/endpoints";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
+import { RefreshControl } from "react-native";
 import {
 	ActivityIndicator,
 	FlatList,
@@ -18,8 +19,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const Home = () => {
 	const { expoPushToken } = useExpoNotifications();
-
-	// console.log({ expoPushToken });
+	const queryClient = useQueryClient();
 
 	const [tab, setTab] = useState(1);
 
@@ -69,6 +69,19 @@ const Home = () => {
 				contentContainerStyle={{
 					paddingHorizontal: 24,
 				}}
+				refreshControl={
+					<RefreshControl
+						refreshing={isOngoingRequestLoading || isLoading}
+						onRefresh={() => {
+							queryClient.invalidateQueries({
+								queryKey: ["fetch ongoing requests"],
+							});
+							queryClient.invalidateQueries({
+								queryKey: ["fetch all services"],
+							});
+						}}
+					/>
+				}
 			/>
 		</SafeAreaView>
 	);

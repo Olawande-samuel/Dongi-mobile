@@ -66,7 +66,6 @@ const useExpoNotifications = () => {
 				await Notifications.getExpoPushTokenAsync({ projectId })
 			).data;
 
-			console.log({ pushTokenString });
 			if (!projectId) {
 				handleRegistrationError("Project ID not found");
 			}
@@ -76,7 +75,6 @@ const useExpoNotifications = () => {
 						projectId,
 					})
 				).data;
-				console.log(pushTokenString);
 
 				return pushTokenString;
 			} catch (e: unknown) {
@@ -111,9 +109,7 @@ const useExpoNotifications = () => {
 		);
 
 		const responseListener =
-			Notifications.addNotificationResponseReceivedListener((response) => {
-				console.log(response);
-			});
+			Notifications.addNotificationResponseReceivedListener((response) => {});
 
 		return () => {
 			notificationListener.remove();
@@ -121,7 +117,6 @@ const useExpoNotifications = () => {
 		};
 	}, []);
 
-	console.log({ expoPushToken });
 	return { expoPushToken };
 };
 export default useExpoNotifications;

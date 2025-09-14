@@ -83,7 +83,6 @@ const ChangePassword = () => {
 	});
 
 	function changePassword(val: FormType) {
-		console.log(val);
 		const { new_password, old_password } = val;
 		mutate({
 			type: userType,

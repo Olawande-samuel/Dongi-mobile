@@ -83,8 +83,6 @@ const BusinessInformation = ({
 		formData.append("user_id", data.userId);
 		formData.append("business_logo", val.business_logo as any);
 
-		console.log({ formData })
-		
 		mutate(formData, {
 			onSuccess: (res) => {
 				toast.success(res.data.message);

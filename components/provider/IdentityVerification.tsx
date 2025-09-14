@@ -81,7 +81,6 @@ const IdentityVerification = ({
 		);
 		formData.append("user_id", data.userId);
 
-		console.log({ formData });
 		mutate(formData, {
 			onSuccess: (res) => {
 				toast.success(res.data.message);
@@ -235,7 +234,7 @@ const IdentityVerification = ({
 									<Pressable
 										onPress={async () => {
 											const result = await pickImage();
-											console.log({ result });
+
 											if (result) {
 												field.onChange(result);
 											}

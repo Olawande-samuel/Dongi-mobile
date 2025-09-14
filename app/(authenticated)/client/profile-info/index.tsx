@@ -8,7 +8,6 @@ const Index = () => {
 	const { data, isLoading } = useUserInfo();
 	const { userType } = useAuth();
 
-	console.log({ data });
 	return (
 		<View className="flex-1 bg-white px-6 pt-[18px]">
 			<View className="flex-row items-center gap-x-6 mb-5">

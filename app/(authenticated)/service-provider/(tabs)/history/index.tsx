@@ -3,7 +3,11 @@ import NoHistory from "@/components/client/history/NoHistory";
 import CompletedServiceItem from "@/components/provider/Dashboard/CompletedServiceItem";
 import RequestCard from "@/components/provider/Dashboard/RequestCard";
 import RouteHeader from "@/components/shared/RouteHeader";
-import { IServiceProviderCompletedRequest } from "@/types";
+import {
+	ICompletedRequest,
+	IRequestInfo,
+	IServiceProviderCompletedRequest,
+} from "@/types";
 import { groupByDate } from "@/utils";
 import { Api } from "@/utils/endpoints";
 import { useQuery } from "@tanstack/react-query";
@@ -25,18 +29,19 @@ const History = () => {
 		queryFn: Api.getProviderOngoingRequests,
 	});
 
-	console.log({ ongoing: ongoingServices?.data.data?.requests });
+	console.log({
+		ongoing: ongoingServices?.data.data?.requests,
+		completed: data?.data.data.requests,
+	});
 	// const services =
 	// 	tab === 1 ? data?.data?.data.requests : ongoingServices?.data.data.requests;
 
-	const listItems = groupByDate(
+	// Fix: Ensure groupByDate always receives the correct type of array for each tab
+	const listItems =
 		tab === 1
-			? [
-					...(ongoingServices?.data.data?.requests || []),
-					// ...(data?.data?.data.requests || []),
-			  ]
-			: data?.data.data.requests || []
-	);
+			? groupByDate(ongoingServices?.data.data?.requests || [])
+			: groupByDate(data?.data.data.requests || []);
+
 	return (
 		// <View className="flex-1">
 		<SafeAreaView className="flex-1 bg-white" edges={["top"]}>
@@ -45,7 +50,17 @@ const History = () => {
 				<SectionList
 					className="bg-white "
 					showsVerticalScrollIndicator={false}
-					sections={listItems}
+					sections={
+						// Fix: Ensure correct typing for SectionList
+						(listItems as Array<{
+							title: string;
+							data: IRequestInfo[];
+						}>) || // tab 1: ongoing, IRequestInfo[]
+						(listItems as Array<{
+							title: string;
+							data: ICompletedRequest[];
+						}>) // tab 2: completed, ICompletedRequest[]
+					}
 					renderItem={({ item }) =>
 						tab === 1 ? (
 							<RequestCard
@@ -54,7 +69,7 @@ const History = () => {
 							/>
 						) : (
 							<CompletedServiceItem
-								{...(item as IServiceProviderCompletedRequest)}
+								{...(item as unknown as ICompletedRequest)}
 								activeTab={2}
 							/>
 						)
@@ -76,7 +91,7 @@ const History = () => {
 							}
 						/>
 					}
-					keyExtractor={(item, index) => String(item.id + index)}
+					keyExtractor={(item, index) => String(item.uuid + index)}
 					renderSectionHeader={({ section: {} }) => (
 						<View className="py-2 relative mb-4">
 							<Text className="text-support text-center text-sm leading-[17.64px]">

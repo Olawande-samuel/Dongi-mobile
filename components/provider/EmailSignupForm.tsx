@@ -49,7 +49,6 @@ type FormType = z.infer<typeof FormSchema>;
 function EmailForm() {
 	const form = useFormContext();
 
-	console.log(form.formState.errors);
 	return (
 		<View className="flex-1">
 			<View className="flex-row mb-5 gap-4">
@@ -224,7 +223,6 @@ function EmailForm() {
 						<GooglePlacesAutocomplete
 							placeholder="Search"
 							onFail={(error) => {
-								console.log("failed", error);
 								toast.error("An error occurred fetching your location");
 							}}
 							fetchDetails

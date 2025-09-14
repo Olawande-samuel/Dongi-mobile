@@ -113,7 +113,6 @@ const VendorBooking = () => {
 		(item) => item.uuid === params.serviceId
 	);
 
-	console.log({ data: data?.data.data });
 	return (
 		<SafeAreaView className="flex-1 bg-white" edges={["top", "bottom"]}>
 			<GestureHandlerRootView className="flex-1 bg-white">
@@ -215,7 +214,7 @@ function RequestService({
 	const { setIsLoading } = useGlobalContext();
 	const queryClient = useQueryClient();
 
-	// console.log({ address, location });
+	//
 	const form = useForm({
 		defaultValues: {
 			deadline: "",
@@ -233,9 +232,7 @@ function RequestService({
 		}
 	}, [data?.user]);
 
-	const handleSheetChanges = useCallback((index: number) => {
-		console.log("handleSheetChanges", index);
-	}, []);
+	const handleSheetChanges = useCallback((index: number) => {}, []);
 
 	const handleClosePress = useCallback(() => {
 		dismiss();

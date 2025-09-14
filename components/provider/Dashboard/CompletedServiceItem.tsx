@@ -3,14 +3,23 @@ import { ICompletedRequest, IServiceProviderCompletedRequest } from "@/types";
 import { SIZES } from "@/utils/constants";
 import { Entypo } from "@expo/vector-icons";
 import { router } from "expo-router";
+import moment from "moment";
 import React from "react";
 import { Image, Pressable, Text, View } from "react-native";
 
-interface Props extends IServiceProviderCompletedRequest {
+interface Props extends ICompletedRequest {
 	activeTab: number;
 }
 
-const CompletedServiceItem = ({ id, uuid }: Props) => {
+const CompletedServiceItem = ({
+	id,
+	uuid,
+	customer,
+	created_at,
+	status,
+	updated_at,
+	
+}: Props) => {
 	return (
 		<Pressable
 			onPress={() =>
@@ -35,13 +44,13 @@ const CompletedServiceItem = ({ id, uuid }: Props) => {
 					<View className="flex-row justify-between">
 						<View className="large:mb-2">
 							<Text className="text-xs large:text-sm text-off-black mb-1 leading-[17.64px]">
-								{/* {provider?.name || ""}{" "} */}
+								{customer?.name || ""}
 							</Text>
-							<Text className="text-[10px] large:text-xs text-support  leading-[15.12px]">
+							{/* <Text className="text-[10px] large:text-xs text-support  leading-[15.12px]">
 								{}{" "}
-							</Text>
+							</Text> */}
 						</View>
-						<View className="flex-row items-center">
+						{/* <View className="flex-row items-center">
 							<Entypo
 								name="star"
 								size={SIZES.height > 700 ? 24 : 18}
@@ -49,16 +58,16 @@ const CompletedServiceItem = ({ id, uuid }: Props) => {
 								className="mr-[4.5px]"
 							/>
 							<Text className="text-xs large:text-sm">4.5</Text>
-						</View>
+						</View> */}
 					</View>
 					<Text className="text-[10px] large:text-xs text-support large:mb-2 leading-[15.12px]">
-						Lagos Island, Lagos
+						{customer?.location || ""}
 					</Text>
 					<View className="flex-row items-center justify-between">
 						<Text className="text-[10px] large:text-xs text-support leading-[15.12px]">
-							20 Nov 08:30AM
+							{moment(created_at).format("DD MMM • hh:mmA")}
 						</Text>
-						<StatusPill title="Completed" buttonClassName="py-[2px]" />
+						<StatusPill title={status} buttonClassName="py-[2px]" />
 					</View>
 				</View>
 				{/* <View>

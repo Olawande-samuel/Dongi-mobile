@@ -11,7 +11,7 @@ const Layout = () => {
 			<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 			<Stack.Screen name="requests" options={{ headerShown: false }} />
 			<Stack.Screen
-				name="history/[serviceId]"
+				name="history/[requestId]"
 				options={{
 					headerShown: false,
 				}}

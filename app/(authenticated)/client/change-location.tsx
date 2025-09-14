@@ -26,11 +26,9 @@ const LocationForm = React.memo(function LocationForm() {
 	const sessionTokenRef = useRef<string>(uuid.v4().toString());
 
 	async function handleLocationUpdate(data?: GooglePlaceDetail) {
-		console.log("updating");
 		// update location with coordinates and address
 		const result = await updateLocation(data);
 
-		console.log({ result, data });
 		// invalidate location queries: userProfile
 	}
 	return (
@@ -41,11 +39,9 @@ const LocationForm = React.memo(function LocationForm() {
 					<GooglePlacesAutocomplete
 						placeholder="Search"
 						onFail={(error) => {
-							console.log("failed", error);
 							toast.error("An error occurred fetching your location");
 						}}
 						onPress={(data, details) => {
-							console.log("pressed", data);
 							sessionTokenRef.current = uuid.v4().toString();
 							handleLocationUpdate(details ?? undefined);
 						}}

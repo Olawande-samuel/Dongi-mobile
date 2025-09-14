@@ -72,7 +72,7 @@ const FacialVerificationForm = ({
 				const photo = await cameraRef.current.takePictureAsync({
 					quality: 1,
 				});
-				console.log({ photo });
+
 				if (photo) {
 					const actualX = centerX - centerX / 2;
 					const croppedPhoto = await ImageManipulator.manipulate(photo.uri)
@@ -102,12 +102,10 @@ const FacialVerificationForm = ({
 						// lastModified: Date.now(),
 					};
 
-					console.log("File created:", fileObject);
 					setUserPhoto(result.uri);
 					setUserFile(fileObject);
 				}
 			} catch (error) {
-				console.log(error);
 				toast.error("An error occurred while taking your picture");
 			}
 		}
@@ -125,11 +123,8 @@ const FacialVerificationForm = ({
 				formdata.append("user_id", phone.userId);
 				formdata.append("avatar", userFile as any);
 
-				console.log({ formdata });
-
 				mutate(formdata, {
 					onSuccess: (res) => {
-						console.log({ uploadResponse: res });
 						toast.success(res.data.message);
 						setSteps((prev) => prev + 1);
 					},

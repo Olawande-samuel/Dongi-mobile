@@ -92,7 +92,6 @@ const AddNewService = () => {
 	});
 
 	function onSubmit(val: FormType) {
-		console.log(val);
 		if (userInfo?.user?.category_of_service) {
 			const payload = {
 				...val,
@@ -113,7 +112,6 @@ const AddNewService = () => {
 				);
 			});
 
-			console.log({ payload, formData });
 			mutate(formData);
 		}
 	}

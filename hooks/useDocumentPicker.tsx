@@ -50,9 +50,7 @@ const useDocumentPicker = () => {
 				return fileObject;
 			}
 			return null;
-		} catch (error) {
-			console.log(error);
-		}
+		} catch (error) {}
 	};
 	return { pickDocument, pickImage };
 };

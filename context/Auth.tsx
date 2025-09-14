@@ -62,7 +62,6 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 				setUser(null);
 			}
 		} catch (error) {
-			console.log({ error });
 		} finally {
 			setIsLoading(false);
 		}

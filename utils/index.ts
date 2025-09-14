@@ -3,6 +3,7 @@ import { clsx, type ClassValue } from "clsx";
 import { AxiosError } from "axios";
 import { toast } from "sonner-native";
 import moment from "moment";
+import { Linking } from "react-native";
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(...inputs));
@@ -112,4 +113,13 @@ export function maskEmail(val: string) {
 		return `${maskedName}@${domain}`;
 	}
 	return "";
+}
+
+export async function handleContactPress(val: string) {
+	const isSupported = await Linking.canOpenURL(val);
+	if (isSupported) {
+		Linking.openURL(val);
+	} else {
+		console.log("Action not supported");
+	}
 }

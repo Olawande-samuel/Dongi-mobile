@@ -53,7 +53,6 @@ const ResetPasswordForm = () => {
 			</View>
 			<Pressable
 				onPress={() => {
-					console.log("clicked");
 					router.push("/(auth)/reset-password/otp-verification");
 				}}
 				className="bg-primary rounded px-1 py-[10px] mt-auto justify-center items-center"

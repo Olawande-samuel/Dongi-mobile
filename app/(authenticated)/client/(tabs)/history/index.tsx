@@ -5,9 +5,10 @@ import OngoingCard from "@/components/client/history/OngoingCard";
 import { ICompletedRequest, OngoingRequest } from "@/types";
 import { groupByDate } from "@/utils";
 import { Api } from "@/utils/endpoints";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import moment from "moment";
 import React, { useState } from "react";
+import { RefreshControl } from "react-native";
 import {
 	ActivityIndicator,
 	SectionList,
@@ -20,6 +21,8 @@ const DATA: any[] = [];
 const History = () => {
 	const [tab, setTab] = useState(1);
 	const { height } = useWindowDimensions();
+
+	const queryClient = useQueryClient();
 
 	const { data, isLoading } = useQuery({
 		queryKey: ["fetch pending requests"],
@@ -40,22 +43,22 @@ const History = () => {
 			queryFn: Api.getCompletedRequests,
 			enabled: tab === 1,
 		});
-	
-	console.log({ ongoingRequestData });
 
-	const listItems = groupByDate(
+	const listItems =
 		tab === 1
-			? completedData?.data.data.requests || []
-			: [
+			? groupByDate(completedData?.data.data.requests || [])
+			: groupByDate([
 					...(ongoingRequestData?.data.data?.requests || []),
 					...(data?.data?.data.requests || []),
-			  ]
-	);
+			  ]);
 	return (
 		<SectionList
 			className="bg-white px-6"
 			showsVerticalScrollIndicator={false}
-			sections={listItems}
+			sections={
+				(listItems as Array<{ title: string; data: OngoingRequest[] }>) ||
+				(listItems as Array<{ title: string; data: ICompletedRequest[] }>)
+			}
 			renderItem={({ item }: { item: any }) =>
 				tab === 1 ? (
 					<HistoryCard {...(item as ICompletedRequest)} />
@@ -95,6 +98,19 @@ const History = () => {
 			contentContainerStyle={{
 				minHeight: height - 200,
 			}}
+			refreshControl={
+				<RefreshControl
+					refreshing={isOngoingRequestLoading || isLoading}
+					onRefresh={() => {
+						queryClient.invalidateQueries({
+							queryKey: ["fetch ongoing requests"],
+						});
+						queryClient.invalidateQueries({
+							queryKey: ["fetch completed requests"],
+						});
+					}}
+				/>
+			}
 		/>
 	);
 };

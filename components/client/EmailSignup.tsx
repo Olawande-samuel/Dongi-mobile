@@ -184,7 +184,6 @@ const EmailForm = () => {
 					<GooglePlacesAutocomplete
 						placeholder="Search"
 						onFail={(error) => {
-							console.log("failed", error);
 							toast.error("An error occurred fetching your location");
 						}}
 						fetchDetails

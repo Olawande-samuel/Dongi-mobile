@@ -2,7 +2,7 @@ import AppModal from "@/components/AppModal";
 import StatusPill from "@/components/StatusPill";
 import useDistance from "@/hooks/useDistance";
 import useServiceProviderUserInfo from "@/hooks/useServiceProviderUserInfo";
-import { handleError } from "@/utils";
+import { handleContactPress, handleError } from "@/utils";
 import { Api } from "@/utils/endpoints";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
@@ -11,7 +11,6 @@ import React, { useState } from "react";
 import {
 	ActivityIndicator,
 	Image,
-	Linking,
 	Pressable,
 	ScrollView,
 	Text,
@@ -33,6 +32,7 @@ const NewRequest = () => {
 		queryKey: ["get request by id", params.requestId as string],
 		queryFn: () => Api.getRequestById(params.requestId as string),
 	});
+
 	const result = data?.data?.data;
 
 	// get all services
@@ -90,14 +90,6 @@ const NewRequest = () => {
 		setRejectionModalVisible(true);
 	}
 
-	async function handleContactPress(val: string) {
-		const isSupported = await Linking.canOpenURL(val);
-		if (isSupported) {
-			Linking.openURL(val);
-		} else {
-			console.log("Action not supported");
-		}
-	}
 	return (
 		<SafeAreaView className="flex-1 bg-white" edges={["bottom"]}>
 			{isLoading ? (

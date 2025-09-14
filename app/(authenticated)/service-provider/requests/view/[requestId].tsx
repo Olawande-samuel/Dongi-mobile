@@ -5,7 +5,7 @@ import StyledButton from "@/components/StyledButton";
 import { useGlobalContext } from "@/providers/GlobalStateProvider";
 import { handleError } from "@/utils";
 import { Api } from "@/utils/endpoints";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { router, useLocalSearchParams } from "expo-router";
 import moment from "moment";
 import React, { useState } from "react";
@@ -14,6 +14,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const Ongoing = () => {
 	const [modalVisible, setModalVisible] = useState(false);
+	const queryClient = useQueryClient();
 
 	const params = useLocalSearchParams();
 
@@ -29,8 +30,13 @@ const Ongoing = () => {
 	const { mutate, isPending } = useMutation({
 		mutationFn: Api.providerConfirmServiceCompletion,
 		onSuccess: (res) => {
-			console.log({ res });
 			setModalVisible(true);
+			queryClient.invalidateQueries({
+				queryKey: ["get provider ongoing requests"],
+			});
+			queryClient.invalidateQueries({
+				queryKey: ["get completed services"],
+			});
 		},
 		onError: (err) => handleError(err),
 		onMutate: () => setIsLoading(true),

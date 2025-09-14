@@ -61,7 +61,6 @@ const PhoneOTPVerification = () => {
 						router.push("/service-provider/sign-up/email");
 					},
 					onError: (err) => {
-						console.log(err);
 						handleError(err);
 					},
 				}

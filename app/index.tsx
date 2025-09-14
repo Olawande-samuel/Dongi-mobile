@@ -20,9 +20,7 @@ export default function Index() {
 				router.push("/(auth)/service-provider/sign-up");
 			}
 			// router.push("/(auth)/clients/sign-up");
-		} catch (error) {
-			console.log("Error storing data", error);
-		}
+		} catch (error) {}
 	}
 
 	useEffect(() => {

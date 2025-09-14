@@ -2,9 +2,7 @@ import HomeTopComponent from "@/components/provider/Dashboard/HomeTopComponent";
 import PendingRequestCard from "@/components/provider/Dashboard/PendingRequestsCard";
 import RequestCard from "@/components/provider/Dashboard/RequestCard";
 import useExpoNotifications from "@/hooks/useExpoNotifications";
-import {
-	IRequestInfo
-} from "@/types";
+import { IRequestInfo } from "@/types";
 import { SIZES } from "@/utils/constants";
 import { Api } from "@/utils/endpoints";
 import { useQueries, useQueryClient } from "@tanstack/react-query";
@@ -42,7 +40,6 @@ const Index = () => {
 
 	const data = result?.data.flatMap((item) => item?.flatMap((item) => item));
 
-	console.log("ongoing",result?.data?.[0])
 	return (
 		<SafeAreaView className="flex-1 bg-white">
 			<StatusBar />
@@ -63,7 +60,9 @@ const Index = () => {
 						totalPending={result.data?.[1]?.length || 0}
 					/>
 				}
-				keyExtractor={(item, index) => item?.uuid?.toString() || index.toString()}
+				keyExtractor={(item, index) =>
+					item?.uuid?.toString() || index.toString()
+				}
 				contentContainerStyle={{
 					paddingHorizontal: SIZES.height > 700 ? 24 : 16,
 				}}

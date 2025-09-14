@@ -3,6 +3,7 @@ import ReviewService from "@/components/client/booking/ReviewService";
 import VendorProfile from "@/components/client/VendorProfile";
 import ReviewComplete from "@/components/ReviewComplete";
 import StatusPill from "@/components/StatusPill";
+import { handleContactPress } from "@/utils";
 import { Api } from "@/utils/endpoints";
 import {
 	BottomSheetModal,
@@ -12,7 +13,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import moment from "moment";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Image, ScrollView, Text, View } from "react-native";
+import { Image, Pressable, ScrollView, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -96,6 +97,24 @@ const Track = () => {
 										{moment(bookingInfo?.created_at).format("DD MMM • hh:mmA")}
 									</Text>
 								</View>
+								{bookingInfo?.status === "ACCEPTED" && (
+									<View className="flex-row justify-between items-center">
+										<Text className="text-support text-sm font-regular mr-4">
+											Phone Number
+										</Text>
+										<Pressable
+											onPress={() =>
+												handleContactPress(
+													`tel:+${bookingInfo?.provider?.phone}`
+												)
+											}
+										>
+											<Text className="font-regular text-sm text-off-black text-right">
+												{bookingInfo?.provider?.phone || ""}
+											</Text>
+										</Pressable>
+									</View>
+								)}
 							</View>
 							<View className="flex-1">
 								<View className="space-y-5 py-3 mb-[149px]">

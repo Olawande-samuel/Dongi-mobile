@@ -10,13 +10,14 @@ import Success from "@/svgs/Success";
 import StyledButton from "./StyledButton";
 import { useAuth } from "@/context/Auth";
 
-
 function ReviewComplete({
 	modalVisible,
 	setModalVisible,
+	name,
 }: {
 	modalVisible: boolean;
 	setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+	name: string;
 }) {
 	const { userType } = useAuth();
 	return (

@@ -47,10 +47,7 @@ const SearchBar = () => {
 		}
 	}, [searchText]);
 
-	console.log({ params });
-
 	function submit(val: FormType) {
-		console.log(val);
 		router.push(`/client/search/search-text?query=${val.search}`);
 	}
 	return (
