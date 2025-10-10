@@ -30,6 +30,7 @@ function ConfirmService({
 	providerName,
 	serviceName,
 }: Props) {
+	console.log({ providerName });
 	const { dismiss } = useBottomSheetModal();
 	const snapPoints = useMemo(() => ["90%"], []);
 
@@ -55,17 +56,22 @@ function ConfirmService({
 		onSettled: () => setIsLoading(false),
 	});
 
-	function confirmCompletion() {
-		mutate(bookingId as string, {
-			onSuccess: () => {
-				toast.success("Request completed successfully!");
-				openRatings();
-			},
-			onError: (err) => {
-				handleError(err);
-			},
-		});
+	function confirmCompletion(action: "CONFIRM" | "REJECT") {
+		mutate(
+			{ action, requestId: bookingId as string },
+			{
+				onSuccess: () => {
+					toast.success("Request completed successfully!");
+					openRatings();
+				},
+				onError: (err) => {
+					handleError(err);
+				},
+			}
+		);
 	}
+
+	function denyCompletion() {}
 
 	return (
 		<BottomSheetModal
@@ -173,14 +179,17 @@ function ConfirmService({
 				</View>
 				<View className="mt-auto px-6 mb-2 flex-row gap-x-3">
 					<Pressable
-						onPress={confirmCompletion}
+						onPress={() => confirmCompletion("CONFIRM")}
 						className="bg-success-500 py-[10px] flex-1 px-1 rounded border-[0.5px] border-primary"
 					>
 						<Text className="text-center text-white text-base font-regular">
 							Confirm
 						</Text>
 					</Pressable>
-					<Pressable className="bg-white border-[0.5px] border-support flex-1 py-[10px] px-1 rounded">
+					<Pressable
+						onPress={() => confirmCompletion("REJECT")}
+						className="bg-white border-[0.5px] border-support flex-1 py-[10px] px-1 rounded"
+					>
 						<Text className="text-center text-support text-base font-regular">
 							Deny
 						</Text>

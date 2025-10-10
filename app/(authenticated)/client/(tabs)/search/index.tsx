@@ -64,7 +64,7 @@ const Search = () => {
 								<View className="h-[154px] w-full  max-w-[162px] mb-2 rounded-lg border-[0.5px] border-primary">
 									<Image
 										source={
-											item.id === "custom"
+											item.id === "custom" || item.imageUrl === ""
 												? CATEGORY_IMAGE_MAP[item.name]
 												: { uri: item.imageUrl }
 										}

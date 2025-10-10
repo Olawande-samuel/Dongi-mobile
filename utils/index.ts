@@ -1,6 +1,6 @@
 import { twMerge } from "tailwind-merge";
 import { clsx, type ClassValue } from "clsx";
-import { AxiosError } from "axios";
+import { AxiosError, isAxiosError } from "axios";
 import { toast } from "sonner-native";
 import moment from "moment";
 import { Linking } from "react-native";
@@ -10,7 +10,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const handleError = (err: any) => {
-	if (err?.isAxiosError) {
+	if (isAxiosError(err)) {
 		const axiosError = err as AxiosError<{ message: string }>;
 		console.error(err.response);
 		const errorMessage =
@@ -72,7 +72,6 @@ export function groupByDate<T extends IDatesOptions>(
 			groupedData["Data"].push(item);
 		}
 	});
-
 	// Sort items within each group by date in descending order
 	Object.keys(groupedData).forEach((date) => {
 		groupedData[date].sort((a, b) => {

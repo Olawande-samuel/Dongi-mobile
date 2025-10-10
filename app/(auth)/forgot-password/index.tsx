@@ -1,9 +1,9 @@
-import { View, Text, Pressable } from "react-native";
-import React from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Ionicons } from "@expo/vector-icons";
-import ForgotPasswordForm from "@/components/client/ForgotPasswordForm";
 import BackButton from "@/components/BackButton";
+import ForgotPasswordForm from "@/components/client/ForgotPasswordForm";
+import React from "react";
+import { Keyboard, TouchableWithoutFeedback } from "react-native";
+import { Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const ForgotPassword = () => {
 	return (

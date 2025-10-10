@@ -62,8 +62,12 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 				setUser(null);
 			}
 		} catch (error) {
+			console.error("Error checking auth state:", error);
 		} finally {
-			setIsLoading(false);
+			// Add a small delay to ensure the app is ready before setting loading to false
+			setTimeout(() => {
+				setIsLoading(false);
+			}, 50);
 		}
 	};
 

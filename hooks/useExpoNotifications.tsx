@@ -1,12 +1,11 @@
-import { View, Text } from "react-native";
+import { useGlobalContext } from "@/providers/GlobalStateProvider";
+import { Api } from "@/utils/endpoints";
+import { useMutation } from "@tanstack/react-query";
+import Constants from "expo-constants";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
-import Constants from "expo-constants";
-import { Platform } from "react-native";
 import { useEffect, useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { Api } from "@/utils/endpoints";
-import { useGlobalContext } from "@/providers/GlobalStateProvider";
+import { Platform } from "react-native";
 
 const useExpoNotifications = () => {
 	const globalContext = useGlobalContext();
@@ -42,6 +41,7 @@ const useExpoNotifications = () => {
 				importance: Notifications.AndroidImportance.MAX,
 				vibrationPattern: [0, 250, 250, 250],
 				lightColor: "#FF231F7C",
+				sound: "dongi.wav",
 			});
 		}
 
@@ -117,6 +117,7 @@ const useExpoNotifications = () => {
 		};
 	}, []);
 
+	console.log("received notification: ", notification);
 	return { expoPushToken };
 };
 export default useExpoNotifications;

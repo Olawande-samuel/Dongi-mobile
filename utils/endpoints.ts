@@ -350,10 +350,10 @@ class API {
 	}
 	async rateService(data: {
 		id: string;
-		payload: { rate: string; message: string };
+		payload: { rate: number; message: string };
 	}): Promise<AxiosResponse<any>> {
 		try {
-			const endpoint = `/rate/${data.id}`;
+			const endpoint = `/requests/customer/rate/${data.id}`;
 			const response = await authInstance.post(endpoint, data.payload);
 			return response;
 		} catch (error) {
@@ -604,12 +604,16 @@ class API {
 		}
 	}
 
-	async confirmServiceCompletion(
-		requestId: string
-	): Promise<AxiosResponse<ApiResponse<any>>> {
+	async confirmServiceCompletion({
+		requestId,
+		action,
+	}: {
+		requestId: string;
+		action: "CONFIRM" | "REJECT";
+	}): Promise<AxiosResponse<ApiResponse<any>>> {
 		try {
 			const endpoint = `requests/${requestId}/confirm-completion`;
-			const response = await authInstance.post(endpoint, {});
+			const response = await authInstance.post(endpoint, { action });
 			return response;
 		} catch (error) {
 			return Promise.reject(error);

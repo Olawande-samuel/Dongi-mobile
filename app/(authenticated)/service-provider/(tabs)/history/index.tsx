@@ -5,8 +5,7 @@ import RequestCard from "@/components/provider/Dashboard/RequestCard";
 import RouteHeader from "@/components/shared/RouteHeader";
 import {
 	ICompletedRequest,
-	IRequestInfo,
-	IServiceProviderCompletedRequest,
+	IRequestInfo
 } from "@/types";
 import { groupByDate } from "@/utils";
 import { Api } from "@/utils/endpoints";

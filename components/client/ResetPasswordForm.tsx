@@ -1,11 +1,14 @@
 import { FormType } from "@/app/(auth)/reset-password/_layout";
-import { router } from "expo-router";
+import { cn } from "@/utils";
+import { router, useLocalSearchParams } from "expo-router";
 import React from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { Pressable, Text, TextInput, View } from "react-native";
 
 const ResetPasswordForm = () => {
 	const form = useFormContext<FormType>();
+
+	const params = useLocalSearchParams();
 
 	return (
 		<View className="flex-1">
@@ -53,9 +56,17 @@ const ResetPasswordForm = () => {
 			</View>
 			<Pressable
 				onPress={() => {
-					router.push("/(auth)/reset-password/otp-verification");
+					router.push({
+						pathname: "/(auth)/reset-password/otp-verification",
+						params: {
+							userType: params.userType as USERTYPE,
+						},
+					});
 				}}
-				className="bg-primary rounded px-1 py-[10px] mt-auto justify-center items-center"
+				className={cn(
+					"bg-primary rounded px-1 py-[10px] mt-auto justify-center items-center",
+					params?.userType === "service" && "bg-service-primary"
+				)}
 			>
 				<Text className="text-white">Create new password</Text>
 			</Pressable>

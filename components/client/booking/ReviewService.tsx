@@ -18,7 +18,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner-native";
 
 const FormSchema = z.object({
-	rate: z.string(),
+	rate: z.number(),
 	message: z.string(),
 });
 
@@ -46,7 +46,7 @@ function ReviewService({
 
 	const form = useForm<FormType>({
 		defaultValues: {
-			rate: "",
+			rate: 0,
 			message: "",
 		},
 		resolver: zodResolver(FormSchema),

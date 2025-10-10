@@ -56,10 +56,15 @@ const Track = () => {
 	}, []);
 
 	useEffect(() => {
-		if (bookingInfo?.status === "completed") {
+		if (
+			bookingInfo?.status === "COMPLETED" &&
+			!bookingInfo?.is_confirmed_completed
+		) {
 			handlePresentModalPress();
 		}
 	}, [data?.data.data.status]);
+
+	console.log({ bookingInfo });
 
 	return (
 		<SafeAreaView className="flex-1 bg-white" edges={["bottom"]}>
@@ -169,7 +174,9 @@ const Track = () => {
 						<ConfirmService
 							compRef={bottomSheetModalRef}
 							openRatings={handlePresentReviewModalPress}
-							providerName={bookingInfo?.provider?.name || ""}
+							providerName={`${bookingInfo?.provider?.first_name || ""} ${
+								bookingInfo?.provider?.last_name || ""
+							} `}
 							serviceName={serviceInfo?.name || ""}
 						/>
 						<ReviewService

@@ -128,40 +128,45 @@ export interface IServiceProviderCompletedRequest {
 	};
 }
 export interface ICompletedRequest {
-	accepted_at: string;
-	completed_at: string;
+	uuid: string;
+	customer_id: string;
+	provider_id: string;
+	service_id: string;
+	deadline: string;
+	location: string;
+	longitude: string;
+	latitude: string;
+	message: string;
+	is_confirmed_completed: string | null;
+	customer_confirmed_at: string | null;
+	customer_rejected_at: string | null;
+	completed_at: string | null;
+	status: string;
 	created_at: string;
-	customer: {
+	updated_at: string;
+	provider: {
+		uuid: string;
 		name: string;
+		business_name: string;
 		image: string;
 		email: string;
 		location: string;
+		category_of_service: string;
+		brief_introduction: string;
+		phone: string;
 	};
-	customer_confirmed_at: string | null;
-	customer_id: string;
-	customer_rejected_at: string | null;
-	deadline: string;
-	id: number;
-	is_confirmed_completed: string | null;
-	location: string;
-	latitude: string;
-	longitude: string;
-	message: string;
-	provider_id: string;
-	service_id: string;
-	status: string;
-	uuid: string;
-	updated_at: string;
-	// rating: {
-	// 	total_rating: number;
-	// 	average_rating: number;
-	// };
-	// provider: {
-	// 	name: string;
-	// 	image: string;
-	// 	email: string;
-	// 	location: string;
-	// };
+	service: {
+		uuid: string;
+		name: string;
+		description: string;
+	};
+	rating: {
+		uuid: string;
+		customer_rating: number;
+		customer_message: string | null;
+	};
+	provider_rating_status: string;
+	customer_rating_status: string;
 }
 
 // export interface IRequestInfo {

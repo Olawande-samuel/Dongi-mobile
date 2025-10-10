@@ -75,7 +75,7 @@ const History = () => {
 				/>
 			}
 			ListEmptyComponent={
-				isLoading || isOngoingRequestLoading ? (
+				isLoading || isOngoingRequestLoading || isCompletedRequestLoading ? (
 					<ActivityIndicator />
 				) : (
 					<NoHistory

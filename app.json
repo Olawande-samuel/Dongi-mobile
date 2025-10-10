@@ -37,6 +37,12 @@
 		"plugins": [
 			"expo-router",
 			[
+				"expo-location",
+				{
+					"locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+				}
+			],
+			[
 				"expo-splash-screen",
 				{
 					"image": "./assets/images/icon.png",
@@ -66,7 +72,15 @@
 				}
 			],
 			"expo-font",
-			"expo-notifications"
+			[
+				"expo-notifications",
+				{
+					"color": "#18658B",
+					"defaultChannel": "default",
+					"sounds": ["./assets/sounds/dongi.wav"],
+					"enableBackgroundRemoteNotifications": true
+				}
+			]
 		],
 		"experiments": {
 			"typedRoutes": true

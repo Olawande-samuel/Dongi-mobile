@@ -1,21 +1,20 @@
-import { View, Text, Pressable } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 import { useFormContext } from "react-hook-form";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Ionicons } from "@expo/vector-icons";
-import ResetPasswordForm from "@/components/client/ResetPasswordForm";
+import { Text, View } from "react-native";
 import { OtpInput } from "react-native-otp-entry";
 
-import StyledButton from "@/components/StyledButton";
 import BackButton from "@/components/BackButton";
-import { FormType } from "../_layout";
-import { useMutation } from "@tanstack/react-query";
-import { Api } from "@/utils/endpoints";
+import StyledButton from "@/components/StyledButton";
 import { useGlobalContext } from "@/providers/GlobalStateProvider";
-import { useAuth } from "@/context/Auth";
+import { Api } from "@/utils/endpoints";
+import { useMutation } from "@tanstack/react-query";
+import { useLocalSearchParams } from "expo-router";
+import { FormType } from "../_layout";
 
 const OTPVerification = () => {
-	const { userType } = useAuth();
+	const params = useLocalSearchParams();
+	const userType = params.userType as USERTYPE;
+
 	const { setIsLoading } = useGlobalContext();
 
 	const form = useFormContext<FormType>();

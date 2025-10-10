@@ -14,6 +14,7 @@ const StatusPill = ({
 			case "pending":
 				return "bg-blue-light";
 			case "completed":
+			case "customer_confirmed_completion":
 				return "bg-success-100";
 			case "cancelled":
 				return "bg-danger-100";
@@ -28,6 +29,7 @@ const StatusPill = ({
 			case "pending":
 				return "bg-blue-light-500";
 			case "completed":
+			case "customer_confirmed_completion":
 				return "bg-success-500";
 			case "cancelled":
 				return "bg-danger-500";
@@ -48,7 +50,7 @@ const StatusPill = ({
 				className={`h-[7.8px] w-[7.8px] rounded-full  ${getPillDotColor()}`}
 			></View>
 			<Text className="text-[10px] large:text-xs text-off-black font-regular">
-				{title}
+				{title === "CUSTOMER_CONFIRMED_COMPLETION" ? "Completed" : title}
 			</Text>
 		</View>
 	);

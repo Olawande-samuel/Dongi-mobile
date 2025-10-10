@@ -25,12 +25,12 @@ const EmailSignIn = () => {
 					<View className="mb-6">
 						<EmailSignInForm userType={"service"} />
 					</View>
-					<View className="items-center mb-3">
+					{/* <View className="items-center mb-3">
 						<Text className="text-center text-sm text-[#99a2b3]">or</Text>
 					</View>
 					<View className="mb-6">
 						<SocialSignIn isLogin={true} />
-					</View>
+					</View> */}
 					<View className="mb-6">
 						<Text className="text-muted text-center text-sm large:text-base">
 							Don't have an account?{" "}

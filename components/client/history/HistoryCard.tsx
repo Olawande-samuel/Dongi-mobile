@@ -41,7 +41,7 @@ const HistoryCard = ({
 						{provider?.name || ""}
 					</Text>
 					<Text className="text-xs text-support mb-2 leading-[15.12px]">
-						Real Estate Agent
+						{provider?.email || ""}
 					</Text>
 					<Text className="text-xs text-support mb-2 leading-[15.12px]">
 						{location || ""}
@@ -58,7 +58,7 @@ const HistoryCard = ({
 							color="#FFCE31"
 							className="mr-[4.5px]"
 						/>
-						<Text>{rating?.average_rating || ""}</Text>
+						<Text>{rating?.customer_rating || ""}</Text>
 					</View>
 				</View>
 			</View>

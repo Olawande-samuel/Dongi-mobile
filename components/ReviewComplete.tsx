@@ -9,15 +9,14 @@ import React from "react";
 import Success from "@/svgs/Success";
 import StyledButton from "./StyledButton";
 import { useAuth } from "@/context/Auth";
+import { router } from "expo-router";
 
 function ReviewComplete({
 	modalVisible,
 	setModalVisible,
-	name,
 }: {
 	modalVisible: boolean;
 	setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
-	name: string;
 }) {
 	const { userType } = useAuth();
 	return (
@@ -56,7 +55,7 @@ function ReviewComplete({
 								Thank you for your review
 							</Text>
 							<View className="mt-auto mb-2">
-								<StyledButton title="Continue" onPress={() => {}} />
+								<StyledButton title="Continue" onPress={() => router.back()} />
 							</View>
 						</View>
 					</View>

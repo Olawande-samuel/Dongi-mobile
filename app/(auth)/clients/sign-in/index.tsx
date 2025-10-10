@@ -32,12 +32,12 @@ const PhoneSignIn = () => {
 						<View className="mb-6">
 							<EmailSignInForm userType="client" />
 						</View>
-						<View className="items-center mb-3">
+						{/* <View className="items-center mb-3">
 							<Text className="text-center text-sm text-[#99a2b3]">or</Text>
 						</View>
 						<View className="mb-6">
 							<SocialSignIn isLogin={true} />
-						</View>
+						</View> */}
 						<View>
 							<Text className="text-muted text-center">
 								Don't have an account?{" "}

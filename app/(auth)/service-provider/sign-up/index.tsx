@@ -44,12 +44,12 @@ const SignUp = () => {
 							<View className="mb-6">
 								<PhoneSignup userType="service" />
 							</View>
-							<View className="items-center mb-3">
+							{/* <View className="items-center mb-3">
 								<Text className="text-center text-sm text-[#99a2b3]">or</Text>
 							</View>
 							<View className="mb-6">
 								<SocialSignIn isLogin={false} />
-							</View>
+							</View> */}
 							<View>
 								<Text className="text-muted text-center">
 									Already have an account?{" "}

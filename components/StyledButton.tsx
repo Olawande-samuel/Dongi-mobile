@@ -1,5 +1,5 @@
 import { cn } from "@/utils";
-import { usePathname } from "expo-router";
+import { useLocalSearchParams, usePathname } from "expo-router";
 import React from "react";
 import {
 	ActivityIndicator,
@@ -23,13 +23,17 @@ const StyledButton: React.FC<StyledButtonProps> = ({
 	isLoading,
 	...props
 }) => {
-	// const { userType } = useAuth();
+	const params = useLocalSearchParams();
 	const pathname = usePathname();
-	const userType = pathname.includes("client") ? "client" : "service";
+	const userType = pathname.includes("client")
+		? "client"
+		: pathname.includes("service-provider")
+		? "service"
+		: params.userType
+		? params.userType
+		: "";
 
-	// const { userType: tempUserType } = useTempStore();
 
-	// const user_type = tempUserType || userType;
 
 	return (
 		<Pressable

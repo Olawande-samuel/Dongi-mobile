@@ -8,11 +8,12 @@ import { useMutation } from "@tanstack/react-query";
 import { Link } from "expo-router";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Text, TextInput, View } from "react-native";
+import { Text, TextInput, TouchableWithoutFeedback, View } from "react-native";
 import { z } from "zod";
 import PasswordInput from "../PasswordInput";
 import StyledButton from "../StyledButton";
 import { useRouter } from "expo-router";
+import { Keyboard } from "react-native";
 
 const FormSchema = z.object({
 	email: z.string().trim().email(),
@@ -95,54 +96,61 @@ const EmailSignInForm = ({ userType }: { userType: USERTYPE }) => {
 	// 	storeUserType("service");
 	// }, []);
 	return (
-		<View className="">
-			<View className="mb-5">
-				<Controller
-					control={form.control}
-					name="email"
-					render={({ field }) => (
-						<View className="space-y-[6px]">
-							<Text className="text-sm text-off-black">Email</Text>
-							<TextInput
-								placeholder="Enter your email address"
-								value={field.value}
-								onChangeText={field.onChange}
-								keyboardType="email-address"
-								textContentType="emailAddress"
-								className="p-2 text-muted text-base rounded border border-inner-light"
-							/>
-						</View>
-					)}
-				/>
+		<TouchableWithoutFeedback className="flex-1" onPress={Keyboard.dismiss}>
+			<View className="">
+				<View className="mb-5">
+					<Controller
+						control={form.control}
+						name="email"
+						render={({ field }) => (
+							<View className="space-y-[6px]">
+								<Text className="text-sm text-off-black">Email</Text>
+								<TextInput
+									placeholder="Enter your email address"
+									value={field.value}
+									onChangeText={field.onChange}
+									keyboardType="email-address"
+									textContentType="emailAddress"
+									className="p-2 text-muted text-base rounded border border-inner-light"
+								/>
+							</View>
+						)}
+					/>
+				</View>
+				<View className="mb-5">
+					<Controller
+						control={form.control}
+						name="password"
+						render={({ field }) => (
+							<View className="space-y-[6px]">
+								<Text className="text-sm text-off-black">Password</Text>
+								<PasswordInput
+									placeholder="********"
+									value={field.value}
+									onChangeText={field.onChange}
+									textContentType="password"
+									className="p-2 text-muted text-base rounded border border-inner-light"
+								/>
+							</View>
+						)}
+					/>
+				</View>
+				<View className="flex-row justify-end mb-3">
+					<Link
+						href={{
+							pathname: "/forgot-password",
+							params: {
+								userType,
+							},
+						}}
+						className="text-primary text-sm text-right"
+					>
+						Forgot Password
+					</Link>
+				</View>
+				<StyledButton onPress={form.handleSubmit(submit)} title="Continue" />
 			</View>
-			<View className="mb-5">
-				<Controller
-					control={form.control}
-					name="password"
-					render={({ field }) => (
-						<View className="space-y-[6px]">
-							<Text className="text-sm text-off-black">Password</Text>
-							<PasswordInput
-								placeholder="********"
-								value={field.value}
-								onChangeText={field.onChange}
-								textContentType="password"
-								className="p-2 text-muted text-base rounded border border-inner-light"
-							/>
-						</View>
-					)}
-				/>
-			</View>
-			<View className="flex-row justify-end mb-3">
-				<Link
-					href="/forgot-password"
-					className="text-primary text-sm text-right"
-				>
-					Forgot Password
-				</Link>
-			</View>
-			<StyledButton onPress={form.handleSubmit(submit)} title="Continue" />
-		</View>
+		</TouchableWithoutFeedback>
 	);
 };
 
