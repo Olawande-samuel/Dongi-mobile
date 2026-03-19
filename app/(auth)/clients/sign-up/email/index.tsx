@@ -1,5 +1,5 @@
 import EmailSignup from "@/components/client/EmailSignup";
-import EmailVerification from "@/components/client/EmailVerification";
+import EmailVerification from "@/components/shared/EmailVerification";
 import FacialVerification from "@/components/client/FacialVerification";
 import SetupPassword from "@/components/shared/SetupPassword";
 import SignUpHeader from "@/components/shared/SignUpHeader";

@@ -1,6 +1,6 @@
 import useTempUser from "@/hooks/useTempUser";
 import { useGlobalContext } from "@/providers/GlobalStateProvider";
-import { handleError } from "@/utils";
+import { cn, handleError } from "@/utils";
 import { Api } from "@/utils/endpoints";
 import { EvilIcons } from "@expo/vector-icons";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,33 +14,71 @@ import {
 	useFormContext,
 } from "react-hook-form";
 import {
-	FlatList,
 	Keyboard,
 	Pressable,
+	ScrollView,
 	Text,
 	TextInput,
+	TouchableOpacity,
 	TouchableWithoutFeedback,
 	View,
 } from "react-native";
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import SelectDropdown from "react-native-select-dropdown";
 import { toast } from "sonner-native";
 import { z } from "zod";
+import FormError from "../FormError";
 
-const FormSchema = z.object({
-	firstname: z.string().min(2, "First Name is required"),
-	lastname: z.string().min(2, "Last Name is required"),
-	email: z.string().email(),
-	gender: z.union([z.literal("MALE"), z.literal("FEMALE"), z.literal("OTHER")]),
-	location: z.string(),
-	latitude: z.number(),
-	longitude: z.number(),
-});
+import { useGoogleAutocomplete } from "@appandflow/react-native-google-autocomplete";
+
+const FormSchema = z
+	.object({
+		firstname: z.string().min(2, "First Name is required"),
+		lastname: z.string().min(2, "Last Name is required"),
+		email: z.string().email(),
+		gender: z.union([
+			z.literal("MALE"),
+			z.literal("FEMALE"),
+			z.literal("OTHER"),
+		]),
+		location: z.string({ message: "Enter a valid location" }),
+		latitude: z.number(),
+		longitude: z.number(),
+	})
+	.refine(
+		(data) => {
+			// If location is provided, both coordinates must be present
+			if (data.location) {
+				return data.latitude != null && data.longitude != null;
+			}
+			return true;
+		},
+		{
+			message: "Enter a valid location",
+			path: ["location"],
+		},
+	);
 
 type FormType = z.infer<typeof FormSchema>;
 
 const EmailForm = () => {
 	const form = useFormContext();
+
+	console.log(process.env.EXPO_PUBLIC_GOOGLE_API, {
+		err: form.formState.errors,
+		val: form.getValues(),
+	});
+
+	const { locationResults, setTerm, clearSearch, searchDetails, term } =
+		useGoogleAutocomplete(process.env.EXPO_PUBLIC_GOOGLE_API!, {
+			language: "en",
+			debounce: 300,
+		});
+
+	console.log({
+		formStateValidity: form.formState.errors,
+		valid: form.formState.isValid,
+		form: form.getValues(),
+	});
 
 	return (
 		<View className="flex-1">
@@ -59,6 +97,11 @@ const EmailForm = () => {
 									className="p-2 text-muted text-base rounded border border-inner-light h-[42px]"
 									textContentType="name"
 								/>
+								{form.formState?.errors?.firstname ? (
+									<FormError
+										value={form.formState.errors?.firstname?.message as string}
+									/>
+								) : null}
 							</View>
 						)}
 					/>
@@ -77,6 +120,11 @@ const EmailForm = () => {
 									onChangeText={field.onChange}
 									className="p-2 text-muted text-base rounded border border-inner-light h-[42px]"
 								/>
+								{form.formState?.errors?.lastname ? (
+									<FormError
+										value={form.formState.errors?.lastname?.message as string}
+									/>
+								) : null}
 							</View>
 						)}
 					/>
@@ -97,6 +145,11 @@ const EmailForm = () => {
 								textContentType="emailAddress"
 								className="p-2 text-muted text-base rounded border border-inner-light"
 							/>
+							{form.formState?.errors?.email ? (
+								<FormError
+									value={form.formState.errors?.email?.message as string}
+								/>
+							) : null}
 						</View>
 					)}
 				/>
@@ -172,6 +225,11 @@ const EmailForm = () => {
 									showsVerticalScrollIndicator={false}
 									// dropdownStyle={styles.dropdownMenuStyle}
 								/>
+								{form.formState?.errors?.gender ? (
+									<FormError
+										value={form.formState.errors?.gender?.message as string}
+									/>
+								) : null}
 							</View>
 						</View>
 					)}
@@ -181,32 +239,45 @@ const EmailForm = () => {
 			<View className="space-y-[6px]">
 				<Text className="text-sm text-off-black">Location</Text>
 				<View>
-					<GooglePlacesAutocomplete
-						placeholder="Search"
-						onFail={(error) => {
-							toast.error("An error occurred fetching your location");
-						}}
-						fetchDetails
-						onPress={(data, detail) => {
-							form.setValue("location", data.description);
-							form.setValue("latitude", detail?.geometry.location.lat);
-							form.setValue("longitude", detail?.geometry.location.lng);
-						}}
-						query={{
-							key: process.env.EXPO_PUBLIC_GOOGLE_API,
-							language: "en",
-						}}
-						styles={{
-							textInput: {
-								borderWidth: 1,
-								borderColor: "#f2f2f2",
-								padding: 2,
-								color: "#99a2b3",
-								borderRadius: 4,
-								fontSize: 16,
-							},
-						}}
+					<TextInput
+						value={term}
+						onChangeText={setTerm}
+						placeholder="Enter your location"
+						className="p-2 text-muted text-base rounded border border-inner-light"
 					/>
+					<View
+						className="px-2 gap-y-2"
+						style={{
+							backgroundColor: "white",
+							elevation: 3, // for Android
+							shadowColor: "#000", // for iOS
+							shadowOpacity: 0.1,
+							shadowRadius: 4,
+						}}
+					>
+						{locationResults.slice(0, 3).map((el, i) => (
+							<TouchableOpacity
+								key={String(i)}
+								className="w-full p-1"
+								onPress={async () => {
+									console.log("pressed");
+									const details = await searchDetails(el.place_id);
+									form.setValue("location", details.formatted_address);
+									form.setValue("latitude", details?.geometry.location.lat);
+									form.setValue("longitude", details?.geometry.location.lng);
+									setTerm(details.formatted_address);
+								}}
+							>
+								<Text>{el.description}</Text>
+							</TouchableOpacity>
+						))}
+					</View>
+
+					{form.formState?.errors?.location ? (
+						<FormError
+							value={form.formState.errors?.location?.message as string}
+						/>
+					) : null}
 				</View>
 			</View>
 
@@ -256,32 +327,29 @@ function EmailSignup({
 				onError: (err) => {
 					handleError(err);
 				},
-			}
+			},
 		);
 	}
+
 	return (
 		<View className="flex-1">
 			<FormProvider {...form}>
 				<TouchableWithoutFeedback className="flex-1" onPress={Keyboard.dismiss}>
-					<FlatList
-						data={[]}
-						ListHeaderComponent={() => <EmailForm />}
-						// ListFooterComponent={LocationComponent}
-						renderItem={() => null}
+					<ScrollView
+						keyboardShouldPersistTaps="handled"
 						showsVerticalScrollIndicator={false}
-						style={{
-							flex: 1,
-						}}
-						keyboardShouldPersistTaps="always"
-						contentContainerStyle={{
-							justifyContent: "space-between",
-						}}
-					/>
+						contentContainerStyle={{ flexGrow: 1 }}
+					>
+						<EmailForm />
+					</ScrollView>
 				</TouchableWithoutFeedback>
 				<View className="pt-5 mt-auto">
 					<Pressable
 						onPress={form.handleSubmit(submit)}
-						className="bg-primary rounded px-1 py-[10px] justify-center items-center"
+						// disabled={!form.formState.isValid}
+						className={cn(
+							"bg-primary rounded px-1 py-[10px] justify-center items-center disabled:opacity-20",
+						)}
 					>
 						<Text className="text-white">Continue</Text>
 					</Pressable>

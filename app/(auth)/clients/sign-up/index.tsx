@@ -1,5 +1,4 @@
 import PhoneSignup from "@/components/shared/PhoneSignup";
-import SocialSignIn from "@/components/client/SocialSignIn";
 import { Link, router } from "expo-router";
 import React from "react";
 import {
@@ -42,6 +41,7 @@ const SignUp = () => {
 						<View className="mb-6">
 							<PhoneSignup userType="client" />
 						</View>
+
 						{/* <View className="items-center mb-3">
 							<Text className="text-center text-sm text-[#99a2b3]">or</Text>
 						</View>
@@ -61,7 +61,9 @@ const SignUp = () => {
 							<Text className=" text-xs large:text-sm text-center text-support">
 								Not a client?{" "}
 							</Text>
-							<Pressable onPress={() => router.push("/service-provider/sign-up")}>
+							<Pressable
+								onPress={() => router.push("/service-provider/sign-up")}
+							>
 								<Text className="underline text-xs large:text-sm">
 									Register as a provider
 								</Text>

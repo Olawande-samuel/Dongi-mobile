@@ -1,54 +1,50 @@
 import { useAuth } from "@/context/Auth";
-import { useTempStore } from "@/store/temp-user-store";
+import { useOnboardingStore } from "@/store/onboarding-store";
 import { UserType } from "@/types";
-import { router } from "expo-router";
+import { Redirect, router } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
-import { Image, Pressable, Text, View } from "react-native";
+import { ActivityIndicator, Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
-	const { user, userType, isLoading, setUserType } = useAuth(); //logged in user
-	// const { userType: user_type } = useUserType();
-
-	const { setUserType: setTempUserType } = useTempStore(); //user type for onboarding
-
-	async function storeUserType(val: UserType) {
-		try {
-			if (val === "client") {
-				router.push("/(auth)/clients/sign-up");
-			} else {
-				router.push("/(auth)/service-provider/sign-up");
-			}
-			// router.push("/(auth)/clients/sign-up");
-		} catch (error) {}
-	}
+	const { isAuthenticated, userType, isLoading } = useAuth();
+	const { setSelectedUserType } = useOnboardingStore();
 
 	useEffect(() => {
-		// if (!user) {
-		// 	router.push("/(auth)/service-provider/sign-in/email");
-		// }
-	}, [user]);
+		SplashScreen.hideAsync();
+	}, []);
 
-	// if (isLoading) {
-	// 	return <Welcome />;
-	// }
+	// Show loading while checking auth state
+	if (isLoading) {
+		return (
+			<View className="flex-1 justify-center items-center bg-white">
+				<ActivityIndicator size="large" color="#18658B" />
+			</View>
+		);
+	}
 
-	// if (!user) {
-	// 	if (userType === "client") {
-	// 		return <Redirect href="/(auth)/clients/sign-in/email" />;
-	// 	}
-	// 	if (userType === "service") {
-	// 	return <Redirect href="/(auth)/service-provider/sign-in/email" />;
-	// 	}
-	// }
+	// Redirect authenticated users to their dashboard
+	if (isAuthenticated && userType) {
+		return (
+			<Redirect
+				href={
+					userType === "client"
+						? "/(authenticated)/client/(tabs)"
+						: "/(authenticated)/service-provider/(tabs)"
+				}
+			/>
+		);
+	}
 
-	// if (user && userType === "service") {
-	// 	return <Redirect href="/service-provider/(tabs)" />;
-	// }
-
-	// if (user && userType === "client") {
-	// 	return <Redirect href="/client/(tabs)" />;
-	// }
+	function handleUserTypeSelection(type: UserType) {
+		setSelectedUserType(type);
+		if (type === "client") {
+			router.push("/(auth)/clients/sign-up");
+		} else {
+			router.push("/(auth)/service-provider/sign-up");
+		}
+	}
 
 	return (
 		<SafeAreaView className="flex-1 px-6 bg-white" edges={["top"]}>
@@ -75,7 +71,7 @@ export default function Index() {
 				<View className="w-full mb-[38px]">
 					<Pressable
 						className="mb-2 bg-primary py-[10px] rounded w-full"
-						onPress={() => storeUserType("client")}
+						onPress={() => handleUserTypeSelection("client")}
 					>
 						<Text className="text-base text-center text-white">
 							I need a service
@@ -83,7 +79,7 @@ export default function Index() {
 					</Pressable>
 					<Pressable
 						className="bg-[#1FB4FF1A] py-[10px] rounded w-full"
-						onPress={() => storeUserType("service")}
+						onPress={() => handleUserTypeSelection("service")}
 					>
 						<Text className="text-base text-primary text-center">
 							I am a service provider

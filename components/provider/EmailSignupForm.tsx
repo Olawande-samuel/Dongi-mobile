@@ -221,7 +221,7 @@ function EmailForm() {
 					<Text className="text-sm text-off-black">Location</Text>
 					<View className="min-h-[200px]">
 						<GooglePlacesAutocomplete
-							placeholder="Search"
+							placeholder="Enter your location"
 							onFail={(error) => {
 								toast.error("An error occurred fetching your location");
 							}}

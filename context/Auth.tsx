@@ -1,8 +1,8 @@
+import { UserType } from "@/types";
 import AsyncStorage, {
 	useAsyncStorage,
 } from "@react-native-async-storage/async-storage";
 import { useQueryClient } from "@tanstack/react-query";
-import { usePathname } from "expo-router";
 import {
 	createContext,
 	PropsWithChildren,
@@ -13,14 +13,12 @@ import {
 
 interface AuthContextType {
 	user: { token: string } | null;
-	userType: USERTYPE;
+	userType: UserType | null;
 	isLoading: boolean;
 	setUser: React.Dispatch<React.SetStateAction<{ token: string } | null>>;
-	setUserType: (value: string, callback?: any) => Promise<void>;
 	logout: VoidFunction;
-	handleLoginToken: (token: string) => void;
+	handleLogin: (token: string, type: UserType) => Promise<void>;
 	isAuthenticated: boolean;
-	userRoute: "service" | "client" | null;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -28,78 +26,68 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export const AuthProvider = ({ children }: PropsWithChildren) => {
 	const [user, setUser] = useState<{ token: string } | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
-	const [loginUserType, setLoginUserType] = useState<USERTYPE | null>(null);
-	const pathname = usePathname();
+	const [userType, setUserType] = useState<UserType | null>(null);
 
-	const { getItem, setItem: setUserType } = useAsyncStorage("userType");
+	const { getItem: getUserType, setItem: storeUserType } =
+		useAsyncStorage("userType");
 
 	useEffect(() => {
-		async function getUserType() {
-			const userType = await getItem();
-			if (userType) {
-				setLoginUserType(userType as USERTYPE);
+		async function loadUserType() {
+			const storedType = await getUserType();
+			if (storedType) {
+				setUserType(storedType as UserType);
 			}
 		}
-
-		getUserType();
-	}, [getItem]);
-
-	const userRoute = pathname.includes("/client")
-		? "client"
-		: pathname.includes("/service-provider")
-		? "service"
-		: null;
+		loadUserType();
+	}, [getUserType]);
 
 	const queryClient = useQueryClient();
 
 	const checkAuthState = async () => {
 		try {
-			const user = await AsyncStorage.getItem("user");
-			if (user) {
-				const result = JSON.parse(user);
+			const storedUser = await AsyncStorage.getItem("user");
+			if (storedUser) {
+				const result = JSON.parse(storedUser);
 				setUser({ token: result.token });
 			} else {
 				setUser(null);
 			}
 		} catch (error) {
 			console.error("Error checking auth state:", error);
+			setUser(null);
 		} finally {
-			// Add a small delay to ensure the app is ready before setting loading to false
-			setTimeout(() => {
-				setIsLoading(false);
-			}, 50);
+			setIsLoading(false);
 		}
 	};
 
 	useEffect(() => {
-		// AsyncStorage.removeItem("userType");
-		// Check if user is already logged in when app starts
 		checkAuthState();
 	}, []);
 
-	async function handleLoginToken(token: string) {
-		setUser({ token: token });
-		checkAuthState();
+	async function handleLogin(token: string, type: UserType) {
+		await AsyncStorage.setItem("user", JSON.stringify({ token }));
+		await storeUserType(type);
+		setUser({ token });
+		setUserType(type);
 	}
 
 	async function logout() {
 		queryClient.clear();
 		await AsyncStorage.removeItem("user");
 		await AsyncStorage.removeItem("userType");
-		checkAuthState();
+		setUser(null);
+		setUserType(null);
 	}
 
 	return (
 		<AuthContext.Provider
 			value={{
 				user,
-				userRoute,
-				userType: loginUserType || null,
+				userType,
 				isLoading,
 				setUser,
-				setUserType,
 				logout,
-				handleLoginToken,
+				handleLogin,
 				isAuthenticated: !!user,
 			}}
 		>

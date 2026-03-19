@@ -37,7 +37,7 @@ const LocationForm = React.memo(function LocationForm() {
 				<Text className="text-sm text-off-black">Location</Text>
 				<View>
 					<GooglePlacesAutocomplete
-						placeholder="Search"
+						placeholder="Enter your location"
 						onFail={(error) => {
 							toast.error("An error occurred fetching your location");
 						}}

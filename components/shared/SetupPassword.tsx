@@ -1,21 +1,16 @@
-import { useTempStore } from "@/store/temp-user-store";
+import useTempUser from "@/hooks/useTempUser";
+import { useGlobalContext } from "@/providers/GlobalStateProvider";
+import { handleError } from "@/utils";
 import { Api } from "@/utils/endpoints";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
+import { usePathname, useRouter } from "expo-router";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Pressable, Text, TextInput, View } from "react-native";
-
-import useTempUser from "@/hooks/useTempUser";
-import { useGlobalContext } from "@/providers/GlobalStateProvider";
-import { z } from "zod";
+import { Pressable, Text, View } from "react-native";
 import { toast } from "sonner-native";
-import { handleError } from "@/utils";
-import { useAsyncStorage } from "@react-native-async-storage/async-storage";
-import { useAuth } from "@/context/Auth";
+import { z } from "zod";
 import PasswordInput from "../PasswordInput";
-import { usePathname } from "expo-router";
-import { useRouter } from "expo-router";
 
 const FormSchema = z
 	.object({
@@ -43,14 +38,9 @@ const SetupPassword = ({
 }: {
 	nextStep: React.Dispatch<React.SetStateAction<number>>;
 }) => {
-	const { setItem } = useAsyncStorage("user");
-	const { setItem: setUserType } = useAsyncStorage("userType");
-	const globalContext = useGlobalContext();
-	const { handleLoginToken } = useAuth();
 	const router = useRouter();
-
+	const globalContext = useGlobalContext();
 	const { data } = useTempUser();
-
 	const pathname = usePathname();
 	const userType = pathname.includes("/clients") ? "client" : "service";
 
@@ -74,25 +64,13 @@ const SetupPassword = ({
 		mutate(
 			{ type: userType, payload: { ...val, user_id: data.userId } },
 			{
-				onSuccess: (res) => {
+				onSuccess: () => {
 					toast.success("Password Set Successfully");
-					// INSERT_YOUR_CODE
 					if (userType === "client") {
 						nextStep((prev) => prev + 1);
-						// For clients, just go to next step
 					} else {
-						// For service providers, store user info before going to next step
-						if (res?.data?.data) {
-							// const value = {
-							// 	token: res.data.data.token,
-							// 	user: res.data.data.user,
-							// };
-							// setItem(JSON.stringify(value));
-							// setUserType("service");
-							// handleLoginToken(res.data.data.token);
-							// nextStep((prev) => prev + 1);
-							router.replace("/service-provider/sign-in");
-						}
+						// Service providers go to sign-in after setting up password
+						router.replace("/(auth)/service-provider/sign-in");
 					}
 				},
 				onError: (err) => {

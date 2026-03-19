@@ -1,23 +1,21 @@
 import StyledButton from "@/components/StyledButton";
 import useTempUser from "@/hooks/useTempUser";
 import { useGlobalContext } from "@/providers/GlobalStateProvider";
-import { useTempStore } from "@/store/temp-user-store";
 import { handleError } from "@/utils";
 import { Api } from "@/utils/endpoints";
 import { Ionicons } from "@expo/vector-icons";
 import { useMutation } from "@tanstack/react-query";
-import { router } from "expo-router";
+import { router, usePathname } from "expo-router";
 import React, { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { OtpInput } from "react-native-otp-entry";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { toast } from "sonner-native";
 import ResendVerificationOtp from "../shared/ResendVerificationOTP";
-import { usePathname } from "expo-router";
 
 const PhoneOTPVerification = () => {
-	const { userType } = useTempStore();
 	const pathname = usePathname();
+	const userType = pathname.includes("/clients") ? "client" : "service";
 	const [otp, setOtp] = useState("");
 	const { data } = useTempUser();
 	const globalContext = useGlobalContext();
@@ -46,8 +44,9 @@ const PhoneOTPVerification = () => {
 					},
 					onError: (err) => {
 						handleError(err);
+						setOtp("");
 					},
-				}
+				},
 			);
 		} else {
 			mutate(
@@ -62,8 +61,9 @@ const PhoneOTPVerification = () => {
 					},
 					onError: (err) => {
 						handleError(err);
+						setOtp("");
 					},
-				}
+				},
 			);
 		}
 	}

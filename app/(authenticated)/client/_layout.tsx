@@ -1,17 +1,16 @@
-import { View, Text, Pressable } from "react-native";
-import React from "react";
-import { Stack } from "expo-router";
-import BackButton from "@/components/BackButton";
-import { Octicons } from "@expo/vector-icons";
-import Header from "@/components/Header";
+import { useAuth } from "@/context/Auth";
+import { Redirect, Stack } from "expo-router";
 
-const Layout = () => {
+export default function ClientLayout() {
+	const { userType } = useAuth();
+
+	// Redirect service users to their dashboard
+	if (userType === "service") {
+		return <Redirect href="/(authenticated)/service-provider/(tabs)" />;
+	}
+
 	return (
-		<Stack
-			screenOptions={{
-				headerShown: false,
-			}}
-		>
+		<Stack screenOptions={{ headerShown: false }}>
 			<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 			<Stack.Screen name="booking" options={{ headerShown: false }} />
 			<Stack.Screen
@@ -23,6 +22,4 @@ const Layout = () => {
 			/>
 		</Stack>
 	);
-};
-
-export default Layout;
+}

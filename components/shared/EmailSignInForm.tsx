@@ -1,19 +1,17 @@
 import { useAuth } from "@/context/Auth";
 import { useGlobalContext } from "@/providers/GlobalStateProvider";
+import { UserType } from "@/types";
 import { handleError } from "@/utils";
 import { Api } from "@/utils/endpoints";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import { useMutation } from "@tanstack/react-query";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Text, TextInput, TouchableWithoutFeedback, View } from "react-native";
+import { Keyboard, Text, TextInput, TouchableWithoutFeedback, View } from "react-native";
 import { z } from "zod";
 import PasswordInput from "../PasswordInput";
 import StyledButton from "../StyledButton";
-import { useRouter } from "expo-router";
-import { Keyboard } from "react-native";
 
 const FormSchema = z.object({
 	email: z.string().trim().email(),
@@ -22,12 +20,9 @@ const FormSchema = z.object({
 
 type FormType = z.infer<typeof FormSchema>;
 
-const EmailSignInForm = ({ userType }: { userType: USERTYPE }) => {
-	const { setItem } = useAsyncStorage("user");
-	const { setItem: setUserType } = useAsyncStorage("userType");
+const EmailSignInForm = ({ userType }: { userType: UserType }) => {
 	const router = useRouter();
-
-	const { handleLoginToken } = useAuth();
+	const { handleLogin } = useAuth();
 
 	const { setIsLoading } = useGlobalContext();
 
@@ -45,30 +40,20 @@ const EmailSignInForm = ({ userType }: { userType: USERTYPE }) => {
 		onSettled: () => setIsLoading(false),
 	});
 
-	function submit(val: FormType) {
+	async function submit(val: FormType) {
 		mutate(
 			{
 				type: userType,
 				payload: val,
 			},
 			{
-				onSuccess: (res) => {
-					const value = {
-						token: res.data.data.token,
-						user: res.data.data.user,
-					};
-					// store in async storage
-					setItem(JSON.stringify(value));
-					handleLoginToken(res.data.data.token);
+				onSuccess: async (res) => {
+					await handleLogin(res.data.data.token, userType);
 
 					if (userType === "client") {
-						setUserType("client");
-						router.push("/(authenticated)/client/(tabs)");
-						// setAuthUserType("client");
+						router.replace("/(authenticated)/client/(tabs)");
 					} else {
-						setUserType("service");
-						router.push("/(authenticated)/service-provider/(tabs)");
-						// setAuthUserType("service");
+						router.replace("/(authenticated)/service-provider/(tabs)");
 					}
 				},
 				onError: (err) => {
@@ -78,23 +63,6 @@ const EmailSignInForm = ({ userType }: { userType: USERTYPE }) => {
 		);
 	}
 
-	// useEffect(() => {
-	// 	async function storeUserType(val) {
-	// 		try {
-	// 			// await AsyncStorage.setItem("userType", val);
-	// 			setUserType(val);
-	// 			if (val === "client") {
-	// 				router.push("/(auth)/clients/sign-up");
-	// 			} else {
-	// 				router.push("/(auth)/service-provider/sign-up");
-	// 			}
-	// 			// router.push("/(auth)/clients/sign-up");
-	// 		} catch (error) {
-	//
-	// 		}
-	// 	}
-	// 	storeUserType("service");
-	// }, []);
 	return (
 		<TouchableWithoutFeedback className="flex-1" onPress={Keyboard.dismiss}>
 			<View className="">

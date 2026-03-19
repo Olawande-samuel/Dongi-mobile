@@ -1,6 +1,5 @@
 import useTempUser from "@/hooks/useTempUser";
 import { useGlobalContext } from "@/providers/GlobalStateProvider";
-import { useTempStore } from "@/store/temp-user-store";
 import { handleError } from "@/utils";
 import { Api } from "@/utils/endpoints";
 import { useMutation } from "@tanstack/react-query";

@@ -1,8 +1,8 @@
 import useTempUser from "@/hooks/useTempUser";
 import { useGlobalContext } from "@/providers/GlobalStateProvider";
-import { useTempStore } from "@/store/temp-user-store";
 import { Api } from "@/utils/endpoints";
 import { useMutation } from "@tanstack/react-query";
+import { usePathname } from "expo-router";
 import { useEffect, useState } from "react";
 import { View, Text, Pressable } from "react-native";
 
@@ -17,7 +17,8 @@ const ResendVerificationOtp = ({
 	const [isRunning, setIsRunning] = useState(true);
 	const globalContext = useGlobalContext();
 	const { data } = useTempUser();
-	const { userType } = useTempStore();
+	const pathname = usePathname();
+	const userType = pathname.includes("/clients") ? "client" : "service";
 
 	const { setIsLoading } = globalContext;
 

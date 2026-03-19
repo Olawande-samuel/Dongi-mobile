@@ -24,7 +24,7 @@ const SignUpHeader = ({
 
 	return (
 		<View className="flex-1">
-			<View className="flex-row justify-between py-[10px] mb-[23.5px]">
+			<View className="flex-row  justify-between py-[10px] mb-[23.5px]">
 				<Pressable
 					onPress={() => {
 						if (steps > 1) {
@@ -39,19 +39,19 @@ const SignUpHeader = ({
 				<Text className="text-base text-off-black">{title}</Text>
 				<View></View>
 			</View>
-			<View className="flex-row space-x-3 items-center mb-5">
+			<View className="flex-row space-x-3 gap-x-3 items-center mb-5">
 				{Array.from({ length: totalSteps }).map((_, i) => (
 					<View
 						key={i}
 						className={cn(
-							"h-1 min-w-[50px] rounded-[999px]",
+							"h-1 min-w-[50px] flex-1 rounded-[999px]",
 							steps >= i + 1
 								? userType === "client"
 									? `bg-client-primary`
 									: "bg-service-primary"
 								: userType === "client"
-								? "bg-client-primary-light"
-								: "bg-service-primary-light"
+									? "bg-client-primary-light"
+									: "bg-service-primary-light",
 						)}
 					></View>
 				))}

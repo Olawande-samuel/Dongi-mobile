@@ -1,6 +1,5 @@
 import useAsyncStorage from "@/hooks/useAsyncStorage";
 import { useGlobalContext } from "@/providers/GlobalStateProvider";
-import { useTempStore } from "@/store/temp-user-store";
 import { handleError } from "@/utils";
 import { Api } from "@/utils/endpoints";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -143,6 +142,9 @@ const PhoneSignup = ({ userType }: { userType: "service" | "client" }) => {
 			<View>
 				<StyledButton
 					onPress={form.handleSubmit(handleSubmit)}
+					// onPress={() => {
+					// 	router.push("/clients/sign-up/email");
+					// }}
 					title="Continue"
 				/>
 			</View>
