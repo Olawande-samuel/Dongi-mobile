@@ -1,7 +1,6 @@
-import FacialVerification from "@/components/client/FacialVerification";
 import PhoneSignup from "@/components/shared/PhoneSignup";
 import { Link, router } from "expo-router";
-import React, { useState } from "react";
+import React from "react";
 import {
 	Image,
 	KeyboardAvoidingView,
@@ -15,7 +14,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const SignUp = () => {
 	return (
-		<SafeAreaView edges={["top"]} className="bg-white flex-1 px-4 pb-4">
+		<SafeAreaView
+			edges={["top", "bottom"]}
+			className="bg-white flex-1 px-4 pb-4"
+		>
 			<KeyboardAvoidingView
 				enabled
 				behavior={Platform.OS === "ios" ? "padding" : undefined}

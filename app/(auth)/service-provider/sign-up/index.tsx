@@ -1,18 +1,18 @@
+import BusinessInformation from "@/components/provider/BusinessInformation";
+import PhoneSignup from "@/components/shared/PhoneSignup";
+import SignUpHeader from "@/components/shared/SignUpHeader";
+import { Link, router } from "expo-router";
+import React, { useState } from "react";
 import {
-	View,
-	Text,
 	Image,
-	ScrollView,
 	KeyboardAvoidingView,
 	Platform,
 	Pressable,
+	ScrollView,
+	Text,
+	View,
 } from "react-native";
-import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import PhoneSignup from "@/components/shared/PhoneSignup";
-import { Link, router } from "expo-router";
-import SocialSignIn from "@/components/client/SocialSignIn";
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
 const SignUp = () => {
 	return (
@@ -22,7 +22,7 @@ const SignUp = () => {
 		>
 			<KeyboardAvoidingView
 				enabled
-				behavior={Platform.OS === "ios" ? "padding" : undefined}
+				behavior={Platform.OS === "ios" ? "padding" : "height"}
 				style={{
 					flex: 1,
 				}}
@@ -73,26 +73,26 @@ const SignUp = () => {
 						</View>
 					</View>
 				</ScrollView>
-			</KeyboardAvoidingView>
-			<View>
-				<View className="">
-					<Text className="text-xs large:text-sm text-center text-support">
-						By creating a new account, you agree to Dongi's{" "}
-						<Link href="/">
-							<Text className="underline text-xs large:text-sm">
-								Terms & Conditions{" "}
-							</Text>
-						</Link>
-						and
-						<Link href="/">
-							<Text className="underline text-xs large:text-sm">
-								{" "}
-								Privacy Policy
-							</Text>
-						</Link>
-					</Text>
+				<View>
+					<View className="">
+						<Text className="text-xs large:text-sm text-center text-support">
+							By creating a new account, you agree to Dongi's{" "}
+							<Link href="/">
+								<Text className="underline text-xs large:text-sm">
+									Terms & Conditions{" "}
+								</Text>
+							</Link>
+							and
+							<Link href="/">
+								<Text className="underline text-xs large:text-sm">
+									{" "}
+									Privacy Policy
+								</Text>
+							</Link>
+						</Text>
+					</View>
 				</View>
-			</View>
+			</KeyboardAvoidingView>
 		</SafeAreaView>
 	);
 };

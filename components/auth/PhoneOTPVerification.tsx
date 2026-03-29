@@ -7,7 +7,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { useMutation } from "@tanstack/react-query";
 import { router, usePathname } from "expo-router";
 import React, { useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import {
+	KeyboardAvoidingView,
+	Platform,
+	Pressable,
+	ScrollView,
+	Text,
+	View,
+} from "react-native";
 import { OtpInput } from "react-native-otp-entry";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { toast } from "sonner-native";
@@ -79,49 +86,55 @@ const PhoneOTPVerification = () => {
 				<Text className="text-base text-off-black">Verify Phone Number </Text>
 				<View></View>
 			</View>
-			<KeyboardAwareScrollView className="flex-1" bottomOffset={62}>
-				<View
-					className="flex-1 pb-4 "
-					style={{ flex: 1, minHeight: SIZES.height - 70 }}
+			<View className="flex-1 pb-2">
+				<KeyboardAvoidingView
+					enabled
+					behavior={Platform.OS === "ios" ? "padding" : "height"}
+					keyboardVerticalOffset={100}
+					style={{
+						flex: 1,
+					}}
 				>
-					<View className="flex-1 justify-between">
-						<View className="flex-1">
-							<View className="mb-[6px]">
-								<Text className="text-sm text-off-black">
-									A code was sent to{" "}
-									<Text className="font-bold">{data?.phone ?? ""}</Text>
-								</Text>
-							</View>
-							<View>
-								<OtpInput
-									numberOfDigits={4}
-									onTextChange={(text) => setOtp(text)}
-									type="numeric"
-									textInputProps={{
-										accessibilityLabel: "One-Time Password",
-										className: "text-sm",
-									}}
-									theme={{
-										pinCodeContainerStyle: {
-											width: 62.25,
-											borderRadius: 4,
-											borderWidth: 1,
-											borderColor: "#F2F2F2",
-										},
-									}}
+					<ScrollView className="flex-1 " style={{ flex: 1 }}>
+						<View className="flex-1 justify-between">
+							<View className="flex-1">
+								<View className="mb-[6px]">
+									<Text className="text-sm text-off-black">
+										A code was sent to{" "}
+										<Text className="font-bold">{data?.phone ?? ""}</Text>
+									</Text>
+								</View>
+								<View>
+									<OtpInput
+										numberOfDigits={4}
+										onTextChange={(text) => setOtp(text)}
+										type="numeric"
+										textInputProps={{
+											accessibilityLabel: "One-Time Password",
+											className: "text-sm",
+										}}
+										theme={{
+											pinCodeContainerStyle: {
+												width: 62.25,
+												borderRadius: 4,
+												borderWidth: 1,
+												borderColor: "#F2F2F2",
+											},
+										}}
+									/>
+								</View>
+								<ResendVerificationOtp
+									reference={data?.phone}
+									type="PHONE_VERIFICATION"
 								/>
 							</View>
-							<ResendVerificationOtp
-								reference={data?.phone}
-								type="PHONE_VERIFICATION"
-							/>
 						</View>
-						<View className="mt-auto">
-							<StyledButton title="Submit" onPress={verifyOtp} />
-						</View>
+					</ScrollView>
+					<View className="mt-auto">
+						<StyledButton title="Submit" onPress={verifyOtp} />
 					</View>
-				</View>
-			</KeyboardAwareScrollView>
+				</KeyboardAvoidingView>
+			</View>
 		</SafeAreaView>
 	);
 };

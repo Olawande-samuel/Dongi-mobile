@@ -14,7 +14,10 @@ import {
 	useFormContext,
 } from "react-hook-form";
 import {
+	FlatList,
 	Keyboard,
+	KeyboardAvoidingView,
+	Platform,
 	Pressable,
 	ScrollView,
 	Text,
@@ -63,22 +66,11 @@ type FormType = z.infer<typeof FormSchema>;
 const EmailForm = () => {
 	const form = useFormContext();
 
-	console.log(process.env.EXPO_PUBLIC_GOOGLE_API, {
-		err: form.formState.errors,
-		val: form.getValues(),
-	});
-
 	const { locationResults, setTerm, clearSearch, searchDetails, term } =
 		useGoogleAutocomplete(process.env.EXPO_PUBLIC_GOOGLE_API!, {
 			language: "en",
 			debounce: 300,
 		});
-
-	console.log({
-		formStateValidity: form.formState.errors,
-		valid: form.formState.isValid,
-		form: form.getValues(),
-	});
 
 	return (
 		<View className="flex-1">
@@ -161,7 +153,7 @@ const EmailForm = () => {
 					render={({ field }) => (
 						<View className="gap-y-[6px]">
 							<Text className="text-sm text-off-black">Gender</Text>
-							<View>
+							<View style={{ minHeight: 20 }}>
 								<SelectDropdown
 									data={[
 										{ title: "Male", value: "MALE" },
@@ -190,7 +182,6 @@ const EmailForm = () => {
 												<Text
 													className="text-sm text-off-black"
 													style={{
-														fontSize: 16,
 														color: "#99a2b3",
 														// fontWeight: 400,
 													}}
@@ -332,28 +323,34 @@ function EmailSignup({
 	}
 
 	return (
-		<View className="flex-1">
+		<View className="flex-1 pb-5">
 			<FormProvider {...form}>
-				<TouchableWithoutFeedback className="flex-1" onPress={Keyboard.dismiss}>
-					<ScrollView
-						keyboardShouldPersistTaps="handled"
-						showsVerticalScrollIndicator={false}
-						contentContainerStyle={{ flexGrow: 1 }}
-					>
-						<EmailForm />
-					</ScrollView>
-				</TouchableWithoutFeedback>
-				<View className="pt-5 mt-auto">
-					<Pressable
-						onPress={form.handleSubmit(submit)}
-						// disabled={!form.formState.isValid}
-						className={cn(
-							"bg-primary rounded px-1 py-[10px] justify-center items-center disabled:opacity-20",
-						)}
-					>
-						<Text className="text-white">Continue</Text>
-					</Pressable>
-				</View>
+				<KeyboardAvoidingView
+					behavior={Platform.OS === "ios" ? "padding" : "height"}
+					keyboardVerticalOffset={120}
+					style={{ flex: 1 }}
+				>
+					<TouchableWithoutFeedback className="" onPress={Keyboard.dismiss}>
+						<FlatList
+							data={[]}
+							ListHeaderComponent={() => <EmailForm />}
+							renderItem={() => null}
+							showsVerticalScrollIndicator={false}
+							keyboardShouldPersistTaps="always"
+						/>
+					</TouchableWithoutFeedback>
+					<View className="mt-auto">
+						<Pressable
+							onPress={form.handleSubmit(submit)}
+							disabled={!form.formState.isValid}
+							className={cn(
+								"bg-primary rounded px-1 py-[10px] justify-center items-center disabled:opacity-20",
+							)}
+						>
+							<Text className="text-white">Continue</Text>
+						</Pressable>
+					</View>
+				</KeyboardAvoidingView>
 			</FormProvider>
 		</View>
 	);

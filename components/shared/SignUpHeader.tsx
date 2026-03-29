@@ -38,7 +38,7 @@ const SignUpHeader = ({
 				<Text className="text-base text-off-black">{title}</Text>
 				<View></View>
 			</View>
-			<View className="flex-row gap-x-3 gap-x-3 justify-between items-center mb-5">
+			<View className="flex-row gap-x-3 justify-between items-center mb-5">
 				{Array.from({ length: totalSteps }).map((_, i) => (
 					<View
 						key={i}
@@ -59,7 +59,7 @@ const SignUpHeader = ({
 					<Text className="ml-1 text-muted">{`${steps}/${totalSteps}`}</Text>
 				</View>
 			</View>
-			{children}
+			<View className="flex-1">{children}</View>
 		</View>
 	);
 };

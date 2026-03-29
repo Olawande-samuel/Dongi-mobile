@@ -1,4 +1,5 @@
 import AppModal from "@/components/AppModal";
+import NoImageModal from "@/components/NoImageModal";
 import StatusPill from "@/components/StatusPill";
 import useDistance from "@/hooks/useDistance";
 import useServiceProviderUserInfo from "@/hooks/useServiceProviderUserInfo";
@@ -53,6 +54,7 @@ const NewRequest = () => {
 	const { mutate, isPending } = useMutation({
 		mutationFn: Api.acceptServiceRequest,
 		onError: (err) => {
+			setAcceptanceModalVisible(false);
 			handleError(err);
 		},
 		onSuccess: (res) => {
@@ -61,6 +63,9 @@ const NewRequest = () => {
 			});
 			queryClient.invalidateQueries({
 				queryKey: ["get request by id", params.requestId as string],
+			});
+			queryClient.invalidateQueries({
+				queryKey: ["get provider ongoing requests"],
 			});
 			setModalVisible(true);
 		},
@@ -78,7 +83,10 @@ const NewRequest = () => {
 			queryClient.invalidateQueries({
 				queryKey: ["get request by id", params.requestId as string],
 			});
-			// setModalVisible(true);
+			queryClient.invalidateQueries({
+				queryKey: ["get provider pending requests"],
+			});
+			setRejectionModalVisible(false);
 		},
 	});
 
@@ -101,7 +109,7 @@ const NewRequest = () => {
 							<View className="flex-row items-center max-w-[60%]">
 								<Image
 									className="h-9 w-9 large:h-[42px] large:w-[42px] rounded-full"
-									source={require("../../../../../assets/images/client/temp_user_sq.png")}
+									source={{ uri: result?.customer.image }}
 									resizeMode="cover"
 								/>
 								<View className="ml-2 gap-y-1">
@@ -260,6 +268,7 @@ const NewRequest = () => {
 							setModalVisible(false);
 						}}
 					/>
+
 					{/* confirm acceptance modal*/}
 					<AppModal
 						modalVisible={acceptanceModalVisible}
@@ -271,7 +280,9 @@ const NewRequest = () => {
 						}`}’s request? You'll be charge an acceptance fee`}
 						onPress={() => mutate(params.requestId as string)}
 						loading={isPending}
+						type="warning"
 					/>
+
 					{/* confirm rejection modal*/}
 					<AppModal
 						modalVisible={rejectionModalVisible}
@@ -282,6 +293,7 @@ const NewRequest = () => {
 						onPress={() => rejectMutation(params.requestId as string)}
 						loading={isRejectPending}
 						type="warning"
+						isError
 					/>
 				</ScrollView>
 			)}

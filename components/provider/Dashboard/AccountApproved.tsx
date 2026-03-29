@@ -23,9 +23,8 @@ function AccountApproved({
 
 	const handleClosePress = useCallback(() => {
 		// save to async storage
-		
-		dismissAll();
 
+		dismissAll();
 	}, [dismissAll]);
 
 	return (
@@ -117,7 +116,7 @@ function AccountApproved({
 
 							<View className="flex-row justify-center gap-x-1 bg-[#F7EFDE] p-2 rounded items-center">
 								<Copy />
-								<Text className="text-xs large:text-sm font-normal text-start text-off-black font-regular">
+								<Text className="text-xs large:text-sm font-normal flex-1 text-start text-off-black font-regular">
 									You have to fund your account to be charged for requests from
 									customers
 								</Text>
@@ -128,7 +127,10 @@ function AccountApproved({
 				<View className="mt-auto px-6 mb-2">
 					<StyledButton
 						title="Get Started"
-						onPress={() => router.push("/service-provider/profile/finance")}
+						onPress={() => {
+							dismissAll();
+							router.push("/service-provider/profile/finance");
+						}}
 					/>
 				</View>
 			</BottomSheetScrollView>

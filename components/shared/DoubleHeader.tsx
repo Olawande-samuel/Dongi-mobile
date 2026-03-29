@@ -9,7 +9,7 @@ interface props {
 }
 const DoubleHeader = ({ title, subtitle }: props) => {
 	return (
-		<View>
+		<View className=" w-fit">
 			<Text className="text-center text-xs large:text-base text-off-black font-regular">
 				{title}
 			</Text>

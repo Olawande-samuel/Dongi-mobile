@@ -20,6 +20,8 @@ const PendingRequestCard = ({
 }: Props) => {
 	const { data } = useServiceProviderUserInfo();
 
+	console.log({ customer });
+
 	const { distance } = useDistance({
 		origin: data?.user?.location as string,
 		destination: customer.location,
@@ -53,7 +55,7 @@ const PendingRequestCard = ({
 								numberOfLines={1}
 								ellipsizeMode="tail"
 							>
-								{`${customer?.first_name || ""} ${customer?.last_name}`}
+								{customer.name || ""}
 							</Text>
 							<Text
 								className="text-[10px] large:text-xs font-regular text-support"

@@ -14,9 +14,8 @@ interface Props {
 	buttonText?: string;
 	loading?: boolean;
 	type?: "warning" | "success";
-	isError?: boolean;
 }
-const AppModal = ({
+const NoImageModal = ({
 	modalVisible,
 	setModalVisible,
 	buttonText,
@@ -25,26 +24,21 @@ const AppModal = ({
 	loading,
 	subtitle,
 	type = "success",
-	isError,
 }: Props) => {
 	return (
 		<ModalComp modalVisible={modalVisible} setModalVisible={setModalVisible}>
-			<View className="gap-y-3 w-full" style={{ padding: 16 }}>
-				<View className="justify-center items-center">
-					{type === "success" ? (
-						<Success isServiceProvider />
-					) : (
-						<Warning isError={isError} />
+			<View className="w-full gap-y-8" style={{ padding: 16 }}>
+				<View className="gap-y-3 ">
+					<Text className="text-center text-2xl">Alert</Text>
+					<Text className="text-sm large:text-base font-regular text-off-black text-center">
+						{title}
+					</Text>
+					{subtitle && (
+						<Text className="text-sm large:text-base font-regular text-off-black text-center">
+							{subtitle}
+						</Text>
 					)}
 				</View>
-				<Text className="text-sm large:text-base font-regular text-off-black text-center">
-					{title}
-				</Text>
-				{subtitle && (
-					<Text className="text-sm large:text-base font-regular text-off-black text-center">
-						{subtitle}
-					</Text>
-				)}
 				<View className="mt-auto mb-2">
 					<StyledButton
 						onPress={onPress}
@@ -58,4 +52,4 @@ const AppModal = ({
 	);
 };
 
-export default AppModal;
+export default NoImageModal;

@@ -12,7 +12,12 @@ const RequestsLayout = () => {
 				name="new/[requestId]"
 				options={{
 					headerTitle: (props) => <DoubleHeader {...props} title="Request" />,
-					headerLeft: () => <BackButton />,
+					headerRight: () => <View className="w-10" />,
+					headerLeft: () => (
+						<View className="w-10">
+							<BackButton />
+						</View>
+					),
 					headerShadowVisible: false,
 				}}
 			/>

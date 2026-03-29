@@ -100,6 +100,8 @@ const Finance = () => {
 	const { isLoading } = useWallet();
 	const { data, isLoading: isHistoryPending } = useTransactionHistory();
 
+	console.log({ data });
+
 	const queryClient = useQueryClient();
 	return (
 		<SafeAreaView className="flex-1 bg-white" edges={["bottom", "top"]}>
@@ -117,7 +119,8 @@ const Finance = () => {
 				<SectionList
 					className="bg-white "
 					showsVerticalScrollIndicator={false}
-					sections={DATA}
+					sections={[]}
+					// sections={DATA}
 					renderItem={({ item }) => <ItemComponent {...item} />}
 					ListHeaderComponent={<HeaderComponent />}
 					ListEmptyComponent={

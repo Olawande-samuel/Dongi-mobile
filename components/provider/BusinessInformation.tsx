@@ -1,27 +1,26 @@
-import {
-	View,
-	Text,
-	TextInput,
-	Pressable,
-	ScrollView,
-	KeyboardAvoidingView,
-	Platform,
-} from "react-native";
+import useDocumentPicker from "@/hooks/useDocumentPicker";
+import useTempUser from "@/hooks/useTempUser";
+import { useGlobalContext } from "@/providers/GlobalStateProvider";
+import { handleError } from "@/utils";
+import { Api } from "@/utils/endpoints";
+import { EvilIcons, Feather } from "@expo/vector-icons";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { EvilIcons, Feather } from "@expo/vector-icons";
-import StyledButton from "../StyledButton";
-import useDocumentPicker from "@/hooks/useDocumentPicker";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { Api } from "@/utils/endpoints";
-import { useGlobalContext } from "@/providers/GlobalStateProvider";
-import useTempUser from "@/hooks/useTempUser";
-import { toast } from "sonner-native";
-import { router } from "expo-router";
-import { handleError } from "@/utils";
+import {
+	KeyboardAvoidingView,
+	Platform,
+	Pressable,
+	ScrollView,
+	Text,
+	TextInput,
+	View,
+} from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
+import { toast } from "sonner-native";
+import { z } from "zod";
+import StyledButton from "../StyledButton";
 
 const FormSchema = z.object({
 	category_of_service: z.string(),
@@ -97,7 +96,8 @@ const BusinessInformation = ({
 	return (
 		<View className="flex-1">
 			<KeyboardAvoidingView
-				behavior={Platform.OS === "ios" ? "padding" : undefined}
+				behavior={Platform.OS === "ios" ? "padding" : "height"}
+				keyboardVerticalOffset={120}
 				style={{
 					flex: 1,
 				}}
@@ -279,10 +279,13 @@ const BusinessInformation = ({
 						)}
 					</View>
 				</ScrollView>
+				<View className="mt-auto mb-3">
+					<StyledButton
+						title="Continue"
+						onPress={form.handleSubmit(onSubmit)}
+					/>
+				</View>
 			</KeyboardAvoidingView>
-			<View className="mt-auto mb-3">
-				<StyledButton title="Continue" onPress={form.handleSubmit(onSubmit)} />
-			</View>
 		</View>
 	);
 };

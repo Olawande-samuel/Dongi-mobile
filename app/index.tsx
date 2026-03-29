@@ -47,7 +47,7 @@ export default function Index() {
 	}
 
 	return (
-		<SafeAreaView className="flex-1 px-6 bg-white" edges={["top"]}>
+		<SafeAreaView className="flex-1 px-6 bg-white" edges={["top", "bottom"]}>
 			<View className="flex-1 bg-white justify-center items-center">
 				<View className="flex-1 justify-center items-center">
 					<View>
@@ -60,12 +60,12 @@ export default function Index() {
 								className="max-w-full w-[159px] h-[145px]"
 							/>
 						</View>
-						<Text className="text-primary font-semibold text-[32px] text-center max-w-[70%]">
+						{/* <Text className="text-primary font-semibold text-[32px] text-center max-w-[70%]">
 							Get it done
 						</Text>
 						<Text className="text-primary font-semibold text-[32px] text-center max-w-[70%]">
 							Anywhere
-						</Text>
+						</Text> */}
 					</View>
 				</View>
 				<View className="w-full mb-[38px]">

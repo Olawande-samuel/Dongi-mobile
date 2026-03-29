@@ -23,7 +23,7 @@ const Index = () => {
 				queryFn: Api.getProviderOngoingRequests,
 			},
 			{
-				queryKey: ["get provider pending requestss"],
+				queryKey: ["get provider pending requests"],
 				queryFn: Api.getProviderPendingRequests,
 			},
 		],

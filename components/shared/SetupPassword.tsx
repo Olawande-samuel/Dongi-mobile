@@ -7,11 +7,21 @@ import { useMutation } from "@tanstack/react-query";
 import { usePathname, useRouter } from "expo-router";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Pressable, Text, View } from "react-native";
+import {
+	Keyboard,
+	KeyboardAvoidingView,
+	Platform,
+	Pressable,
+	ScrollView,
+	Text,
+	TouchableWithoutFeedback,
+	View,
+} from "react-native";
 import { toast } from "sonner-native";
 import { z } from "zod";
 import PasswordInput from "../PasswordInput";
 import StyledButton from "../StyledButton";
+import { SIZES } from "@/utils/constants";
 
 const FormSchema = z
 	.object({
@@ -82,58 +92,79 @@ const SetupPassword = ({
 	}
 	return (
 		<View className="flex-1 pb-4">
-			<View className="flex-1">
-				<View className="mb-5">
-					<Controller
-						control={form.control}
-						name="password"
-						render={({ field }) => (
-							<View className="gap-y-[6px]">
-								<Text className="text-sm text-off-black">
-									Create your password
-								</Text>
-								<PasswordInput
-									placeholder="********"
-									value={field.value}
-									onChangeText={field.onChange}
-									className="p-2 text-muted text-base rounded border border-inner-light"
+			<KeyboardAvoidingView
+				enabled
+				behavior={Platform.OS === "ios" ? "padding" : "height"}
+				keyboardVerticalOffset={120}
+				style={{
+					flex: 1,
+				}}
+			>
+				<TouchableWithoutFeedback
+					onPress={() => Keyboard.dismiss()}
+					className="flex-1"
+				>
+					<View className="flex-1" style={{ flex: 1 }}>
+						<ScrollView className="flex-1">
+							<View className="mb-5">
+								<Controller
+									control={form.control}
+									name="password"
+									render={({ field }) => (
+										<View className="gap-y-[6px]">
+											<Text className="text-sm text-off-black">
+												Create your password
+											</Text>
+											<PasswordInput
+												placeholder="********"
+												value={field.value}
+												onChangeText={field.onChange}
+												autoFocus
+												className="p-2 text-muted text-base rounded border border-inner-light"
+											/>
+										</View>
+									)}
 								/>
+								{form.formState.errors?.password && (
+									<Text className="text-xs text-red-400">
+										{form.formState.errors?.password.message ?? ""}
+									</Text>
+								)}
 							</View>
-						)}
-					/>
-					{form.formState.errors?.password && (
-						<Text className="text-xs text-red-400">
-							{form.formState.errors?.password.message ?? ""}
-						</Text>
-					)}
-				</View>
-				<View className="mb-5">
-					<Controller
-						control={form.control}
-						name="confirmPassword"
-						render={({ field }) => (
-							<View className="gap-y-[6px]">
-								<Text className="text-sm text-off-black">Confirm Password</Text>
-								<PasswordInput
-									placeholder="********"
-									value={field.value}
-									onChangeText={field.onChange}
-									className="p-2 text-muted text-base rounded border border-inner-light"
+							<View className="mb-5">
+								<Controller
+									control={form.control}
+									name="confirmPassword"
+									render={({ field }) => (
+										<View className="gap-y-[6px]">
+											<Text className="text-sm text-off-black">
+												Confirm Password
+											</Text>
+											<PasswordInput
+												placeholder="********"
+												value={field.value}
+												onChangeText={field.onChange}
+												className="p-2 text-muted text-base rounded border border-inner-light"
+											/>
+										</View>
+									)}
 								/>
+								{form.formState.errors?.confirmPassword && (
+									<Text className="text-xs text-red-400">
+										{form.formState.errors?.confirmPassword.message ?? ""}
+									</Text>
+								)}
 							</View>
-						)}
-					/>
-					{form.formState.errors?.confirmPassword && (
-						<Text className="text-xs text-red-400">
-							{form.formState.errors?.confirmPassword.message ?? ""}
-						</Text>
-					)}
-				</View>
-			</View>
-			<StyledButton
-				title="Continue"
-				onPress={form.handleSubmit(handleSubmit)}
-			/>
+						</ScrollView>
+						<View className="mt-auto">
+							<StyledButton
+								title="Continue"
+								onPress={form.handleSubmit(handleSubmit)}
+							/>
+						</View>
+					</View>
+				</TouchableWithoutFeedback>
+			</KeyboardAvoidingView>
 		</View>
 	);
 };

@@ -228,6 +228,7 @@ export interface IRequestInfo {
 	longitude: string;
 	customer: {
 		uuid: string;
+		image: string;
 		name?: string;
 		first_name: string;
 		last_name: string;
