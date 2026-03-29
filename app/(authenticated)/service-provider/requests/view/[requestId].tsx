@@ -65,7 +65,7 @@ const Ongoing = () => {
 								source={require("../../../../../assets/images/client/temp_user_sq.png")}
 								resizeMode="cover"
 							/>
-							<View className="ml-2 space-y-1">
+							<View className="ml-2 gap-y-1">
 								<Text
 									className="text-sm large:text-base font-regular text-off-black"
 									numberOfLines={2}
@@ -81,7 +81,7 @@ const Ongoing = () => {
 								</Text>
 							</View>
 						</View>
-						<View className="space-y-1 max-w-[50%]">
+						<View className="gap-y-1 max-w-[50%]">
 							<View className="flex-row items-center justify-end">
 								<Image
 									source={require("../../../../../assets/images/location.png")}
@@ -104,7 +104,7 @@ const Ongoing = () => {
 						</View>
 					</View>
 				</View>
-				<View className="space-y-5 py-3 mb-6 ">
+				<View className="gap-y-5 py-3 mb-6 ">
 					<Text className="text-xs large:text-sm text-off-black font-regular">
 						Request
 					</Text>
@@ -146,7 +146,7 @@ const Ongoing = () => {
 						</View>
 					</View>
 				</View>
-				<View className="space-y-3 mb-32 large:mb-[153px]">
+				<View className="gap-y-3 mb-32 large:mb-[153px]">
 					<View className="flex-row justify-between items-center">
 						<Text className="text-support text-xs large:text-sm font-regular mr-4">
 							Status

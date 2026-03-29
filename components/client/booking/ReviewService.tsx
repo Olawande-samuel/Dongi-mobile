@@ -29,7 +29,7 @@ function ReviewService({
 	showCompletionModal,
 	bookingId,
 }: {
-	compRef: React.RefObject<BottomSheetModal>;
+	compRef: React.RefObject<BottomSheetModal | null>;
 	showCompletionModal: VoidFunction;
 	bookingId: string;
 }) {
@@ -74,7 +74,7 @@ function ReviewService({
 					dismissAll();
 					showCompletionModal();
 				},
-			}
+			},
 		);
 	}
 
@@ -136,7 +136,7 @@ function ReviewService({
 							control={form.control}
 							name="message"
 							render={({ field }) => (
-								<View className="space-y-5 px-6 mb-[25px]">
+								<View className="gap-y-5 px-6 mb-[25px]">
 									<Text className="text-sm text-off-black font-regular mb-[6px]">
 										Write a review
 									</Text>

@@ -18,7 +18,6 @@ const SignUpHeader = ({
 	children,
 	totalSteps = 4,
 }: Props) => {
-	
 	const pathname = usePathname();
 	const userType = pathname.includes("/clients") ? "client" : "service";
 
@@ -39,7 +38,7 @@ const SignUpHeader = ({
 				<Text className="text-base text-off-black">{title}</Text>
 				<View></View>
 			</View>
-			<View className="flex-row space-x-3 gap-x-3 items-center mb-5">
+			<View className="flex-row gap-x-3 gap-x-3 justify-between items-center mb-5">
 				{Array.from({ length: totalSteps }).map((_, i) => (
 					<View
 						key={i}

@@ -104,7 +104,7 @@ const NewRequest = () => {
 									source={require("../../../../../assets/images/client/temp_user_sq.png")}
 									resizeMode="cover"
 								/>
-								<View className="ml-2 space-y-1">
+								<View className="ml-2 gap-y-1">
 									<Text
 										className="text-sm large:text-base font-regular text-off-black"
 										numberOfLines={1}
@@ -117,7 +117,7 @@ const NewRequest = () => {
 									<Text>{result?.service?.name || ""}</Text>
 								</View>
 							</View>
-							<View className="space-y-1 max-w-[40%]">
+							<View className="gap-y-1 max-w-[40%]">
 								<View className="flex-row items-center justify-end">
 									<Image
 										source={require("../../../../../assets/images/location.png")}
@@ -142,7 +142,7 @@ const NewRequest = () => {
 							</View>
 						</View>
 					</View>
-					<View className="space-y-2 large:space-y-3 mb-6">
+					<View className="gap-y-2 large:gap-y-3 mb-6">
 						<View className="flex-row justify-between items-center">
 							<Text className="text-support text-xs large:text-sm font-regular mr-4">
 								Status
@@ -183,7 +183,7 @@ const NewRequest = () => {
 							</View>
 						)}
 					</View>
-					<View className="space-y-5 py-3 mb-[14px] ">
+					<View className="gap-y-5 py-3 mb-[14px] ">
 						<Text className="text-xs large:text-sm text-off-black font-regular">
 							Request
 						</Text>
@@ -228,7 +228,7 @@ const NewRequest = () => {
 						</View>
 					</View>
 					{result?.status === "PENDING" && (
-						<View className="mb-6  flex-row space-x-3">
+						<View className="mb-6  flex-row gap-x-3">
 							<Pressable
 								onPress={acceptRequest}
 								className="bg-success-500 py-2 large:py-[10px] flex-1 px-1 rounded border-[0.5px] border-primary"

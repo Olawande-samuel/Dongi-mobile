@@ -1,5 +1,6 @@
 import ConfirmService from "@/components/client/booking/ConfirmService";
 import ReviewService from "@/components/client/booking/ReviewService";
+import ProviderProfile from "@/components/client/ProviderProfile";
 import VendorProfile from "@/components/client/VendorProfile";
 import ReviewComplete from "@/components/ReviewComplete";
 import StatusPill from "@/components/StatusPill";
@@ -33,8 +34,8 @@ const Track = () => {
 		queryFn: () => Api.getProvidersServices(providerId as string),
 	});
 
-	const serviceInfo = services?.data?.data?.services.find(
-		(item) => item.uuid === serviceId
+	const providerServiceInfo = services?.data?.data?.services.find(
+		(item) => item.uuid === serviceId,
 	);
 
 	const bookingInfo = data?.data?.data;
@@ -76,9 +77,11 @@ const Track = () => {
 					>
 						<View className="flex-1 bg-white">
 							<View className="mb-6">
-								{serviceInfo && <VendorProfile {...serviceInfo} />}
+								{providerServiceInfo && (
+									<ProviderProfile {...providerServiceInfo} />
+								)}
 							</View>
-							<View className="space-y-3 mb-6">
+							<View className="gap-y-3 mb-6">
 								<View className="flex-row justify-between items-center">
 									<Text className="text-support text-sm font-regular mr-4">
 										Status
@@ -90,7 +93,7 @@ const Track = () => {
 										Request Type
 									</Text>
 									<Text className="font-regular text-sm text-off-black text-right">
-										{serviceInfo?.name || ""}
+										{providerServiceInfo?.name || ""}
 									</Text>
 								</View>
 
@@ -110,7 +113,7 @@ const Track = () => {
 										<Pressable
 											onPress={() =>
 												handleContactPress(
-													`tel:+${bookingInfo?.provider?.phone}`
+													`tel:+${bookingInfo?.provider?.phone}`,
 												)
 											}
 										>
@@ -122,7 +125,7 @@ const Track = () => {
 								)}
 							</View>
 							<View className="flex-1">
-								<View className="space-y-5 py-3 mb-[149px]">
+								<View className="gap-y-5 py-3 mb-[149px]">
 									<Text className="text-sm text-off-black font-regular">
 										Request
 									</Text>
@@ -153,7 +156,7 @@ const Track = () => {
 											How soon do you need this?
 										</Text>
 										<View className="flex-row border p-2 border-inner-background-light">
-											<Text className="flex-1 text-base text-off-black placeholder:text-off-black">
+											<Text className="flex-1 text-base text-off-black">
 												{bookingInfo?.deadline || ""}
 											</Text>
 										</View>
@@ -163,7 +166,7 @@ const Track = () => {
 											Message
 										</Text>
 										<View className="flex-row border p-2 border-inner-background-light h-[158px]">
-											<Text className="flex-1 text-off-black placeholder:text-off-black text-base">
+											<Text className="flex-1 text-off-black text-base">
 												{bookingInfo?.message || ""}
 											</Text>
 										</View>
@@ -177,7 +180,7 @@ const Track = () => {
 							providerName={`${bookingInfo?.provider?.first_name || ""} ${
 								bookingInfo?.provider?.last_name || ""
 							} `}
-							serviceName={serviceInfo?.name || ""}
+							serviceName={providerServiceInfo?.name || ""}
 						/>
 						<ReviewService
 							compRef={bottomSheetReviewModalRef}

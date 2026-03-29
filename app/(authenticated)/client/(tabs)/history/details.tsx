@@ -17,7 +17,7 @@ const Details = () => {
 		});
 
 	const info = completedData?.data?.data?.requests?.find(
-		(item) => item.uuid === params.id
+		(item) => item.uuid === params.id,
 	);
 
 	console.log({ info });
@@ -32,8 +32,8 @@ const Details = () => {
 				status={info?.status || ""}
 				ratings={info?.rating?.customer_rating || 0}
 			/>
-			<View className="flex-1 mt-6 space-y-5">
-				<View className="space-y-3">
+			<View className="flex-1 mt-6 gap-y-5">
+				<View className="gap-y-3">
 					<View className="flex-row justify-between items-center">
 						<Text className="text-support text-sm font-regular mr-4">
 							Request Type
@@ -72,7 +72,7 @@ const Details = () => {
 					</View>
 				</View>
 				<View className="h-1 w-full bg-[#FAFAFA]"></View>
-				<View className="h-[186px] space-y-2">
+				<View className="h-[186px] gap-y-2">
 					<Text className="text-support font-regular text-sm">Message</Text>
 					<View className="flex-1">
 						<Text className="text-sm font-regular text-off-black">
@@ -80,13 +80,13 @@ const Details = () => {
 						</Text>
 					</View>
 				</View>
-				<View className="h-[186px] space-y-2">
+				<View className="h-[186px] gap-y-2">
 					<Text className="text-support font-regular text-sm">Your Review</Text>
 					<View className="flex-1 justify-start">
 						<Text>{info?.rating?.customer_message || ""}</Text>
 					</View>
 				</View>
-				<View className="h-[186px] space-y-2">
+				<View className="h-[186px] gap-y-2">
 					<Text className="text-support font-regular text-sm">
 						Service Provider's Review
 					</Text>

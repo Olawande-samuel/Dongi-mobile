@@ -32,7 +32,7 @@ const FormSchema = z
 				{
 					message:
 						"Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character (@$!%*?&).",
-				}
+				},
 			),
 		confirm_password: z
 			.string()
@@ -43,7 +43,7 @@ const FormSchema = z
 				{
 					message:
 						"Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character (@$!%*?&).",
-				}
+				},
 			),
 	})
 	.refine((data) => data.new_password === data.confirm_password, {
@@ -100,7 +100,7 @@ const ChangePassword = () => {
 						flex: 1,
 					}}
 				>
-					<View className="space-y-6">
+					<View className="gap-y-6">
 						<View>
 							<Controller
 								control={form.control}

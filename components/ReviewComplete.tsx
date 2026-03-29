@@ -47,7 +47,7 @@ function ReviewComplete({
 							elevation: 5,
 						}}
 					>
-						<View className="space-y-3 w-full" style={{ padding: 16 }}>
+						<View className="gap-y-3 w-full" style={{ padding: 16 }}>
 							<View className="justify-center items-center">
 								<Success isServiceProvider={userType === "service"} />
 							</View>

@@ -1,10 +1,15 @@
 import { View, Text, Pressable } from "react-native";
 import React, { PropsWithChildren, useCallback, useMemo } from "react";
-import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView, useBottomSheetModal } from "@gorhom/bottom-sheet";
+import {
+	BottomSheetBackdrop,
+	BottomSheetModal,
+	BottomSheetView,
+	useBottomSheetModal,
+} from "@gorhom/bottom-sheet";
 import { Ionicons } from "@expo/vector-icons";
 
 interface Props extends PropsWithChildren {
-	compRef: React.RefObject<BottomSheetModal>;
+	compRef: React.RefObject<BottomSheetModal | null>;
 	snapPoints?: string[];
 	title: string;
 }

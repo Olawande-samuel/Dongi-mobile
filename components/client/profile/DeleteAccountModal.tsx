@@ -6,11 +6,11 @@ import Warning from "@/svgs/Warning";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 interface Props extends PropsWithChildren {
-	compRef: React.RefObject<BottomSheetModal>;
+	compRef: React.RefObject<BottomSheetModal | null>;
 }
 const DeleteAccountModal = ({ compRef }: Props) => {
 	const { dismiss } = useBottomSheetModal();
-	const snapPoints = useMemo(() => ["60"], []);
+	const snapPoints = useMemo(() => ["60", "70", "85"], []);
 	return (
 		<SafeAreaView>
 			<BottomSheetPrompt

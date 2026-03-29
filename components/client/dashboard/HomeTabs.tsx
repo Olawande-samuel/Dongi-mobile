@@ -41,7 +41,7 @@ const HomeTabs = ({
 	tab2title: string;
 }) => {
 	return (
-		<View className="flex-row mt-4 space-x-2 mb-3">
+		<View className="flex-row mt-4 gap-x-2 mb-3">
 			<Tab id={1} title={tab1title} isActive={tab === 1} setTab={setTab} />
 			<Tab id={2} title={tab2title} isActive={tab === 2} setTab={setTab} />
 		</View>

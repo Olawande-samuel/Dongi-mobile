@@ -122,17 +122,17 @@ const EditService = () => {
 									flex: 1,
 								}}
 							>
-								<View className="mb-4 flex-1 p-2 bg-white rounded-[9px] space-y-4 ">
+								<View className="mb-4 flex-1 p-2 bg-white rounded-[9px] gap-y-4 ">
 									<View className="mb-5">
 										<Controller
 											control={form.control}
 											name="name"
 											render={({ field }) => (
-												<View className="space-y-[6px]">
+												<View className="gap-y-[6px]">
 													<Text className="text-xs large:text-sm text-off-black">
 														What is the name of your service?
 													</Text>
-													<View className="space-y-2">
+													<View className="gap-y-2">
 														<TextInput
 															multiline
 															value={field.value}
@@ -154,11 +154,11 @@ const EditService = () => {
 											control={form.control}
 											name="description"
 											render={({ field }) => (
-												<View className="space-y-[6px]">
+												<View className="gap-y-[6px]">
 													<Text className="text-xs large:text-sm text-off-black">
 														Write a brief description of your service?
 													</Text>
-													<View className="space-y-2">
+													<View className="gap-y-2">
 														<TextInput
 															placeholder=""
 															multiline
@@ -185,7 +185,7 @@ const EditService = () => {
 											control={form.control}
 											name="images"
 											render={({ field }) => (
-												<View className="space-y-[6px]">
+												<View className="gap-y-[6px]">
 													<Text className="text-xs large:text-sm text-off-black">
 														Upload an image communicating your service
 													</Text>

@@ -20,7 +20,7 @@ const Index = () => {
 					</Text>
 				</View>
 			</View>
-			<View className="space-y-5">
+			<View className="gap-y-5">
 				<View className="flex-row items-center gap-x-6">
 					<Text className="text-muted font-regular text-sm w-[110px]">
 						Full Name

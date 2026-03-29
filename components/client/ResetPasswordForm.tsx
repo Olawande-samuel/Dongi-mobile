@@ -18,7 +18,7 @@ const ResetPasswordForm = () => {
 						control={form.control}
 						name="new_password"
 						render={({ field }) => (
-							<View className="space-y-[6px]">
+							<View className="gap-y-[6px]">
 								<Text className="text-sm text-off-black">
 									Create your password
 								</Text>
@@ -39,7 +39,7 @@ const ResetPasswordForm = () => {
 						control={form.control}
 						name="confirm_password"
 						render={({ field }) => (
-							<View className="space-y-[6px]">
+							<View className="gap-y-[6px]">
 								<Text className="text-sm text-off-black">Confirm Password</Text>
 								<TextInput
 									secureTextEntry
@@ -65,7 +65,7 @@ const ResetPasswordForm = () => {
 				}}
 				className={cn(
 					"bg-primary rounded px-1 py-[10px] mt-auto justify-center items-center",
-					params?.userType === "service" && "bg-service-primary"
+					params?.userType === "service" && "bg-service-primary",
 				)}
 			>
 				<Text className="text-white">Create new password</Text>

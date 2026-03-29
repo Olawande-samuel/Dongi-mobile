@@ -53,8 +53,8 @@ const Profile = () => {
 						</Text>
 					</View>
 				</View>
-				<View className="space-y-9">
-					<View className="space-y-4">
+				<View className="gap-y-9">
+					<View className="gap-y-4">
 						<View>
 							<Links
 								title="Profile"
@@ -95,7 +95,7 @@ const Profile = () => {
 							/>
 						</View>
 					</View>
-					<View className="space-y-4">
+					<View className="gap-y-4">
 						<View className="">
 							<SignOut showPrompt={handleSignoutModalPress} />
 						</View>

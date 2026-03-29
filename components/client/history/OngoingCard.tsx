@@ -52,7 +52,7 @@ const OngoingCard = ({
 							source={require("../../../assets/images/client/temp_user_sq.png")}
 							resizeMode="cover"
 						/>
-						<View className="ml-2 space-y-1">
+						<View className="ml-2 gap-y-1">
 							<Text className="text-base font-regular text-off-black">
 								{provider.name || ""}
 							</Text>
@@ -64,7 +64,7 @@ const OngoingCard = ({
 							</Text>
 						</View>
 					</View>
-					<View className="space-y-1 max-w-[45%]">
+					<View className="gap-y-1 max-w-[45%]">
 						<View className="flex-row items-center justify-end">
 							<Image
 								source={require("../../../assets/images/location.png")}

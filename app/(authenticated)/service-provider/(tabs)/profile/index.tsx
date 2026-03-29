@@ -43,7 +43,11 @@ const Profile = () => {
 						<View className=" h-12 w-12 large:w-[60px] large:h-[60px] rounded-full">
 							<Image
 								className="large:h-[60px] h-12 w-12 large:w-[60px] rounded-full"
-								source={data?.user?.business_logo ? { uri: data?.user?.business_logo } : require("../../../../../assets/images/client/temp_user_sq.png")}
+								source={
+									data?.user?.business_logo
+										? { uri: data?.user?.business_logo }
+										: require("../../../../../assets/images/client/temp_user_sq.png")
+								}
 								resizeMode="contain"
 							/>
 						</View>
@@ -56,7 +60,7 @@ const Profile = () => {
 							</Text>
 						</View>
 					</View>
-					<View className="space-y-6 large:space-y-9">
+					<View className="" style={{ rowGap: 24 }}>
 						<View>
 							<View className="">
 								<Links
@@ -66,7 +70,7 @@ const Profile = () => {
 								/>
 							</View>
 						</View>
-						<View className=" space-y-2 large:space-y-4">
+						<View className="gap-y-2 large:gap-y-4" style={{ rowGap: 8 }}>
 							<View>
 								<Links
 									title="Profile"
@@ -99,7 +103,7 @@ const Profile = () => {
 								/>
 							</View>
 						</View>
-						<View className="space-y-4">
+						<View className="gap-y-4">
 							<View className="">
 								<SignOut showPrompt={handleSignoutModalPress} />
 							</View>

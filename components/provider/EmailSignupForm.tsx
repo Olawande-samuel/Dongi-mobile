@@ -57,7 +57,7 @@ function EmailForm() {
 						control={form.control}
 						name="firstname"
 						render={({ field }) => (
-							<View className="space-y-[6px]">
+							<View className="gap-y-[6px]">
 								<Text className="text-sm text-off-black">First Name</Text>
 								<TextInput
 									placeholder="Enter first name"
@@ -75,7 +75,7 @@ function EmailForm() {
 						control={form.control}
 						name="middlename"
 						render={({ field }) => (
-							<View className="space-y-[6px]">
+							<View className="gap-y-[6px]">
 								<Text className="text-sm text-off-black">Middle Name</Text>
 								<TextInput
 									placeholder="Enter middle name"
@@ -93,7 +93,7 @@ function EmailForm() {
 					control={form.control}
 					name="lastname"
 					render={({ field }) => (
-						<View className="space-y-[6px]">
+						<View className="gap-y-[6px]">
 							<Text className="text-sm text-off-black">Last Name</Text>
 							<TextInput
 								placeholder="Enter last name"
@@ -110,7 +110,7 @@ function EmailForm() {
 					control={form.control}
 					name="email"
 					render={({ field }) => (
-						<View className="space-y-[6px]">
+						<View className="gap-y-[6px]">
 							<Text className="text-sm text-off-black">Email</Text>
 							<TextInput
 								placeholder="Enter your email address"
@@ -129,7 +129,7 @@ function EmailForm() {
 					control={form.control}
 					name="businessName"
 					render={({ field }) => (
-						<View className="space-y-[6px]">
+						<View className="gap-y-[6px]">
 							<Text className="text-sm text-off-black">Business Name</Text>
 							<TextInput
 								placeholder="Enter your business name"
@@ -146,7 +146,7 @@ function EmailForm() {
 					control={form.control}
 					name="gender"
 					render={({ field }) => (
-						<View className="space-y-[6px]">
+						<View className="gap-y-[6px]">
 							<Text className="text-sm text-off-black">Gender</Text>
 							<View>
 								<SelectDropdown
@@ -217,16 +217,20 @@ function EmailForm() {
 				/>
 			</View>
 			<View className="mb-5 flex-1">
-				<View className="space-y-[6px]">
+				<View className="gap-y-[6px]">
 					<Text className="text-sm text-off-black">Location</Text>
 					<View className="min-h-[200px]">
 						<GooglePlacesAutocomplete
 							placeholder="Enter your location"
+							debounce={300}
+							enablePoweredByContainer
 							onFail={(error) => {
+								console.log(error);
 								toast.error("An error occurred fetching your location");
 							}}
 							fetchDetails
 							onPress={(data, detail) => {
+								console.log({ data });
 								form.setValue("location", data.description);
 								form.setValue("latitude", detail?.geometry.location.lat);
 								form.setValue("longitude", detail?.geometry.location.lng);
@@ -293,7 +297,7 @@ const EmailSignupForm = ({
 				onError: (err) => {
 					handleError(err);
 				},
-			}
+			},
 		);
 	}
 	return (

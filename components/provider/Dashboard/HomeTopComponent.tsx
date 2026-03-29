@@ -14,6 +14,7 @@ import { Pressable, Text, View } from "react-native";
 import { toast } from "sonner-native";
 import AccountApproved from "./AccountApproved";
 import ProviderHomeUserInfo from "./ProviderHomeUserInfo";
+import useServices from "@/hooks/useServices";
 
 const HomeTopComponent = ({
 	setTab,
@@ -28,12 +29,20 @@ const HomeTopComponent = ({
 }) => {
 	const { data, isLoading } = useServiceProviderUserInfo();
 	const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+	const { isLoading: isServiceLoading, result } = useServices();
 
 	useEffect(() => {
-		if (!isLoading && !data?.wallet?.balance) {
+		const shouldShowModal =
+			!isLoading &&
+			!isServiceLoading &&
+			(!data?.wallet?.balance || data?.wallet?.balance === 0) &&
+			Array.isArray(result) &&
+			result.length < 1;
+
+		if (shouldShowModal) {
 			bottomSheetModalRef.current?.present();
 		}
-	}, []);
+	}, [isLoading, isServiceLoading, data?.wallet?.balance, result]);
 
 	return (
 		<View className="">
@@ -41,7 +50,7 @@ const HomeTopComponent = ({
 				{/* <HomeUserInfo /> */}
 				<ProviderHomeUserInfo />
 			</View>
-			<View className="p-2 mb-3 space-y-2 border border-outer-light rounded-lg">
+			<View className="p-2 mb-3 gap-y-2 border border-outer-light rounded-lg">
 				<View className="rounded-lg bg-light justify-center items-center py-4 px-3">
 					<View className="mb-5">
 						<Text>Balance</Text>
@@ -92,7 +101,7 @@ const HomeTopComponent = ({
 						onPress={async () => {
 							if (data?.wallet?.account_number) {
 								await Clipboard.setStringAsync(
-									data?.wallet?.account_number || ""
+									data?.wallet?.account_number || "",
 								);
 								// Clipboard.setString(data?.wallet?.account_number || "");
 								toast.success("Account number copied to clipboard");
@@ -115,7 +124,7 @@ const HomeTopComponent = ({
 						View public profile
 					</Text>
 					<AntDesign
-						name="arrowright"
+						name="arrow-right"
 						size={SIZES.height > 700 ? 24 : 16}
 						color="#18658B"
 					/>

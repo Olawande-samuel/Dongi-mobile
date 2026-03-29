@@ -47,7 +47,7 @@ const ServiceId = () => {
 					<View className="px-4 large:px-6 flex-1">
 						<RouteHeader title="Completed" />
 						<ScrollView
-							className="flex-1 bg-white  pb-4 space-y-6 pt-[18px]"
+							className="flex-1 bg-white  pb-4 gap-y-6 pt-[18px]"
 							showsVerticalScrollIndicator={false}
 						>
 							<View>
@@ -58,7 +58,7 @@ const ServiceId = () => {
 											source={require("../../../../assets/images/client/temp_user_sq.png")}
 											resizeMode="cover"
 										/>
-										<View className="ml-2 space-y-1">
+										<View className="ml-2 gap-y-1">
 											<Text className="text-sm large:text-base font-regular text-off-black">
 												{`${result?.customer?.first_name} ${result?.customer?.last_name}`}
 											</Text>
@@ -67,7 +67,7 @@ const ServiceId = () => {
 											</Text>
 										</View>
 									</View>
-									<View className="space-y-1 max-w-[45%]">
+									<View className="gap-y-1 max-w-[45%]">
 										<View className="flex-row items-center justify-end">
 											<Image
 												source={require("../../../../assets/images/location.png")}
@@ -90,7 +90,7 @@ const ServiceId = () => {
 									</View>
 								</View>
 							</View>
-							<View className="space-y-3">
+							<View className="gap-y-3">
 								<View className="flex-row justify-between items-center">
 									<Text className="text-support text-xs large:text-sm font-regular mr-4">
 										Request Type
@@ -108,7 +108,7 @@ const ServiceId = () => {
 									</Text>
 								</View>
 							</View>
-							<View className="space-y-5 py-3 mb-6  ">
+							<View className="gap-y-5 py-3 mb-6  ">
 								<Text className="text-xs large:text-sm text-off-black font-regular">
 									Request
 								</Text>
@@ -150,7 +150,7 @@ const ServiceId = () => {
 									</View>
 								</View>
 							</View>
-							<View className="space-y-3 mb-32 large:mb-[153px]">
+							<View className="gap-y-3 mb-32 large:mb-[153px]">
 								<View className="flex-row justify-between items-center">
 									<Text className="text-support text-xs large:text-sm font-regular mr-4">
 										Status

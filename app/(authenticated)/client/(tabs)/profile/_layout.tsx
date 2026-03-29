@@ -15,6 +15,7 @@ const ProfileLayout = () => {
 						fontSize: 16,
 						color: "#1A1B23",
 					},
+
 					headerShadowVisible: false,
 				}}
 			/>

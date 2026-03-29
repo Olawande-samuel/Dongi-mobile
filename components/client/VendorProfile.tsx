@@ -1,4 +1,4 @@
-import { IProviderService } from "@/types";
+import { ICategoryServices, IProviderService } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { Image, Text, View } from "react-native";
@@ -9,23 +9,23 @@ const VendorProfile = ({
 	unique_customers,
 	total_ratings,
 	category,
-}: IProviderService) => {
+}: ICategoryServices) => {
 	return (
 		<View className="flex-row mb-5">
 			<View className="mr-4">
 				<Image
-					source={require("../../assets/images/client/temp_user.png")}
-					// source={
-					// 	provider?.business_logo
-					// 		? { uri: provider?.business_logo }
-					// 		: require("../../assets/images/client/temp_user.png")
-					// }
+					// source={require("../../assets/images/client/temp_user.png")}
+					source={
+						provider?.business_logo
+							? { uri: provider?.business_logo }
+							: require("../../assets/images/client/temp_user.png")
+					}
 					className="w-[100px] h-[100px] rounded-full"
 					width={100}
 					height={100}
 				/>
 			</View>
-			<View className="flex-1 py-[6px] space-y-2 ">
+			<View className="flex-1 py-[6px] gap-y-2 ">
 				<View>
 					<Text
 						className="text-sm font-regular text-support mb-2"

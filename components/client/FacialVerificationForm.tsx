@@ -148,49 +148,57 @@ const FacialVerificationForm = ({
 						/>
 					</View>
 				) : (
-					<CameraView facing={facing} className="flex-1" ref={cameraRef}>
-						<Canvas
-							style={{
-								position: "absolute",
-								width,
-								height,
-								top: 0,
-								zIndex: 100,
-								borderWidth: 1,
-								borderColor: "red",
-							}}
+					<View className="flex-1 ">
+						<CameraView
+							facing={facing}
+							className="flex-1"
+							style={{ flex: 1, height: "100%" }}
+							ref={cameraRef}
 						>
-							<Rect x={0} y={0} width={width} height={height} color="white" />
-							<Group blendMode="clear">
-								<Oval
-									x={centerX}
-									y={4}
-									width={faceWidth}
-									height={faceHeight}
-									transform={[{ translateX: -(centerX / 2) }]}
-									color="white"
-								/>
-							</Group>
-							<Group>
-								<Oval
-									x={centerX}
-									y={4}
-									width={faceWidth}
-									height={faceHeight}
-									transform={[{ translateX: -(centerX / 2) }]}
-									style="stroke"
-									strokeWidth={2}
-									color="#18658B"
-								/>
-							</Group>
-						</Canvas>
-					</CameraView>
+							<Canvas
+								style={{
+									position: "absolute",
+									width,
+									height,
+									top: 0,
+									zIndex: 100,
+									borderWidth: 1,
+									borderColor: "red",
+								}}
+							>
+								<Rect x={0} y={0} width={width} height={height} color="white" />
+								<Group blendMode="clear">
+									<Oval
+										x={centerX}
+										y={4}
+										width={faceWidth}
+										height={faceHeight}
+										transform={[{ translateX: -(centerX / 2) }]}
+										color="white"
+									/>
+								</Group>
+								<Group>
+									<Oval
+										x={centerX}
+										y={4}
+										width={faceWidth}
+										height={faceHeight}
+										transform={[{ translateX: -(centerX / 2) }]}
+										style="stroke"
+										strokeWidth={2}
+										color="#18658B"
+									/>
+								</Group>
+							</Canvas>
+						</CameraView>
+					</View>
 				)}
 			</View>
 			<View className="absolute bottom-8 w-full ">
 				{!userPhoto && (
 					<Text className="text-center text-sm font-normal text-support px-4 mb-6">
-						Kindly confirm if your head is in within the bounds of the border
+						Ensure you're clothed and kindly confirm if your head is in within
+						the bounds of the border
 					</Text>
 				)}
 				{!userPhoto ? (
@@ -213,7 +221,7 @@ const FacialVerificationForm = ({
 					onPress={uploadUserPhoto}
 					className={cn(
 						"rounded px-1 py-[10px] mt-auto justify-center items-center bg-inactive mb-2",
-						userPhoto && "bg-primary"
+						userPhoto && "bg-primary",
 					)}
 				>
 					<Text className="text-white">Continue</Text>

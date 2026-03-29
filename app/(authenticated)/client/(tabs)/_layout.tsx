@@ -36,7 +36,6 @@ const Layout = () => {
 				options={{
 					title: "Profile",
 					tabBarIcon: ({ focused }) => <Profile isActive={focused} />,
-		
 				}}
 			/>
 		</Tabs>

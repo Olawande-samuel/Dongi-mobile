@@ -1,6 +1,7 @@
+import FacialVerification from "@/components/client/FacialVerification";
 import PhoneSignup from "@/components/shared/PhoneSignup";
 import { Link, router } from "expo-router";
-import React from "react";
+import React, { useState } from "react";
 import {
 	Image,
 	KeyboardAvoidingView,

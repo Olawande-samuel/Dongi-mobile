@@ -12,7 +12,7 @@ function ServiceComponent({
 	images,
 }: IProviderService) {
 	return (
-		<View className="bg-white rounded-lg border-outer-light p-3 space-y-2">
+		<View className="bg-white rounded-lg border-outer-light p-3 gap-y-2">
 			<View
 				className=""
 				style={{
@@ -59,7 +59,7 @@ function ServiceComponent({
 			<Pressable
 				onPress={() =>
 					router.push({
-						pathname: "/service-provider/(tabs)/services/edit/[serviceId]",
+						pathname: "/service-provider/services/edit/[serviceId]",
 						params: {
 							serviceId: uuid,
 						},

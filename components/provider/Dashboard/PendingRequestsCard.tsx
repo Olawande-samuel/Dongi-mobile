@@ -47,7 +47,7 @@ const PendingRequestCard = ({
 							source={require("../../../assets/images/client/temp_user_sq.png")}
 							resizeMode="cover"
 						/>
-						<View className="ml-2 space-y-1 flex-1 min-w-0">
+						<View className="ml-2 gap-y-1 flex-1 min-w-0">
 							<Text
 								className="text-sm large:text-base font-regular text-off-black"
 								numberOfLines={1}
@@ -64,7 +64,7 @@ const PendingRequestCard = ({
 							</Text>
 						</View>
 					</View>
-					<View className="flex-1 min-w-0 space-y-1 items-end">
+					<View className="flex-1 min-w-0 gap-y-1 items-end">
 						<View className="flex-row items-center justify-end">
 							<Image
 								source={require("../../../assets/images/location.png")}

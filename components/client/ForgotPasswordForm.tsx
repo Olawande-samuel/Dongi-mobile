@@ -63,7 +63,7 @@ const ForgotPasswordForm = () => {
 				onError: (err) => {
 					handleError(err);
 				},
-			}
+			},
 		);
 	}
 
@@ -78,7 +78,7 @@ const ForgotPasswordForm = () => {
 						control={form.control}
 						name="email"
 						render={({ field }) => (
-							<View className="space-y-[6px]">
+							<View className="gap-y-[6px]">
 								<Text className="text-sm text-off-black">Email</Text>
 								<TextInput
 									placeholder="Enter your email address"
@@ -103,7 +103,7 @@ const ForgotPasswordForm = () => {
 					onPress={form.handleSubmit(submit)}
 					className={cn(
 						"bg-primary rounded px-1 py-[10px] mt-auto justify-center items-center mb-3",
-						userType === "service" && "bg-service-primary"
+						userType === "service" && "bg-service-primary",
 					)}
 				>
 					<Text className="text-white">Submit</Text>

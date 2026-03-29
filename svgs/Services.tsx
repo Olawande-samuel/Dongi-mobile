@@ -4,8 +4,8 @@ import Svg, { Mask, Path } from "react-native-svg";
 import { useAuth } from "@/context/Auth";
 
 const Services = ({ isActive }: { isActive: boolean }) => {
-	const { userRoute } = useAuth();
-    const color = userRoute === "client" ? "#18658B" : "#E4AE1B";
+	const { userType } = useAuth();
+	const color = userType === "client" ? "#18658B" : "#E4AE1B";
 
 	return (
 		<Svg width={25} height={25} viewBox="0 0 25 25" fill="none">

@@ -1,3 +1,5 @@
+import Animated, { useAnimatedStyle } from "react-native-reanimated";
+import { useGradualAnimation } from "@/hooks/useGradualAnimation";
 import useAsyncStorage from "@/hooks/useAsyncStorage";
 import { useGlobalContext } from "@/providers/GlobalStateProvider";
 import { handleError } from "@/utils";
@@ -12,6 +14,7 @@ import { CountryPicker } from "react-native-country-codes-picker";
 import { toast } from "sonner-native";
 import { z } from "zod";
 import StyledButton from "../StyledButton";
+import FacialVerification from "../client/FacialVerification";
 
 const FormSchema = z.object({
 	phone: z.string().min(10).max(15),
@@ -19,6 +22,7 @@ const FormSchema = z.object({
 type FormType = z.infer<typeof FormSchema>;
 
 const PhoneSignup = ({ userType }: { userType: "service" | "client" }) => {
+	const { height } = useGradualAnimation();
 	const [show, setShow] = useState(false);
 	const [countryCode, setCountryCode] = useState("+234");
 	const [countryFlag, setCountryFlag] = useState("🇳🇬");
@@ -27,6 +31,12 @@ const PhoneSignup = ({ userType }: { userType: "service" | "client" }) => {
 
 	const { setIsLoading } = globalContext;
 
+	const keyboardPadding = useAnimatedStyle(() => {
+		return {
+			height: height.value,
+		};
+	}, []);
+
 	const form = useForm<FormType>({
 		defaultValues: {
 			phone: "",
@@ -34,7 +44,7 @@ const PhoneSignup = ({ userType }: { userType: "service" | "client" }) => {
 		resolver: zodResolver(FormSchema),
 	});
 
-	const { mutate, isPending } = useMutation({
+	const { mutate } = useMutation({
 		mutationFn: Api.phoneSignup,
 		onMutate: () => {
 			setIsLoading(true);
@@ -64,7 +74,7 @@ const PhoneSignup = ({ userType }: { userType: "service" | "client" }) => {
 					onError: (err) => {
 						handleError(err);
 					},
-				}
+				},
 			);
 			return;
 		}
@@ -90,56 +100,58 @@ const PhoneSignup = ({ userType }: { userType: "service" | "client" }) => {
 						toast.error(err.message);
 						handleError(err);
 					},
-				}
+				},
 			);
 		}
 	}
 
 	return (
-		<View className="space-y-[13px]">
-			<Controller
-				control={form.control}
-				name="phone"
-				render={({ field }) => (
-					<View className="">
-						<Text className="text-off-black mb-[6px]">
-							Enter your phone number
-						</Text>
-						<View className="flex-row w-full">
-							<View className="mr-[6px]">
-								<TouchableOpacity
-									onPress={() => setShow(true)}
-									className="bg-[#FCFCFD] p-[10px] flex-row items-center"
-								>
-									<Text className="mr-2 text-2xl">{countryFlag}</Text>
-									<Text className="text-off-black text-base">
-										{countryCode}
-									</Text>
-								</TouchableOpacity>
-								<CountryPicker
-									show={show}
-									lang="en"
-									// when picker button press you will get the country object with dial code
-									pickerButtonOnPress={(item) => {
-										setCountryCode(item.dial_code);
-										setCountryFlag(item.flag);
-										setShow(false);
-									}}
+		<View className="00">
+			<View>
+				<Controller
+					control={form.control}
+					name="phone"
+					render={({ field }) => (
+						<View className="">
+							<Text className="text-off-black mb-[6px]">
+								Enter your phone number
+							</Text>
+							<View className="flex-row w-full">
+								<View className="mr-[6px]">
+									<TouchableOpacity
+										onPress={() => setShow(true)}
+										className="bg-[#FCFCFD] p-[10px] flex-row items-center"
+									>
+										<Text className="mr-2 text-2xl">{countryFlag}</Text>
+										<Text className="text-off-black text-base">
+											{countryCode}
+										</Text>
+									</TouchableOpacity>
+									<CountryPicker
+										show={show}
+										lang="en"
+										// when picker button press you will get the country object with dial code
+										pickerButtonOnPress={(item) => {
+											setCountryCode(item.dial_code);
+											setCountryFlag(item.flag);
+											setShow(false);
+										}}
+									/>
+								</View>
+								<TextInput
+									className="flex-1 p-2 rounded border border-[#f2f2f2]"
+									value={field.value}
+									onChangeText={field.onChange}
+									inputMode="tel"
+									textContentType="telephoneNumber"
+									keyboardType="phone-pad"
 								/>
 							</View>
-							<TextInput
-								className="flex-1 p-2 rounded border border-[#f2f2f2]"
-								value={field.value}
-								onChangeText={field.onChange}
-								inputMode="tel"
-								textContentType="telephoneNumber"
-								keyboardType="phone-pad"
-							/>
 						</View>
-					</View>
-				)}
-			/>
-			<View>
+					)}
+				/>
+			</View>
+			<View className="mt-4" style={{ marginTop: 13 }}>
 				<StyledButton
 					onPress={form.handleSubmit(handleSubmit)}
 					// onPress={() => {
@@ -148,6 +160,7 @@ const PhoneSignup = ({ userType }: { userType: "service" | "client" }) => {
 					title="Continue"
 				/>
 			</View>
+			<Animated.View style={keyboardPadding} />
 		</View>
 	);
 };

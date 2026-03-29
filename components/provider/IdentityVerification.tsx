@@ -72,12 +72,12 @@ const IdentityVerification = ({
 		formData.append(
 			"means_of_verification_file",
 			val.means_of_verification_file as any,
-			val.means_of_verification_file.name
+			val.means_of_verification_file.name,
 		);
 		formData.append(
 			"certificate_of_expertise_file",
 			val.certificate_of_expertise_file as any,
-			val.certificate_of_expertise_file.name
+			val.certificate_of_expertise_file.name,
 		);
 		formData.append("user_id", data.userId);
 
@@ -106,7 +106,7 @@ const IdentityVerification = ({
 							control={form.control}
 							name="means_of_verification"
 							render={({ field }) => (
-								<View className="space-y-[6px]">
+								<View className="gap-y-[6px]">
 									<Text className="text-sm text-off-black">
 										Choose a means of verification
 									</Text>
@@ -187,7 +187,7 @@ const IdentityVerification = ({
 							control={form.control}
 							name="means_of_verification_file"
 							render={({ field }) => (
-								<View className="space-y-[6px]">
+								<View className="gap-y-[6px]">
 									<Text className="text-sm text-off-black">
 										{"Upload ID document "}
 									</Text>
@@ -227,7 +227,7 @@ const IdentityVerification = ({
 							control={form.control}
 							name="certificate_of_expertise_file"
 							render={({ field }) => (
-								<View className="space-y-[6px]">
+								<View className="gap-y-[6px]">
 									<Text className="text-sm text-off-black">
 										Upload Business Certificate
 									</Text>

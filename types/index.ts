@@ -314,12 +314,11 @@ export interface IServiceListItem {
 }
 
 export interface IProviderService {
-	category_id: string;
 	created_at: string;
 	description: string;
 	id: number;
 	images: string[];
-	provider: { name: string; image: string; bio: string };
+	provider: { uuid: string; business_name: string; firstname: string; lastname: string; business_logo: string; bio: string };
 	category: {
 		description: string;
 		image: string;
@@ -328,8 +327,6 @@ export interface IProviderService {
 		uuid: string;
 	};
 	name: string;
-	provider_id: string;
-	starting_price: string;
 	status: string;
 	total_completed: number;
 	total_ratings: number;

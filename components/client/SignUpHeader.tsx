@@ -38,7 +38,7 @@ const SignUpHeader = ({
 				<Text className="text-base text-off-black">{title}</Text>
 				<View></View>
 			</View>
-			<View className="flex-row space-x-2 items-center mb-5">
+			<View className="flex-row gap-x-2 items-center mb-5">
 				{Array.from({ length: totalSteps }).map((_, i) => (
 					<View
 						key={i}
@@ -49,8 +49,8 @@ const SignUpHeader = ({
 									? `bg-client-primary`
 									: "bg-service-primary"
 								: userType === "client"
-								? "bg-client-primary-light"
-								: "bg-service-primary-light"
+									? "bg-client-primary-light"
+									: "bg-service-primary-light",
 						)}
 					></View>
 				))}

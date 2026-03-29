@@ -38,7 +38,7 @@ const RequestCard = ({
 							source={require("../../../assets/images/client/temp_user_sq.png")}
 							resizeMode="cover"
 						/>
-						<View className="ml-2 space-y-1">
+						<View className="ml-2 gap-y-1">
 							<Text className="text-sm large:text-base font-regular text-off-black">
 								{customer?.name ||
 									`${customer?.first_name || ""} ${customer?.last_name || ""}`}
@@ -48,7 +48,7 @@ const RequestCard = ({
 							</Text>
 						</View>
 					</View>
-					<View className="space-y-1 max-w-[50%]">
+					<View className="gap-y-1 max-w-[50%]">
 						<View className="flex-row items-center justify-end">
 							<Image
 								source={require("../../../assets/images/location.png")}

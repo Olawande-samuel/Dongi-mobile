@@ -9,21 +9,23 @@ import {
 	BottomSheetScrollView,
 	useBottomSheetModal,
 } from "@gorhom/bottom-sheet";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import React, { useCallback, useMemo } from "react";
 import { Pressable, Text, View } from "react-native";
 
 function AccountApproved({
 	compRef,
 }: {
-	compRef: React.RefObject<BottomSheetModal>;
+	compRef: React.RefObject<BottomSheetModal | null>;
 }) {
-
 	const { dismissAll } = useBottomSheetModal();
-	const snapPoints = useMemo(() => ["50%"], []);
+	const snapPoints = useMemo(() => ["50%", "100"], []);
 
 	const handleClosePress = useCallback(() => {
+		// save to async storage
+		
 		dismissAll();
+
 	}, [dismissAll]);
 
 	return (
@@ -62,7 +64,7 @@ function AccountApproved({
 							<Checkmark />
 						</View>
 
-						<View className="space-y-4 mb-[30px]">
+						<View className="gap-y-4 mb-[30px]">
 							<View className="">
 								<Text className="text-center font-bold text-sm large:text-base text-primaryII ">
 									Congratulations!
@@ -76,7 +78,7 @@ function AccountApproved({
 								<Text className="text-center font-medium large:font-bold text-sm large:text-base text-primaryII mb-2">
 									Up Next
 								</Text>
-								<View className="space-y-2">
+								<View className="gap-y-2">
 									<View className="flex-row justify-between items-center">
 										<View className="flex-row ">
 											<View className="border-[1.5px] mr-3 border-primaryII h-[18px] w-[18px] rounded-full bg-white"></View>
@@ -84,8 +86,8 @@ function AccountApproved({
 												Fund your wallet
 											</Text>
 										</View>
-										<Link href="/service-provider/(tabs)">
-											<AntDesign name="arrowright" size={24} color="#E4AE1B" />
+										<Link href="/service-provider/profile/finance">
+											<AntDesign name="arrow-right" size={24} color="#E4AE1B" />
 										</Link>
 									</View>
 									<View className="flex-row justify-between items-center">
@@ -95,8 +97,8 @@ function AccountApproved({
 												Create at least one service
 											</Text>
 										</View>
-										<Link href="/service-provider/(tabs)/services">
-											<AntDesign name="arrowright" size={24} color="#E4AE1B" />
+										<Link href="/service-provider/services">
+											<AntDesign name="arrow-right" size={24} color="#E4AE1B" />
 										</Link>
 									</View>
 									<View className="flex-row justify-between items-center">
@@ -107,7 +109,7 @@ function AccountApproved({
 											</Text>
 										</View>
 										<Link href="/service-provider/profile">
-											<AntDesign name="arrowright" size={24} color="#E4AE1B" />
+											<AntDesign name="arrow-right" size={24} color="#E4AE1B" />
 										</Link>
 									</View>
 								</View>
@@ -124,7 +126,10 @@ function AccountApproved({
 					</View>
 				</View>
 				<View className="mt-auto px-6 mb-2">
-					<StyledButton title="Send" onPress={() => {}} />
+					<StyledButton
+						title="Get Started"
+						onPress={() => router.push("/service-provider/profile/finance")}
+					/>
 				</View>
 			</BottomSheetScrollView>
 		</BottomSheetModal>

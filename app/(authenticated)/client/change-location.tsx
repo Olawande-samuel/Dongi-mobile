@@ -33,7 +33,7 @@ const LocationForm = React.memo(function LocationForm() {
 	}
 	return (
 		<View className="flex-1 p-6">
-			<View className="space-y-[6px]">
+			<View className="gap-y-[6px]">
 				<Text className="text-sm text-off-black">Location</Text>
 				<View>
 					<GooglePlacesAutocomplete

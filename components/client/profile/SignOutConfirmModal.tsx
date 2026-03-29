@@ -7,11 +7,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "@/context/Auth";
 
 interface Props extends PropsWithChildren {
-	compRef: React.RefObject<BottomSheetModal>;
+	compRef: React.RefObject<BottomSheetModal | null>;
 }
 const SignOutConfirmModal = ({ compRef }: Props) => {
 	const { dismiss } = useBottomSheetModal();
-	const snapPoints = useMemo(() => ["60"], []);
+	const snapPoints = useMemo(() => ["60", "70", "85"], []);
 	const { logout } = useAuth();
 	return (
 		<SafeAreaView>

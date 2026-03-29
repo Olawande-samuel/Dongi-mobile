@@ -4,7 +4,7 @@ import { Image, Pressable, Text, View } from "react-native";
 const SocialSignIn = ({ isLogin = false }: { isLogin: boolean }) => {
 	// const { userType } = useUserType();
 	return (
-		<View className="space-y-2">
+		<View className="gap-y-2">
 			{/* <Pressable className="mb-2 flex-row items-center bg-[#1FB4FF1A] rounded px-1 py-[10px] justify-center">
 				<Image
 					source={require("../../assets/images/apple.png")}

@@ -82,7 +82,7 @@ function ItemComponent({ type }: ItemProps) {
 				<Text
 					className={cn(
 						"font-semibold text-xs large:text-sm text-error-600",
-						type === "top-up" && "text-success-600"
+						type === "top-up" && "text-success-600",
 					)}
 				>
 					+₦10,000
@@ -121,7 +121,7 @@ const Finance = () => {
 					renderItem={({ item }) => <ItemComponent {...item} />}
 					ListHeaderComponent={<HeaderComponent />}
 					ListEmptyComponent={
-						<NoHistory text={"You have made any transaction"} />
+						<NoHistory text={"You haven't made any transaction"} />
 					}
 					keyExtractor={(section, index) => section.name + index}
 					renderSectionHeader={({ section: {} }) => (

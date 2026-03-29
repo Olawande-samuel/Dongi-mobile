@@ -88,7 +88,7 @@ const EmailForm = () => {
 						control={form.control}
 						name="firstname"
 						render={({ field }) => (
-							<View className="space-y-[6px]">
+							<View className="gap-y-[6px]">
 								<Text className="text-sm text-off-black">First Name</Text>
 								<TextInput
 									placeholder="First name"
@@ -112,7 +112,7 @@ const EmailForm = () => {
 						control={form.control}
 						name="lastname"
 						render={({ field }) => (
-							<View className="space-y-[6px]">
+							<View className="gap-y-[6px]">
 								<Text className="text-sm text-off-black">Last Name</Text>
 								<TextInput
 									placeholder="Last name"
@@ -135,7 +135,7 @@ const EmailForm = () => {
 					control={form.control}
 					name="email"
 					render={({ field }) => (
-						<View className="space-y-[6px]">
+						<View className="gap-y-[6px]">
 							<Text className="text-sm text-off-black">Email</Text>
 							<TextInput
 								placeholder="Enter your email address"
@@ -159,7 +159,7 @@ const EmailForm = () => {
 					control={form.control}
 					name="gender"
 					render={({ field }) => (
-						<View className="space-y-[6px]">
+						<View className="gap-y-[6px]">
 							<Text className="text-sm text-off-black">Gender</Text>
 							<View>
 								<SelectDropdown
@@ -236,7 +236,7 @@ const EmailForm = () => {
 				/>
 			</View>
 
-			<View className="space-y-[6px]">
+			<View className="gap-y-[6px]">
 				<Text className="text-sm text-off-black">Location</Text>
 				<View>
 					<TextInput

@@ -11,7 +11,7 @@ const BackButton = () => {
 			onPress={() => {
 				router.back();
 			}}
-			className="size-20 "
+			className="mr-1"
 		>
 			<Ionicons name="arrow-back" size={SIZES.height > 700 ? 24 : 18} />
 		</TouchableOpacity>

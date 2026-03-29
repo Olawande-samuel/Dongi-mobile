@@ -7,7 +7,7 @@ import TestFaceDetection from "./TestFaceDetection";
 
 const FacialVerification = ({
 	steps,
-	setSteps
+	setSteps,
 }: {
 	steps: number;
 	setSteps: React.Dispatch<React.SetStateAction<number>>;
@@ -28,7 +28,7 @@ const FacialVerification = ({
 				</View>
 				<View></View>
 			</View>
-			<View className="flex-row space-x-2 items-center mb-5">
+			<View className="flex-row gap-x-3 justify-between gap-x-2 items-center mb-5">
 				{[...Array(4)].map((_, i) => (
 					<View
 						key={i}

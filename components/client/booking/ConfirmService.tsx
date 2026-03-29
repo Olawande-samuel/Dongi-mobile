@@ -18,7 +18,7 @@ import { toast } from "sonner-native";
 import { handleError } from "@/utils";
 
 interface Props {
-	compRef: React.RefObject<BottomSheetModal>;
+	compRef: React.RefObject<BottomSheetModal | null>;
 	openRatings: VoidFunction;
 	providerName: string;
 	serviceName: string;
@@ -67,7 +67,7 @@ function ConfirmService({
 				onError: (err) => {
 					handleError(err);
 				},
-			}
+			},
 		);
 	}
 
@@ -119,7 +119,7 @@ function ConfirmService({
 										resizeMode="contain"
 									/>
 								</View>
-								<View className="space-y-1 flex-1">
+								<View className="gap-y-1 flex-1">
 									<Text className="text-base font-regular text-off-black">
 										{providerName}
 									</Text>
@@ -135,7 +135,7 @@ function ConfirmService({
 								</View>
 							</View>
 						</View>
-						<View className="space-y-3">
+						<View className="gap-y-3">
 							<View className="flex-row justify-between items-center">
 								<Text className="text-support text-sm font-regular mr-4">
 									Status

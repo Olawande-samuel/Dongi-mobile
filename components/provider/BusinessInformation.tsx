@@ -72,7 +72,7 @@ const BusinessInformation = ({
 		(cat: any) => ({
 			title: cat.name,
 			value: cat.uuid,
-		})
+		}),
 	);
 
 	async function onSubmit(val: FormType) {
@@ -111,7 +111,7 @@ const BusinessInformation = ({
 							control={form.control}
 							name="category_of_service"
 							render={({ field }) => (
-								<View className="space-y-[6px]">
+								<View className="gap-y-[6px]">
 									<Text className="text-sm text-off-black">
 										Service Category
 									</Text>
@@ -189,7 +189,7 @@ const BusinessInformation = ({
 							control={form.control}
 							name="business_logo"
 							render={({ field }) => (
-								<View className="space-y-[6px]">
+								<View className="gap-y-[6px]">
 									<Text className="text-sm text-off-black">
 										Business Banner
 									</Text>
@@ -226,9 +226,9 @@ const BusinessInformation = ({
 							control={form.control}
 							name="bio"
 							render={({ field }) => (
-								<View className="space-y-[6px]">
+								<View className="gap-y-[6px]">
 									<Text className="text-sm text-off-black">About You</Text>
-									<View className="space-y-2">
+									<View className="gap-y-2">
 										<TextInput
 											placeholder="I am ..."
 											multiline
@@ -255,11 +255,11 @@ const BusinessInformation = ({
 							control={form.control}
 							name="brief_introduction"
 							render={({ field }) => (
-								<View className="space-y-[6px]">
+								<View className="gap-y-[6px]">
 									<Text className="text-sm text-off-black">
 										About Your Business
 									</Text>
-									<View className="space-y-2">
+									<View className="gap-y-2">
 										<TextInput
 											placeholder=""
 											multiline

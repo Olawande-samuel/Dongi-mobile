@@ -8,26 +8,27 @@ const ServiceCompletedModal = ({
 	modalVisible,
 	setModalVisible,
 	onPress,
-	customerName
+	customerName,
 }: {
 	modalVisible: boolean;
 	setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
-		onPress: VoidFunction;
-	customerName: string
+	onPress: VoidFunction;
+	customerName: string;
 }) => {
 	return (
 		<ModalComp modalVisible={modalVisible} setModalVisible={setModalVisible}>
-			<View className="space-y-3 w-full" style={{ padding: 16 }}>
+			<View className="gap-y-3 w-full" style={{ padding: 16 }}>
 				<View className="justify-center items-center mb-6">
 					<Delivery isServiceProvider />
 				</View>
 				<Text className="text-base font-regular text-off-black text-center">
 					Congratulations you have marked{" "}
-					<Text className="font-bold">{customerName || ""}’s</Text> request complete
+					<Text className="font-bold">{customerName || ""}’s</Text> request
+					complete
 				</Text>
 				<Text className="text-sm text-support font-regular text-center">
-					Kindly wait for our confirmation from {customerName} to verify this job
-					completed, Thank you
+					Kindly wait for our confirmation from {customerName} to verify this
+					job completed, Thank you
 				</Text>
 				<StyledButton title="Write a Review" onPress={onPress} />
 			</View>

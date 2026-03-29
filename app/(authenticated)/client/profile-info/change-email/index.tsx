@@ -7,7 +7,7 @@ const ChangeEmail = () => {
 	return (
 		<SafeAreaView className="flex-1 bg-white" edges={["bottom"]}>
 			<View className="flex-1 bg-white px-6 pt-[18px]">
-				<View className="space-y-5">
+				<View className="gap-y-5">
 					<View>
 						<Text className="mb-[6px]">Enter your old email address</Text>
 						<TextInput

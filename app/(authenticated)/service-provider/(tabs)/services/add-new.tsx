@@ -41,7 +41,7 @@ const FormSchema = z.object({
 				uri: z.string(),
 				type: z.string(),
 				name: z.string(),
-			})
+			}),
 		)
 		.min(1, "At least one image is required")
 		.max(3, "Maximum of three images"),
@@ -108,7 +108,7 @@ const AddNewService = () => {
 				formData.append(
 					"service_images",
 					image as any,
-					`service_profile_${index}`
+					`service_profile_${index}`,
 				);
 			});
 
@@ -130,17 +130,17 @@ const AddNewService = () => {
 						className="flex-1 bg-white py-[18px]"
 						showsVerticalScrollIndicator={false}
 					>
-						<View className="mb-4 flex-1 p-2 bg-white rounded-[9px] space-y-4 ">
+						<View className="mb-4 flex-1 p-2 bg-white rounded-[9px] gap-y-4 ">
 							<View className="mb-5">
 								<Controller
 									control={form.control}
 									name="name"
 									render={({ field }) => (
-										<View className="space-y-[6px]">
+										<View className="gap-y-[6px]">
 											<Text className="text-xs large:text-sm text-off-black">
 												What is the name of your service?
 											</Text>
-											<View className="space-y-2">
+											<View className="gap-y-2">
 												<TextInput
 													multiline
 													value={field.value}
@@ -162,11 +162,11 @@ const AddNewService = () => {
 									control={form.control}
 									name="description"
 									render={({ field }) => (
-										<View className="space-y-[6px]">
+										<View className="gap-y-[6px]">
 											<Text className="text-xs large:text-sm text-off-black">
 												Write a brief description of your service?
 											</Text>
-											<View className="space-y-2">
+											<View className="gap-y-2">
 												<TextInput
 													placeholder=""
 													multiline
@@ -193,7 +193,7 @@ const AddNewService = () => {
 									control={form.control}
 									name="images"
 									render={({ field }) => (
-										<View className="space-y-[6px]">
+										<View className="gap-y-[6px]">
 											<Text className="text-xs large:text-sm text-off-black">
 												Upload an image communicating your service
 											</Text>
@@ -216,7 +216,7 @@ const AddNewService = () => {
 													{images.length > 0
 														? `${images.length} image${
 																images.length > 1 ? "s" : ""
-														  } selected`
+															} selected`
 														: "Upload your business banner"}
 												</Text>
 											</Pressable>
@@ -239,7 +239,7 @@ const AddNewService = () => {
 			<AppModal
 				modalVisible={modalVisible}
 				setModalVisible={setModalVisible}
-				onPress={() => router.replace("/service-provider/(tabs)/services")}
+				onPress={() => router.replace("/service-provider/services")}
 				title="Congratulations you have successfully created your service"
 				buttonText="Continue"
 			/>

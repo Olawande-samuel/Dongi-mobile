@@ -25,7 +25,7 @@ const AppModal = ({
 }: Props) => {
 	return (
 		<ModalComp modalVisible={modalVisible} setModalVisible={setModalVisible}>
-			<View className="space-y-3 w-full" style={{ padding: 16 }}>
+			<View className="gap-y-3 w-full" style={{ padding: 16 }}>
 				<View className="justify-center items-center">
 					{type === "success" ? <Success isServiceProvider /> : <Warning />}
 				</View>

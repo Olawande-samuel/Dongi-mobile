@@ -11,8 +11,10 @@ const RouteHeader = ({
 }) => {
 	return (
 		<View className="flex-row justify-between py-2 items-center border-b border-[#FAFAFA]">
-			<BackButton />
-			<View className="mx-auto">
+			<View className="basis-1/3" style={{ flexBasis: "33%" }}>
+				<BackButton />
+			</View>
+			<View className="basis-1/3" style={{ flexBasis: "33%" }}>
 				<Text className="text-sm large:text-base text-center text-black font-normal font-regular">
 					{title}
 				</Text>
@@ -22,7 +24,9 @@ const RouteHeader = ({
 					</Text>
 				)}
 			</View>
-			<View className="" />
+			<View className="basis-1/3" style={{ flexBasis: "33%" }}>
+				{/* <Text>Hello</Text> */}
+			</View>
 		</View>
 	);
 };

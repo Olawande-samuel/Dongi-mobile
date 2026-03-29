@@ -11,6 +11,7 @@ import { Pressable, Text, View } from "react-native";
 import { toast } from "sonner-native";
 import { z } from "zod";
 import PasswordInput from "../PasswordInput";
+import StyledButton from "../StyledButton";
 
 const FormSchema = z
 	.object({
@@ -22,7 +23,7 @@ const FormSchema = z
 				{
 					message:
 						"Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character",
-				}
+				},
 			),
 		confirmPassword: z.string(),
 	})
@@ -76,7 +77,7 @@ const SetupPassword = ({
 				onError: (err) => {
 					handleError(err);
 				},
-			}
+			},
 		);
 	}
 	return (
@@ -87,7 +88,7 @@ const SetupPassword = ({
 						control={form.control}
 						name="password"
 						render={({ field }) => (
-							<View className="space-y-[6px]">
+							<View className="gap-y-[6px]">
 								<Text className="text-sm text-off-black">
 									Create your password
 								</Text>
@@ -111,7 +112,7 @@ const SetupPassword = ({
 						control={form.control}
 						name="confirmPassword"
 						render={({ field }) => (
-							<View className="space-y-[6px]">
+							<View className="gap-y-[6px]">
 								<Text className="text-sm text-off-black">Confirm Password</Text>
 								<PasswordInput
 									placeholder="********"
@@ -129,12 +130,10 @@ const SetupPassword = ({
 					)}
 				</View>
 			</View>
-			<Pressable
+			<StyledButton
+				title="Continue"
 				onPress={form.handleSubmit(handleSubmit)}
-				className="bg-primary rounded px-1 py-[10px] mt-auto justify-center items-center"
-			>
-				<Text className="text-white">Continue</Text>
-			</Pressable>
+			/>
 		</View>
 	);
 };

@@ -25,7 +25,7 @@ function ServiceComponent({
 	images,
 }: IProviderService) {
 	return (
-		<View className="bg-white rounded-lg border-outer-light p-3 space-y-2">
+		<View className="bg-white rounded-lg border-outer-light p-3 gap-y-2">
 			<View>
 				<Image
 					source={require("../../../../assets/images/client/preview_1.png")}
@@ -69,7 +69,7 @@ const PublicProfile = () => {
 	});
 
 	const nameOfService = result?.find(
-		(item) => item.category_id === data?.user?.category_of_service
+		(item) => item.category_id === data?.user?.category_of_service,
 	);
 	return (
 		<SafeAreaView className="flex-1 bg-white" edges={["bottom", "top"]}>
@@ -95,13 +95,13 @@ const PublicProfile = () => {
 					<View className="flex-row items-center mb-5">
 						<View className="mr-4">
 							<Image
-								source={require("../../../../assets/images/client/temp_user.png")}
+								source={{ uri: data?.user.business_logo }}
 								className="w-16 h-16 large:w-[100px] large:h-[100px] rounded-full"
 								width={100}
 								height={100}
 							/>
 						</View>
-						<View className="flex-1 py-[6px] space-y-2 ">
+						<View className="flex-1 py-[6px] gap-y-2 ">
 							<View>
 								<Text
 									className="text-xs large:text-sm font-regular text-support mb-2"

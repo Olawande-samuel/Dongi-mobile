@@ -16,8 +16,6 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-
-
 const Services = () => {
 	const { isLoading, result } = useServices();
 
@@ -36,7 +34,7 @@ const Services = () => {
 						showsVerticalScrollIndicator={false}
 					>
 						<View className="mb-4 flex-1 p-2 bg-inner-light rounded-[9px]">
-							<View className="space-y-2">
+							<View className="gap-y-2">
 								{result?.map((service, i) => (
 									<View key={i}>
 										<ServiceComponent {...service} />
@@ -49,7 +47,7 @@ const Services = () => {
 									onPress={() =>
 										router.push("/service-provider/services/add-new")
 									}
-									className="flex-row mt-2 justify-center items-center py-1 large:py-2 w-full space-x-[10px] bg-service-primary rounded"
+									className="flex-row mt-2 justify-center items-center py-1 large:py-2 w-full gap-x-[10px] bg-service-primary rounded"
 								>
 									<Text className="text-white text-sm large:text-base text-center font-regular">
 										Add a new service
@@ -57,7 +55,7 @@ const Services = () => {
 									<Ionicons name="add" color="white" size={SIZES ? 24 : 16} />
 								</Pressable>
 							)}
-							<View className="flex-row justify-center items-center space-x-1 py-3 mt-2 ">
+							<View className="flex-row justify-center items-center gap-x-1 py-3 mt-2 ">
 								<Text className="text-sm text-muted font-regular text-center">
 									{result?.length || 0}/3
 								</Text>

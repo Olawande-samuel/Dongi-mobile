@@ -12,6 +12,8 @@ import { OtpInput } from "react-native-otp-entry";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { toast } from "sonner-native";
 import ResendVerificationOtp from "../shared/ResendVerificationOTP";
+import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
+import { SIZES } from "@/utils/constants";
 
 const PhoneOTPVerification = () => {
 	const pathname = usePathname();
@@ -77,44 +79,49 @@ const PhoneOTPVerification = () => {
 				<Text className="text-base text-off-black">Verify Phone Number </Text>
 				<View></View>
 			</View>
-			<View className="flex-1 pb-4">
-				<View className="flex-1">
-					<View className="flex-1">
-						<View className="mb-[6px]">
-							<Text className="text-sm text-off-black">
-								A code was sent to{" "}
-								<Text className="font-bold">{data?.phone ?? ""}</Text>
-							</Text>
-						</View>
-						<View>
-							<OtpInput
-								numberOfDigits={4}
-								onTextChange={(text) => setOtp(text)}
-								type="numeric"
-								textInputProps={{
-									accessibilityLabel: "One-Time Password",
-									className: "text-sm",
-								}}
-								theme={{
-									pinCodeContainerStyle: {
-										width: 62.25,
-										borderRadius: 4,
-										borderWidth: 1,
-										borderColor: "#F2F2F2",
-									},
-								}}
+			<KeyboardAwareScrollView className="flex-1" bottomOffset={62}>
+				<View
+					className="flex-1 pb-4 "
+					style={{ flex: 1, minHeight: SIZES.height - 70 }}
+				>
+					<View className="flex-1 justify-between">
+						<View className="flex-1">
+							<View className="mb-[6px]">
+								<Text className="text-sm text-off-black">
+									A code was sent to{" "}
+									<Text className="font-bold">{data?.phone ?? ""}</Text>
+								</Text>
+							</View>
+							<View>
+								<OtpInput
+									numberOfDigits={4}
+									onTextChange={(text) => setOtp(text)}
+									type="numeric"
+									textInputProps={{
+										accessibilityLabel: "One-Time Password",
+										className: "text-sm",
+									}}
+									theme={{
+										pinCodeContainerStyle: {
+											width: 62.25,
+											borderRadius: 4,
+											borderWidth: 1,
+											borderColor: "#F2F2F2",
+										},
+									}}
+								/>
+							</View>
+							<ResendVerificationOtp
+								reference={data?.phone}
+								type="PHONE_VERIFICATION"
 							/>
 						</View>
-						<ResendVerificationOtp
-							reference={data?.phone}
-							type="PHONE_VERIFICATION"
-						/>
-					</View>
-					<View className="mt-auto">
-						<StyledButton title="Submit" onPress={verifyOtp} />
+						<View className="mt-auto">
+							<StyledButton title="Submit" onPress={verifyOtp} />
+						</View>
 					</View>
 				</View>
-			</View>
+			</KeyboardAwareScrollView>
 		</SafeAreaView>
 	);
 };

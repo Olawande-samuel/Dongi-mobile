@@ -52,7 +52,7 @@ function ServiceComponent({
 	images,
 }: ServiceProps) {
 	return (
-		<View className="bg-white rounded-lg border-outer-light p-3 space-y-2">
+		<View className="bg-white rounded-lg border-outer-light p-3 gap-y-2">
 			<View>
 				{!images ? (
 					<Image
@@ -110,8 +110,10 @@ const VendorBooking = () => {
 	}, []);
 
 	const serviceInfo = data?.data?.data?.services.find(
-		(item) => item.uuid === params.serviceId
+		(item) => item.uuid === params.serviceId,
 	);
+
+	console.log({serviceInfo})
 
 	return (
 		<SafeAreaView className="flex-1 bg-white" edges={["top", "bottom"]}>
@@ -206,7 +208,7 @@ function RequestService({
 	serviceId,
 }: {
 	serviceId: string;
-	compRef: React.RefObject<BottomSheetModal>;
+	compRef: React.RefObject<BottomSheetModal | null>;
 }) {
 	const { dismiss } = useBottomSheetModal();
 	const { data, isLoading } = useUserInfo();
@@ -260,7 +262,7 @@ function RequestService({
 				onError: (err) => {
 					handleError(err);
 				},
-			}
+			},
 		);
 	}
 
@@ -294,7 +296,7 @@ function RequestService({
 						<Ionicons name="close-circle-outline" color="#676B83" size={24} />
 					</Pressable>
 				</View>
-				<View className="space-y-5 px-6 mb-[149px]">
+				<View className="gap-y-5 px-6 mb-[149px]">
 					<View>
 						<TouchableOpacity
 							onPress={() => router.push("/client/change-location")}

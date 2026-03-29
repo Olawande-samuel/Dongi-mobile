@@ -12,6 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import PhoneSignup from "@/components/shared/PhoneSignup";
 import { Link, router } from "expo-router";
 import SocialSignIn from "@/components/client/SocialSignIn";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
 const SignUp = () => {
 	return (
