@@ -24,7 +24,7 @@ const Search = () => {
 
 	const categoryItems = [
 		...(data?.data?.data?.categories.filter(
-			(item) => item.status === "ACTIVE"
+			(item) => item.status === "ACTIVE",
 		) || []),
 		{
 			name: "Customized Services",
@@ -50,7 +50,7 @@ const Search = () => {
 					) : (
 						categoryItems?.map((item) => (
 							<Pressable
-								key={item.id}
+								key={item.uuid}
 								className="max-w-[162px] w-full mr-2 large:mr-0"
 								onPress={() =>
 									router.push({

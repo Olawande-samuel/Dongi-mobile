@@ -85,7 +85,10 @@ function AccountApproved({
 												Fund your wallet
 											</Text>
 										</View>
-										<Link href="/service-provider/profile/finance">
+										<Link
+											href="/service-provider/profile/finance"
+											onPress={dismissAll}
+										>
 											<AntDesign name="arrow-right" size={24} color="#E4AE1B" />
 										</Link>
 									</View>
@@ -96,7 +99,10 @@ function AccountApproved({
 												Create at least one service
 											</Text>
 										</View>
-										<Link href="/service-provider/services">
+										<Link
+											href="/service-provider/services"
+											onPress={dismissAll}
+										>
 											<AntDesign name="arrow-right" size={24} color="#E4AE1B" />
 										</Link>
 									</View>
@@ -107,7 +113,7 @@ function AccountApproved({
 												Review your public profile
 											</Text>
 										</View>
-										<Link href="/service-provider/profile">
+										<Link href="/service-provider/profile" onPress={dismissAll}>
 											<AntDesign name="arrow-right" size={24} color="#E4AE1B" />
 										</Link>
 									</View>

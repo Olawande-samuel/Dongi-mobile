@@ -5,11 +5,50 @@ import BusinessInformation from "@/components/provider/BusinessInformation";
 import EmailSignup from "@/components/provider/EmailSignup";
 import IdentityVerification from "@/components/provider/IdentityVerification";
 import Welcome from "@/components/Welcome";
-import React, { useState } from "react";
+import {
+	getOnboardingCheckpoint,
+	saveOnboardingCheckpoint,
+} from "@/utils/onboardingCheckpoint";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { ActivityIndicator, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const SignUpWithEmail = () => {
 	const [steps, setSteps] = useState(1);
+	const [checkpointLoaded, setCheckpointLoaded] = useState(false);
+	const maxStepRef = useRef(1);
+
+	useEffect(() => {
+		async function restoreStep() {
+			const cp = await getOnboardingCheckpoint();
+			if (cp?.phase === "email" && cp.step && cp.userType === "service") {
+				setSteps(cp.step);
+				maxStepRef.current = cp.step;
+			}
+			setCheckpointLoaded(true);
+		}
+		restoreStep();
+	}, []);
+
+	const handleNextStep = useCallback((action: React.SetStateAction<number>) => {
+		setSteps((prev) => {
+			const next = typeof action === "function" ? action(prev) : action;
+			if (next > maxStepRef.current && next < 6) {
+				maxStepRef.current = next;
+				saveOnboardingCheckpoint({ userType: "service", phase: "email", step: next });
+			}
+			return next;
+		});
+	}, []);
+
+	if (!checkpointLoaded) {
+		return (
+			<View className="flex-1 justify-center items-center bg-white">
+				<ActivityIndicator size="large" color="#1FB4FF" />
+			</View>
+		);
+	}
+
 	if (steps === 6) {
 		return <Welcome />;
 	}
@@ -22,7 +61,7 @@ const SignUpWithEmail = () => {
 					title="Setup your account"
 					totalSteps={5}
 				>
-					<EmailSignup steps={steps} setSteps={setSteps} />
+					<EmailSignup steps={steps} setSteps={handleNextStep} />
 				</SignUpHeader>
 			)}
 			{steps === 2 && (
@@ -32,7 +71,7 @@ const SignUpWithEmail = () => {
 					title="Confirm your email"
 					totalSteps={5}
 				>
-					<OTP nextStep={setSteps} />
+					<OTP nextStep={handleNextStep} />
 				</SignUpHeader>
 			)}
 			{steps === 3 && (
@@ -42,7 +81,7 @@ const SignUpWithEmail = () => {
 					title="Set Up Your Account"
 					totalSteps={5}
 				>
-					<BusinessInformation nextStep={setSteps} />
+					<BusinessInformation nextStep={handleNextStep} />
 				</SignUpHeader>
 			)}
 			{steps === 4 && (
@@ -52,7 +91,7 @@ const SignUpWithEmail = () => {
 					title="Verify your identity"
 					totalSteps={5}
 				>
-					<IdentityVerification nextStep={setSteps} />
+					<IdentityVerification nextStep={handleNextStep} />
 				</SignUpHeader>
 			)}
 			{steps === 5 && (

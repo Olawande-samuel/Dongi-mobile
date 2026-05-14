@@ -3,6 +3,7 @@ import useTempUser from "@/hooks/useTempUser";
 import { useGlobalContext } from "@/providers/GlobalStateProvider";
 import { handleError } from "@/utils";
 import { Api } from "@/utils/endpoints";
+import { saveOnboardingCheckpoint } from "@/utils/onboardingCheckpoint";
 import { Ionicons } from "@expo/vector-icons";
 import { useMutation } from "@tanstack/react-query";
 import { router, usePathname } from "expo-router";
@@ -19,8 +20,6 @@ import { OtpInput } from "react-native-otp-entry";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { toast } from "sonner-native";
 import ResendVerificationOtp from "../shared/ResendVerificationOTP";
-import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
-import { SIZES } from "@/utils/constants";
 
 const PhoneOTPVerification = () => {
 	const pathname = usePathname();
@@ -49,6 +48,11 @@ const PhoneOTPVerification = () => {
 				{
 					onSuccess: (res) => {
 						toast.success(res.data.message);
+						saveOnboardingCheckpoint({
+							userType: "client",
+							phase: "email",
+							step: 1,
+						});
 						router.push("/clients/sign-up/email");
 					},
 					onError: (err) => {
@@ -66,6 +70,11 @@ const PhoneOTPVerification = () => {
 				{
 					onSuccess: (res) => {
 						toast.success(res.data.message);
+						saveOnboardingCheckpoint({
+							userType: "service",
+							phase: "email",
+							step: 1,
+						});
 						router.push("/service-provider/sign-up/email");
 					},
 					onError: (err) => {

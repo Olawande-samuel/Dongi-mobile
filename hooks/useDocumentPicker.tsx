@@ -1,6 +1,7 @@
 import * as DocumentPicker from "expo-document-picker";
-import { toast } from "sonner-native";
+import { File, Paths } from "expo-file-system";
 import * as ImagePicker from "expo-image-picker";
+import { toast } from "sonner-native";
 
 const useDocumentPicker = () => {
 	const pickDocument = async () => {
@@ -17,40 +18,43 @@ const useDocumentPicker = () => {
 		}
 	};
 	const pickImage = async (
-		aspectRatio?: [number, number]
+		aspectRatio?: [number, number],
 	): Promise<
 		| {
 				uri: string;
-				type: string | undefined;
+				type: string;
 				name: string;
+				base64: string | null | undefined;
 		  }
 		| null
 		| undefined
 	> => {
 		try {
 			let result = await ImagePicker.launchImageLibraryAsync({
-				mediaTypes: ImagePicker.MediaTypeOptions.Images,
+				mediaTypes: ["images"],
 				allowsEditing: true,
 				aspect: aspectRatio ? aspectRatio : [4, 3],
 				quality: 1,
+				base64: true,
 			});
 			if (!result.canceled && result.assets && result.assets.length > 0) {
 				const asset = result.assets[0];
-				const fileName =
-					asset.fileName ?? `image.${asset.mimeType?.split("/")[1]}`;
-				const fileObject = {
-					uri: asset.uri,
+				const mimeType = asset.mimeType ?? "image/jpeg";
+				const fileName = asset.fileName ?? `image.${mimeType.split("/")[1]}`;
+				const ext = mimeType.split("/")[1];
+				const dest = new File(Paths.cache, `picked_${Date.now()}.${ext}`);
+				new File(asset.uri).copy(dest);
+				return {
+					uri: dest.uri,
 					name: fileName,
-					type: asset.mimeType,
-					// size: asset.fileSize,
-					// height: asset.height,
-					// width: asset.width,
+					type: mimeType,
+					base64: asset.base64,
 				};
-
-				return fileObject;
 			}
 			return null;
-		} catch (error) {}
+		} catch (error) {
+			toast.error("Error uploading image");
+		}
 	};
 	return { pickDocument, pickImage };
 };

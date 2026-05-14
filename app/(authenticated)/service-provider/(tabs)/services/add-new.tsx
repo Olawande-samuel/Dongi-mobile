@@ -41,6 +41,7 @@ const FormSchema = z.object({
 				uri: z.string(),
 				type: z.string(),
 				name: z.string(),
+				base64: z.string().nullable().optional(),
 			}),
 		)
 		.min(1, "At least one image is required")
@@ -93,16 +94,12 @@ const AddNewService = () => {
 
 	function onSubmit(val: FormType) {
 		if (userInfo?.user?.category_of_service) {
-			const payload = {
-				...val,
-				images: val.images,
-				category_id: userInfo.user.category_of_service,
-			};
 			const formData = new FormData();
 			formData.append("category_id", userInfo.user.category_of_service);
 			formData.append("name", val.name);
 			formData.append("description", val.description);
 
+			console.log({ formData });
 			// Append each image to FormData
 			val.images.forEach((image, index) => {
 				formData.append(
@@ -197,29 +194,63 @@ const AddNewService = () => {
 											<Text className="text-xs large:text-sm text-off-black">
 												Upload an image communicating your service
 											</Text>
-											<Pressable
-												onPress={async () => {
-													const result = await pickImage();
-													if (result) {
-														field.onChange([...images, result]);
-													}
-												}}
-												className="relative border border-inner-light rounded py-[19px] px-2 justify-center items-center"
-											>
-												<Feather
-													name="upload-cloud"
-													size={SIZES.height > 700 ? 32 : 24}
-													color="#676b83"
-													className="mb-[6px]"
-												/>
-												<Text className=" text-muted text-sm large:text-base text-center font-regular ">
-													{images.length > 0
-														? `${images.length} image${
-																images.length > 1 ? "s" : ""
-															} selected`
-														: "Upload your business banner"}
-												</Text>
-											</Pressable>
+											<View className="flex-row flex-wrap gap-2">
+												{images.map((img, index) => (
+													<View
+														key={img.uri}
+														className="rounded border border-inner-light overflow-hidden"
+														style={{ width: 100, height: 100 }}
+													>
+														<Image
+															source={{ uri: img.uri }}
+															style={{ width: "100%", height: "100%" }}
+															resizeMode="cover"
+														/>
+														<Pressable
+															onPress={() => {
+																field.onChange(
+																	images.filter((_, i) => i !== index),
+																);
+															}}
+															hitSlop={8}
+															style={{
+																position: "absolute",
+																top: 4,
+																right: 4,
+																backgroundColor: "rgba(0,0,0,0.55)",
+																borderRadius: 999,
+																padding: 4,
+															}}
+														>
+															<Feather name="x" size={12} color="#fff" />
+														</Pressable>
+													</View>
+												))}
+												{images.length < 3 && (
+													<Pressable
+														onPress={async () => {
+															const result = await pickImage();
+															if (result) {
+																field.onChange([...images, result]);
+															}
+														}}
+														className="border border-inner-light rounded justify-center items-center gap-y-1"
+														style={{ width: 100, height: 100 }}
+													>
+														<Feather
+															name="upload-cloud"
+															size={SIZES.height > 700 ? 28 : 22}
+															color="#676b83"
+														/>
+														<Text className="text-muted text-xs text-center font-regular">
+															{images.length === 0 ? "Add image" : "Add more"}
+														</Text>
+													</Pressable>
+												)}
+											</View>
+											<Text className="text-muted text-xs font-regular">
+												Up to 3 images
+											</Text>
 										</View>
 									)}
 								/>

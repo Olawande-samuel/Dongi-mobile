@@ -18,7 +18,7 @@ const HomeCategory = () => {
 				<View className="flex-row flex-wrap justify-between gap-y-4 ">
 					{data?.data?.categories?.slice(0, 6).map((item, index) => (
 						<Pressable
-							key={item.id + String(index)}
+							key={item.uuid + String(index)}
 							className="w-[99px] "
 							onPress={() =>
 								router.push({

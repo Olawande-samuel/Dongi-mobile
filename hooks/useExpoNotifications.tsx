@@ -117,7 +117,7 @@ const useExpoNotifications = () => {
 		};
 	}, []);
 
-	console.log("received notification: ", notification);
+	console.log("received notification: ", notification, expoPushToken);
 	return { expoPushToken };
 };
 export default useExpoNotifications;

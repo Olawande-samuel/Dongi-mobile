@@ -2,6 +2,7 @@ import useTempUser from "@/hooks/useTempUser";
 import { useGlobalContext } from "@/providers/GlobalStateProvider";
 import { handleError } from "@/utils";
 import { Api } from "@/utils/endpoints";
+import { clearOnboardingCheckpoint } from "@/utils/onboardingCheckpoint";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { usePathname, useRouter } from "expo-router";
@@ -80,7 +81,7 @@ const SetupPassword = ({
 					if (userType === "client") {
 						nextStep((prev) => prev + 1);
 					} else {
-						// Service providers go to sign-in after setting up password
+						clearOnboardingCheckpoint();
 						router.replace("/(auth)/service-provider/sign-in");
 					}
 				},

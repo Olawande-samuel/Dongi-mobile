@@ -1,11 +1,10 @@
 import NoHistory from "@/components/client/history/NoHistory";
 import CategorySearch from "@/components/client/search/CategorySearch";
 import ServiceItem from "@/components/client/search/ServiceItem";
-import useUserInfo from "@/hooks/useUserInfo";
 import { Api } from "@/utils/endpoints";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, RefreshControl } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -13,8 +12,12 @@ const Query = () => {
 	const params = useLocalSearchParams();
 	const [activeTab, setActiveTab] = useState(1);
 	const [searchValue, setSearchValue] = useState("");
+	const [debouncedSearch, setDebouncedSearch] = useState("");
 
-	const { data: user } = useUserInfo();
+	useEffect(() => {
+		const timer = setTimeout(() => setDebouncedSearch(searchValue), 400);
+		return () => clearTimeout(timer);
+	}, [searchValue]);
 
 	const queryClient = useQueryClient();
 
@@ -24,13 +27,13 @@ const Query = () => {
 	});
 
 	const { data: searchResults, isLoading: searchLoading } = useQuery({
-		queryKey: ["get search values", searchValue],
+		queryKey: ["get search values", debouncedSearch],
 		queryFn: () =>
 			Api.searchService({
 				category: params.query as string,
-				query: searchValue,
+				query: debouncedSearch,
 			}),
-		enabled: !!searchValue,
+		enabled: !!debouncedSearch,
 	});
 
 	const services =
@@ -57,7 +60,7 @@ const Query = () => {
 						<NoHistory text="No service found" />
 					)
 				}
-				keyExtractor={(item) => item.toString()}
+				keyExtractor={(item) => item.uuid.toString()}
 				showsVerticalScrollIndicator={false}
 				refreshControl={
 					<RefreshControl
@@ -67,7 +70,7 @@ const Query = () => {
 								queryKey: ["get service items", params.query],
 							});
 							queryClient.invalidateQueries({
-								queryKey: ["get search values", searchValue],
+								queryKey: ["get search values", debouncedSearch],
 							});
 						}}
 					/>
@@ -76,11 +79,5 @@ const Query = () => {
 		</SafeAreaView>
 	);
 };
-
-// function Loader() {
-// 	return (
-
-// 	)
-// }
 
 export default Query;

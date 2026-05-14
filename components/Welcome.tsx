@@ -1,4 +1,5 @@
 import { useAuth } from "@/context/Auth";
+import { clearOnboardingCheckpoint } from "@/utils/onboardingCheckpoint";
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import { router, usePathname } from "expo-router";
 import React, { useEffect } from "react";
@@ -12,6 +13,7 @@ const Welcome = () => {
 	const userType = pathname.includes("/clients") ? "client" : "service";
 
 	useEffect(() => {
+		clearOnboardingCheckpoint();
 		const timeout = setTimeout(() => {
 			setItem(JSON.stringify(true));
 			if (user) {

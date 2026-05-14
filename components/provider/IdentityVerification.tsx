@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Platform, Pressable, Text, View } from "react-native";
+import { Image, Platform, Pressable, Text, View } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
 import { toast } from "sonner-native";
 import { z } from "zod";
@@ -28,11 +28,13 @@ const FormSchema = z.object({
 		uri: z.string(),
 		type: z.string(),
 		name: z.string(),
+		base64: z.string().nullable().optional(),
 	}),
 	certificate_of_expertise_file: z.object({
 		uri: z.string(),
 		type: z.string(),
 		name: z.string(),
+		base64: z.string().nullable().optional(),
 	}),
 });
 
@@ -43,7 +45,7 @@ const IdentityVerification = ({
 }: {
 	nextStep: React.Dispatch<React.SetStateAction<number>>;
 }) => {
-	const { pickDocument, pickImage } = useDocumentPicker();
+	const { pickImage } = useDocumentPicker();
 	const { setIsLoading } = useGlobalContext();
 	const form = useForm<FormType>({
 		defaultValues: {
@@ -54,11 +56,10 @@ const IdentityVerification = ({
 
 	const { data } = useTempUser();
 
-	const means_of_verification = form.watch("means_of_verification");
 	const means_of_verification_file =
-		form.watch("means_of_verification_file")?.name ?? "";
+		form.watch("means_of_verification_file")?.uri ?? "";
 	const certificate_of_expertise =
-		form.watch("certificate_of_expertise_file")?.name ?? "";
+		form.watch("certificate_of_expertise_file")?.uri ?? "";
 
 	const { mutate } = useMutation({
 		mutationFn: Api.registerVerificationDocs,
@@ -72,12 +73,10 @@ const IdentityVerification = ({
 		formData.append(
 			"means_of_verification_file",
 			val.means_of_verification_file as any,
-			val.means_of_verification_file.name,
 		);
 		formData.append(
 			"certificate_of_expertise_file",
 			val.certificate_of_expertise_file as any,
-			val.certificate_of_expertise_file.name,
 		);
 		formData.append("user_id", data.userId);
 
@@ -115,7 +114,7 @@ const IdentityVerification = ({
 											data={[
 												{ title: "Driver's License", value: "DRIVERS_LICENSE" },
 												{ title: "National ID", value: "NATIONAL_ID_CARD" },
-												{ title: "VOTERS ID", value: "VOTERS_ID" },
+												{ title: "Voters ID", value: "VOTERS_ID" },
 												{ title: "Passport", value: "PASSPORT" },
 											]}
 											onSelect={(selectedItem) => {
@@ -198,18 +197,22 @@ const IdentityVerification = ({
 												field.onChange(result);
 											}
 										}}
-										className="relative border border-inner-light rounded py-[19px] px-2 justify-center items-center"
+										className="relative border border-inner-light rounded py-[19px] px-2 justify-center items-center overflow-hidden"
+										style={{ minHeight: 120 }}
 									>
-										<Feather
-											name="upload-cloud"
-											size={32}
-											color="#676b83"
-											className="mb-[6px]"
-										/>
-										{means_of_verification_file && (
-											<Text className="text-muted text-base text-center font-regular">
-												{means_of_verification_file}
-											</Text>
+										{means_of_verification_file ? (
+											<Image
+												source={{ uri: means_of_verification_file }}
+												style={{ width: "100%", height: 160, borderRadius: 4 }}
+												resizeMode="cover"
+											/>
+										) : (
+											<Feather
+												name="upload-cloud"
+												size={32}
+												color="#676b83"
+												className="mb-[6px]"
+											/>
 										)}
 									</Pressable>
 								</View>
@@ -239,18 +242,23 @@ const IdentityVerification = ({
 												field.onChange(result);
 											}
 										}}
-										className="relative border border-inner-light rounded py-[19px] px-2 justify-center items-center"
+										className="relative border border-inner-light rounded py-[19px] px-2 justify-center items-center overflow-hidden"
+										style={{ minHeight: 120 }}
 									>
-										<Feather
-											name="upload-cloud"
-											size={32}
-											color="#676b83"
-											className="mb-[6px]"
-										/>
-										<Text className=" text-muted text-base text-center font-regular ">
-											{certificate_of_expertise ??
-												"Upload a certificate of your expertise"}
-										</Text>
+										{certificate_of_expertise ? (
+											<Image
+												source={{ uri: certificate_of_expertise }}
+												style={{ width: "100%", height: 160, borderRadius: 4 }}
+												resizeMode="cover"
+											/>
+										) : (
+											<Feather
+												name="upload-cloud"
+												size={32}
+												color="#676b83"
+												className="mb-[6px]"
+											/>
+										)}
 									</Pressable>
 								</View>
 							)}

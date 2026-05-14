@@ -6,8 +6,9 @@ import {
 	KeyboardAvoidingView,
 	Platform,
 	ActivityIndicator,
+	Image,
 } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import BackButton from "@/components/BackButton";
 import { Controller, useForm } from "react-hook-form";
@@ -24,26 +25,32 @@ import { handleError } from "@/utils";
 import { toast } from "sonner-native";
 import { router, useLocalSearchParams } from "expo-router";
 import RouteHeader from "@/components/shared/RouteHeader";
+import useUserInfo from "@/hooks/useUserInfo";
+import useServiceProviderUserInfo from "@/hooks/useServiceProviderUserInfo";
 
 const FormSchema = z.object({
 	name: z.string(),
 	description: z
 		.string()
 		.max(600, "Description should not be more than 500 characters"),
-	images: z.object({
-		uri: z.string(),
-		type: z.string().optional(),
-		name: z.string(),
-	}),
+	images: z.array(z.string()).min(1, "At least one image is required"),
 	category_id: z.string(),
-	starting_price: z.number().optional(),
 });
 
 type FormType = z.infer<typeof FormSchema>;
 
+type NewImage = {
+	uri: string;
+	type: string;
+	name: string;
+	base64?: string | null;
+};
+
 const EditService = () => {
 	const params = useLocalSearchParams();
+	const user = useServiceProviderUserInfo();
 	const { pickImage } = useDocumentPicker();
+	const [newImages, setNewImages] = useState<NewImage[]>([]);
 
 	const { data, isLoading } = useQuery({
 		queryKey: ["get provider service by id", params.serviceId],
@@ -59,6 +66,7 @@ const EditService = () => {
 		defaultValues: {
 			name: "",
 			description: "",
+			images: [],
 		},
 		resolver: zodResolver(FormSchema),
 	});
@@ -68,21 +76,19 @@ const EditService = () => {
 			form.reset({
 				name: serviceInfo.name,
 				description: serviceInfo.description,
-				...(serviceInfo.images && {
-					images: { uri: serviceInfo.images?.[0], name: "service image" },
-				}),
-				category_id: serviceInfo.category_id,
-				starting_price: Number(serviceInfo.starting_price),
+				images: serviceInfo.images ?? [],
+				category_id: serviceInfo.category.uuid,
 			});
 		}
 	}, [data?.data?.data]);
 
-	const bannerName = form.watch("images")?.name ?? "";
+	const images = form.watch("images") ?? [];
 
 	const { mutate, isPending } = useMutation({
 		mutationFn: Api.editService,
 		onSuccess: () => {
 			toast.success("Service updated successfully");
+			setNewImages([]);
 			queryClient.invalidateQueries({
 				queryKey: ["get all services"],
 			});
@@ -95,11 +101,17 @@ const EditService = () => {
 
 	function onSubmit(val: FormType) {
 		if (serviceInfo) {
-			const payload = {
-				...val,
-				images: [val.images.uri],
-			};
-			mutate({ serviceId: serviceInfo?.uuid, payload });
+			const formData = new FormData();
+			formData.append("name", val.name);
+			formData.append("description", val.description);
+			formData.append("category_id", val.category_id);
+			formData.append("userId", user?.data?.user.uuid as string);
+
+			// val.images.forEach((url) => formData.append("existing_images", url));
+			newImages.forEach((img, i) =>
+				formData.append("service_images", img as any, `service_profile_${i}`),
+			);
+			mutate({ serviceId: serviceInfo.uuid, formData });
 		}
 	}
 
@@ -184,32 +196,104 @@ const EditService = () => {
 										<Controller
 											control={form.control}
 											name="images"
-											render={({ field }) => (
-												<View className="gap-y-[6px]">
-													<Text className="text-xs large:text-sm text-off-black">
-														Upload an image communicating your service
-													</Text>
-													<Pressable
-														onPress={async () => {
-															const result = await pickImage();
-															if (result) {
-																field.onChange(result);
-															}
-														}}
-														className="relative border border-inner-light rounded py-[19px] px-2 justify-center items-center"
-													>
-														<Feather
-															name="upload-cloud"
-															size={SIZES.height > 700 ? 32 : 24}
-															color="#676b83"
-															className="mb-[6px]"
-														/>
-														<Text className=" text-muted text-sm large:text-base text-center font-regular ">
-															{bannerName ?? "Upload your business banner"}
+											render={({ field }) => {
+												const total = images.length + newImages.length;
+												return (
+													<View className="gap-y-[6px]">
+														<Text className="text-xs large:text-sm text-off-black">
+															Service images
 														</Text>
-													</Pressable>
-												</View>
-											)}
+														<View className="flex-row flex-wrap gap-2">
+															{images.map((uri, index) => (
+																<View
+																	key={uri}
+																	className="rounded border border-inner-light overflow-hidden"
+																	style={{ width: 100, height: 100 }}
+																>
+																	<Image
+																		source={{ uri }}
+																		style={{ width: "100%", height: "100%" }}
+																		resizeMode="cover"
+																	/>
+																	<Pressable
+																		onPress={() =>
+																			field.onChange(
+																				images.filter((_, i) => i !== index),
+																			)
+																		}
+																		hitSlop={8}
+																		style={{
+																			position: "absolute",
+																			top: 4,
+																			right: 4,
+																			backgroundColor: "rgba(0,0,0,0.55)",
+																			borderRadius: 999,
+																			padding: 4,
+																		}}
+																	>
+																		<Feather name="x" size={12} color="#fff" />
+																	</Pressable>
+																</View>
+															))}
+															{newImages.map((img, index) => (
+																<View
+																	key={img.uri}
+																	className="rounded border border-inner-light overflow-hidden"
+																	style={{ width: 100, height: 100 }}
+																>
+																	<Image
+																		source={{ uri: img.uri }}
+																		style={{ width: "100%", height: "100%" }}
+																		resizeMode="cover"
+																	/>
+																	<Pressable
+																		onPress={() =>
+																			setNewImages(
+																				newImages.filter((_, i) => i !== index),
+																			)
+																		}
+																		hitSlop={8}
+																		style={{
+																			position: "absolute",
+																			top: 4,
+																			right: 4,
+																			backgroundColor: "rgba(0,0,0,0.55)",
+																			borderRadius: 999,
+																			padding: 4,
+																		}}
+																	>
+																		<Feather name="x" size={12} color="#fff" />
+																	</Pressable>
+																</View>
+															))}
+															{total < 3 && (
+																<Pressable
+																	onPress={async () => {
+																		const result = await pickImage();
+																		if (result) {
+																			setNewImages([...newImages, result]);
+																		}
+																	}}
+																	className="border border-inner-light rounded justify-center items-center gap-y-1"
+																	style={{ width: 100, height: 100 }}
+																>
+																	<Feather
+																		name="upload-cloud"
+																		size={SIZES.height > 700 ? 28 : 22}
+																		color="#676b83"
+																	/>
+																	<Text className="text-muted text-xs text-center font-regular">
+																		Add more
+																	</Text>
+																</Pressable>
+															)}
+														</View>
+														<Text className="text-muted text-xs font-regular">
+															Up to 3 images
+														</Text>
+													</View>
+												);
+											}}
 										/>
 										{form.formState.errors?.images && (
 											<Text className="text-xs text-red-400">

@@ -518,17 +518,13 @@ class API {
 	}
 	async editService(data: {
 		serviceId: string;
-		payload: {
-			category_id: string;
-			description: string;
-			starting_price?: number;
-			name: string;
-			images: string[];
-		};
+		formData: FormData;
 	}): Promise<AxiosResponse<any>> {
 		try {
 			const endpoint = `/services/${data.serviceId}`;
-			const response = await authInstance.put(endpoint, data.payload);
+			const response = await authInstance.put(endpoint, data.formData, {
+				headers: { "Content-Type": "multipart/form-data" },
+			});
 			return response;
 		} catch (error) {
 			return Promise.reject(error);

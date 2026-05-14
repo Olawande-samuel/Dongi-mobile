@@ -77,7 +77,7 @@ export default function RootLayout() {
 					<GlobalStateProvider>
 						<BottomSheetModalProvider>
 							<RootLayoutNav />
-							<Toaster position="top-center" />
+							<Toaster position="top-center" richColors />
 						</BottomSheetModalProvider>
 					</GlobalStateProvider>
 				</GestureHandlerRootView>

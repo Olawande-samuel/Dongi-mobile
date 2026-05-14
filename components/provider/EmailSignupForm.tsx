@@ -7,6 +7,7 @@ import {
 	useFormContext,
 } from "react-hook-form";
 import {
+	ActivityIndicator,
 	FlatList,
 	Keyboard,
 	KeyboardAvoidingView,
@@ -37,17 +38,21 @@ const FormSchema = z.object({
 		.string()
 		.email()
 		.transform((val) => val.toLowerCase()),
-	businessName: z.string(),
+	business_name: z.string(),
 	gender: z.union([z.literal("MALE"), z.literal("FEMALE"), z.literal("OTHER")]),
 	location: z.string(),
 	latitude: z.number(),
 	longitude: z.number(),
+	city: z.string(),
+	state: z.string(),
+	country: z.string(),
 });
 
 type FormType = z.infer<typeof FormSchema>;
 
 function EmailForm() {
 	const form = useFormContext();
+	const [isFetching, setIsFetching] = React.useState(false);
 
 	return (
 		<View className="flex-1">
@@ -127,7 +132,7 @@ function EmailForm() {
 			<View className="mb-5">
 				<Controller
 					control={form.control}
-					name="businessName"
+					name="business_name"
 					render={({ field }) => (
 						<View className="gap-y-[6px]">
 							<Text className="text-sm text-off-black">Business Name</Text>
@@ -176,7 +181,7 @@ function EmailForm() {
 												<Text
 													className="text-sm text-off-black"
 													style={{
-														fontSize: 16,
+														fontSize: 14,
 														color: "#c6c6c6",
 														// fontWeight: 400,
 													}}
@@ -225,15 +230,44 @@ function EmailForm() {
 							debounce={300}
 							enablePoweredByContainer
 							onFail={(error) => {
+								setIsFetching(false);
 								console.log(error);
 								toast.error("An error occurred fetching your location");
 							}}
 							fetchDetails
+							textInputProps={{
+								onChangeText: (text) => {
+									setIsFetching(text.length > 0);
+									form.setValue("location", text);
+								},
+							}}
+							renderRightButton={() =>
+								isFetching ? (
+									<ActivityIndicator
+										size="small"
+										color="#18658B"
+										style={{ marginRight: 8, alignSelf: "center" }}
+									/>
+								) : null
+							}
 							onPress={(data, detail) => {
-								console.log({ data });
-								form.setValue("location", data.description);
+								setIsFetching(false);
+								const components = detail?.address_components ?? [];
+								const city =
+									components.find((c) => c.types.includes("locality"))
+										?.long_name ?? "";
+								const state =
+									components.find((c) =>
+										c.types.includes("administrative_area_level_1"),
+									)?.long_name ?? "";
 								form.setValue("latitude", detail?.geometry.location.lat);
 								form.setValue("longitude", detail?.geometry.location.lng);
+								const country =
+									components.find((c) => c.types.includes("country"))
+										?.long_name ?? "";
+								form.setValue("city", city);
+								form.setValue("state", state);
+								form.setValue("country", country);
 							}}
 							query={{
 								key: process.env.EXPO_PUBLIC_GOOGLE_API,
@@ -272,10 +306,12 @@ const EmailSignupForm = ({
 			firstname: "",
 			lastname: "",
 			middlename: "",
-			businessName: "",
+			business_name: "",
 			location: "",
 		},
 		resolver: zodResolver(FormSchema),
+		mode: "onChange",
+		reValidateMode: "onChange",
 	});
 
 	const { mutate } = useMutation({
@@ -304,7 +340,8 @@ const EmailSignupForm = ({
 		<View className="flex-1">
 			<FormProvider {...form}>
 				<KeyboardAvoidingView
-					behavior={Platform.OS === "ios" ? "padding" : undefined}
+					behavior={Platform.OS === "ios" ? "padding" : "height"}
+					keyboardVerticalOffset={60}
 					style={{ flex: 1 }}
 				>
 					<TouchableWithoutFeedback

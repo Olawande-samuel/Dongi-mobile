@@ -6,12 +6,7 @@ import React from "react";
 import { ActivityIndicator, Image, Pressable, Text, View } from "react-native";
 
 const ProviderHomeUserInfo = () => {
-	const { data, isLoading } = useServiceProviderUserInfo();
-
-	const location = useLocation(
-		data?.user.latitude || 0,
-		data?.user.longitude || 0
-	);
+	const { data } = useServiceProviderUserInfo();
 
 	// if (isLoading) {
 	// 	return (
@@ -24,13 +19,13 @@ const ProviderHomeUserInfo = () => {
 	return (
 		<View className="flex-row items-center mb-4">
 			<Text className="mr-4 font-semibold text-base large:text-lg text-black">
-				{`Hi, ${data?.user.firstname || ""}`}
+				{`Hi, ${data?.user?.firstname || ""}`}
 			</Text>
 			<View className="flex-row items-center ml-auto">
 				<Text>at</Text>
 				<Pressable
 					className="flex-row px-1 py-[7px]"
-					onPress={() => router.push("/client/change-location")}
+					onPress={() => router.push("/provider/change-location")}
 				>
 					<Image
 						source={require("../../../assets/images/location.png")}
@@ -43,7 +38,7 @@ const ProviderHomeUserInfo = () => {
 						className="max-w-[120px] text-off-black mr-[2px] overflow-hidden text-ellipsis"
 						numberOfLines={1}
 					>
-						{data?.user.location || ""}
+						{data?.user?.location || ""}
 					</Text>
 					<Image
 						source={require("../../../assets/images/arrow-down.png")}

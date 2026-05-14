@@ -1,4 +1,5 @@
 import { UserType } from "@/types";
+import { clearOnboardingCheckpoint } from "@/utils/onboardingCheckpoint";
 import AsyncStorage, {
 	useAsyncStorage,
 } from "@react-native-async-storage/async-storage";
@@ -67,6 +68,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 	async function handleLogin(token: string, type: UserType) {
 		await AsyncStorage.setItem("user", JSON.stringify({ token }));
 		await storeUserType(type);
+		await clearOnboardingCheckpoint();
 		setUser({ token });
 		setUserType(type);
 	}
@@ -75,6 +77,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 		queryClient.clear();
 		await AsyncStorage.removeItem("user");
 		await AsyncStorage.removeItem("userType");
+		await clearOnboardingCheckpoint();
 		setUser(null);
 		setUserType(null);
 	}

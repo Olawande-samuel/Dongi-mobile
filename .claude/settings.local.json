@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \"try { require\\('expo-file-system'\\); console.log\\('available'\\); } catch\\(e\\) { console.log\\('not available'\\); }\")",
+      "Bash(npx expo *)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\olawa\\\\Desktop\\\\Dongi\\\\app\\\\\\(auth\\)\" -Recurse -Force)",
+      "Bash(Select-Object FullName)"
+    ]
+  }
+}

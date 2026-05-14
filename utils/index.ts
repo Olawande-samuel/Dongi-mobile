@@ -15,10 +15,11 @@ export const handleError = (err: any) => {
 		console.error(err.response);
 		const errorMessage =
 			axiosError.response?.data?.message || axiosError.message;
-		toast.error(errorMessage);
+		toast.error("Error", { description: errorMessage });
 	} else {
 		const error = err as Error;
-		toast.error(error.message);
+		console.log("another error");
+		toast.error("Error", { description: error.message });
 	}
 };
 
@@ -42,7 +43,7 @@ export interface IDatesOptions {
 	created_at?: string | null;
 }
 export function groupByDate<T extends IDatesOptions>(
-	data: Array<T>
+	data: Array<T>,
 ): { title: string; data: T[] }[] {
 	if (!data) {
 		return [];

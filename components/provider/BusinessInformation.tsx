@@ -9,6 +9,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
+	Image,
 	KeyboardAvoidingView,
 	Platform,
 	Pressable,
@@ -28,6 +29,7 @@ const FormSchema = z.object({
 		uri: z.string(),
 		type: z.string(),
 		name: z.string(),
+		base64: z.string().nullable().optional(),
 	}),
 	bio: z.string(),
 	brief_introduction: z.string(),
@@ -52,7 +54,7 @@ const BusinessInformation = ({
 		resolver: zodResolver(FormSchema),
 	});
 
-	const bannerName = form.watch("business_logo")?.name ?? "";
+	const bannerUri = form.watch("business_logo")?.uri ?? "";
 
 	const { data: categories, isLoading } = useQuery({
 		queryKey: ["get service categories"],
@@ -81,6 +83,14 @@ const BusinessInformation = ({
 		formData.append("bio", val.bio);
 		formData.append("user_id", data.userId);
 		formData.append("business_logo", val.business_logo as any);
+
+		// const { uri, type, name, base64 } = val.business_logo;
+		// if (base64) {
+		// 	const fetchResponse = await fetch(`data:${type};base64,${base64}`);
+		// 	const blob = await fetchResponse.blob();
+		// 	formData.append("business_logo", blob, name);
+		// } else {
+		// }
 
 		mutate(formData, {
 			onSuccess: (res) => {
@@ -200,17 +210,28 @@ const BusinessInformation = ({
 												field.onChange(result);
 											}
 										}}
-										className="relative border border-inner-light rounded py-[19px] px-2 justify-center items-center"
+										className="relative border border-inner-light rounded overflow-hidden"
+										style={{ height: 160 }}
 									>
-										<Feather
-											name="upload-cloud"
-											size={32}
-											color="#676b83"
-											className="mb-[6px]"
-										/>
-										<Text className=" text-muted text-base text-center font-regular ">
-											{bannerName ?? "Upload your business banner"}
-										</Text>
+										{bannerUri ? (
+											<Image
+												source={{ uri: bannerUri }}
+												style={{ width: "100%", height: "100%" }}
+												resizeMode="cover"
+											/>
+										) : (
+											<View className="flex-1 justify-center items-center py-[19px] px-2">
+												<Feather
+													name="upload-cloud"
+													size={32}
+													color="#676b83"
+													className="mb-[6px]"
+												/>
+												<Text className="text-muted text-base text-center font-regular">
+													Upload your business banner
+												</Text>
+											</View>
+										)}
 									</Pressable>
 								</View>
 							)}

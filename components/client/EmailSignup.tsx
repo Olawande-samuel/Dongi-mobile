@@ -14,24 +14,22 @@ import {
 	useFormContext,
 } from "react-hook-form";
 import {
+	ActivityIndicator,
 	FlatList,
 	Keyboard,
 	KeyboardAvoidingView,
 	Platform,
 	Pressable,
-	ScrollView,
 	Text,
 	TextInput,
-	TouchableOpacity,
 	TouchableWithoutFeedback,
 	View,
 } from "react-native";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import SelectDropdown from "react-native-select-dropdown";
 import { toast } from "sonner-native";
 import { z } from "zod";
 import FormError from "../FormError";
-
-import { useGoogleAutocomplete } from "@appandflow/react-native-google-autocomplete";
 
 const FormSchema = z
 	.object({
@@ -46,6 +44,9 @@ const FormSchema = z
 		location: z.string({ message: "Enter a valid location" }),
 		latitude: z.number(),
 		longitude: z.number(),
+		city: z.string(),
+		state: z.string(),
+		country: z.string(),
 	})
 	.refine(
 		(data) => {
@@ -63,14 +64,15 @@ const FormSchema = z
 
 type FormType = z.infer<typeof FormSchema>;
 
+const GENDER_OPTIONS = [
+	{ title: "Male", value: "MALE" },
+	{ title: "Female", value: "FEMALE" },
+	{ title: "Other", value: "OTHER" },
+] as const;
+
 const EmailForm = () => {
 	const form = useFormContext();
-
-	const { locationResults, setTerm, clearSearch, searchDetails, term } =
-		useGoogleAutocomplete(process.env.EXPO_PUBLIC_GOOGLE_API!, {
-			language: "en",
-			debounce: 300,
-		});
+	const [isFetching, setIsFetching] = React.useState(false);
 
 	return (
 		<View className="flex-1">
@@ -155,13 +157,11 @@ const EmailForm = () => {
 							<Text className="text-sm text-off-black">Gender</Text>
 							<View style={{ minHeight: 20 }}>
 								<SelectDropdown
-									data={[
-										{ title: "Male", value: "MALE" },
-										{ title: "Female", value: "FEMALE" },
-										{ title: "Other", value: "OTHER" },
-									]}
+									data={GENDER_OPTIONS as any}
+									defaultValue={
+										GENDER_OPTIONS.find((o) => o.value === field.value) ?? null
+									}
 									onSelect={(selectedItem) => {
-										// form.setValue("gender", selectedItem.value);
 										field.onChange(selectedItem.value);
 									}}
 									renderButton={(selectedItem, isOpened) => {
@@ -229,50 +229,74 @@ const EmailForm = () => {
 
 			<View className="gap-y-[6px]">
 				<Text className="text-sm text-off-black">Location</Text>
-				<View>
-					<TextInput
-						value={term}
-						onChangeText={setTerm}
+				<View className="min-h-[200px]">
+					<GooglePlacesAutocomplete
 						placeholder="Enter your location"
-						className="p-2 text-muted text-base rounded border border-inner-light"
-					/>
-					<View
-						className="px-2 gap-y-2"
-						style={{
-							backgroundColor: "white",
-							elevation: 3, // for Android
-							shadowColor: "#000", // for iOS
-							shadowOpacity: 0.1,
-							shadowRadius: 4,
+						debounce={300}
+						enablePoweredByContainer
+						onFail={(error) => {
+							setIsFetching(false);
+							console.log(error);
+							toast.error("An error occurred fetching your location");
 						}}
-					>
-						{locationResults.slice(0, 3).map((el, i) => (
-							<TouchableOpacity
-								key={String(i)}
-								className="w-full p-1"
-								onPress={async () => {
-									console.log("pressed");
-									const details = await searchDetails(el.place_id);
-									form.setValue("location", details.formatted_address);
-									form.setValue("latitude", details?.geometry.location.lat);
-									form.setValue("longitude", details?.geometry.location.lng);
-									setTerm(details.formatted_address);
-								}}
-							>
-								<Text>{el.description}</Text>
-							</TouchableOpacity>
-						))}
-					</View>
-
-					{form.formState?.errors?.location ? (
-						<FormError
-							value={form.formState.errors?.location?.message as string}
-						/>
-					) : null}
+						fetchDetails
+						textInputProps={{
+							onChangeText: (text) => {
+								setIsFetching(text.length > 0);
+								form.setValue("location", text);
+							},
+						}}
+						renderRightButton={() =>
+							isFetching ? (
+								<ActivityIndicator
+									size="small"
+									color="#18658B"
+									style={{ marginRight: 8, alignSelf: "center" }}
+								/>
+							) : null
+						}
+						onPress={(data, detail) => {
+							setIsFetching(false);
+							const components = detail?.address_components ?? [];
+							const city =
+								components.find((c) => c.types.includes("locality"))
+									?.long_name ?? "";
+							const state =
+								components.find((c) =>
+									c.types.includes("administrative_area_level_1"),
+								)?.long_name ?? "";
+							const country =
+								components.find((c) => c.types.includes("country"))
+									?.long_name ?? "";
+							form.setValue("location", data.description);
+							form.setValue("latitude", detail?.geometry.location.lat);
+							form.setValue("longitude", detail?.geometry.location.lng);
+							form.setValue("city", city);
+							form.setValue("state", state);
+							form.setValue("country", country);
+						}}
+						query={{
+							key: process.env.EXPO_PUBLIC_GOOGLE_API,
+							language: "en",
+						}}
+						styles={{
+							textInput: {
+								borderWidth: 1,
+								borderColor: "#f2f2f2",
+								padding: 2,
+								color: "#99a2b3",
+								borderRadius: 4,
+								fontSize: 16,
+							},
+						}}
+					/>
 				</View>
+				{form.formState?.errors?.location ? (
+					<FormError
+						value={form.formState.errors?.location?.message as string}
+					/>
+				) : null}
 			</View>
-
-			<View className="flex-1">{/* <VirtualizedList /> */}</View>
 		</View>
 	);
 };
@@ -296,7 +320,10 @@ function EmailSignup({
 			email: "",
 		},
 		resolver: zodResolver(FormSchema),
+		mode: "onChange",
 	});
+
+	console.log(form.getValues(), form.formState.errors);
 
 	const { mutate } = useMutation({
 		mutationFn: Api.registerUserInfo,

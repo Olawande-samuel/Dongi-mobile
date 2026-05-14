@@ -1,9 +1,8 @@
-import Animated, { useAnimatedStyle } from "react-native-reanimated";
-import { useGradualAnimation } from "@/hooks/useGradualAnimation";
 import useAsyncStorage from "@/hooks/useAsyncStorage";
 import { useGlobalContext } from "@/providers/GlobalStateProvider";
 import { handleError } from "@/utils";
 import { Api } from "@/utils/endpoints";
+import { saveOnboardingCheckpoint } from "@/utils/onboardingCheckpoint";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { router } from "expo-router";
@@ -14,7 +13,7 @@ import { CountryPicker } from "react-native-country-codes-picker";
 import { toast } from "sonner-native";
 import { z } from "zod";
 import StyledButton from "../StyledButton";
-import FacialVerification from "../client/FacialVerification";
+import BusinessInformation from "../provider/BusinessInformation";
 
 const FormSchema = z.object({
 	phone: z.string().min(10).max(15),
@@ -22,7 +21,6 @@ const FormSchema = z.object({
 type FormType = z.infer<typeof FormSchema>;
 
 const PhoneSignup = ({ userType }: { userType: "service" | "client" }) => {
-	const { height } = useGradualAnimation();
 	const [show, setShow] = useState(false);
 	const [countryCode, setCountryCode] = useState("+234");
 	const [countryFlag, setCountryFlag] = useState("🇳🇬");
@@ -30,12 +28,6 @@ const PhoneSignup = ({ userType }: { userType: "service" | "client" }) => {
 	const { setItem } = useAsyncStorage();
 
 	const { setIsLoading } = globalContext;
-
-	const keyboardPadding = useAnimatedStyle(() => {
-		return {
-			height: height.value,
-		};
-	}, []);
 
 	const form = useForm<FormType>({
 		defaultValues: {
@@ -69,6 +61,10 @@ const PhoneSignup = ({ userType }: { userType: "service" | "client" }) => {
 							userId: res.data.data.user.uuid ?? "",
 						};
 						setItem("tempUser", JSON.stringify(tempUser));
+						saveOnboardingCheckpoint({
+							userType: "client",
+							phase: "phone-verification",
+						});
 						router.push("/clients/phone-verification");
 					},
 					onError: (err) => {
@@ -94,10 +90,13 @@ const PhoneSignup = ({ userType }: { userType: "service" | "client" }) => {
 						};
 
 						setItem("tempUser", JSON.stringify(tempUser));
+						saveOnboardingCheckpoint({
+							userType: "service",
+							phase: "phone-verification",
+						});
 						router.push("/service-provider/phone-verification");
 					},
 					onError: (err) => {
-						toast.error(err.message);
 						handleError(err);
 					},
 				},
@@ -105,6 +104,9 @@ const PhoneSignup = ({ userType }: { userType: "service" | "client" }) => {
 		}
 	}
 
+	const [nextStep, setNextStep] = useState(1);
+
+	// return <BusinessInformation nextStep={setNextStep} />;
 	return (
 		<View className="00">
 			<View>
@@ -151,6 +153,7 @@ const PhoneSignup = ({ userType }: { userType: "service" | "client" }) => {
 					)}
 				/>
 			</View>
+
 			<View className="mt-4" style={{ marginTop: 13 }}>
 				<StyledButton
 					onPress={form.handleSubmit(handleSubmit)}
@@ -160,7 +163,6 @@ const PhoneSignup = ({ userType }: { userType: "service" | "client" }) => {
 					title="Continue"
 				/>
 			</View>
-			<Animated.View style={keyboardPadding} />
 		</View>
 	);
 };
