@@ -20,6 +20,7 @@ import { OtpInput } from "react-native-otp-entry";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { toast } from "sonner-native";
 import ResendVerificationOtp from "../shared/ResendVerificationOTP";
+import { Keyboard } from "react-native";
 
 const PhoneOTPVerification = () => {
 	const pathname = usePathname();
@@ -39,6 +40,7 @@ const PhoneOTPVerification = () => {
 	});
 
 	function verifyOtp() {
+		Keyboard.dismiss();
 		if (pathname.includes("/clients")) {
 			mutate(
 				{

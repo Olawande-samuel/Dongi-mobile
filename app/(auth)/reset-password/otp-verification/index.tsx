@@ -5,32 +5,20 @@ import { OtpInput } from "react-native-otp-entry";
 
 import BackButton from "@/components/BackButton";
 import StyledButton from "@/components/StyledButton";
-import { useGlobalContext } from "@/providers/GlobalStateProvider";
-import { Api } from "@/utils/endpoints";
-import { useMutation } from "@tanstack/react-query";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { FormType } from "../_layout";
 
 const OTPVerification = () => {
 	const params = useLocalSearchParams();
 	const userType = params.userType as USERTYPE;
 
-	const { setIsLoading } = useGlobalContext();
-
 	const form = useFormContext<FormType>();
 
-	const { mutate } = useMutation({
-		mutationFn: Api.resetPassword,
-		onMutate: () => setIsLoading(true),
-		onSettled: () => setIsLoading(false),
-	});
-
-	function verifyOtp(val: FormType) {
-		const payload = {
-			token: val.token,
-			new_password: val.new_password,
-		};
-		mutate({ type: userType, payload });
+	function handleContinue() {
+		router.push({
+			pathname: "/(auth)/reset-password",
+			params: { userType },
+		});
 	}
 
 	return (
@@ -46,12 +34,11 @@ const OTPVerification = () => {
 						<View className="mb-[6px]">
 							<Text className="text-sm text-off-black text-center">
 								A code was sent to your email
-								{/* <Text className="font-bold">{phone?.phone ?? ""}</Text> */}
 							</Text>
 						</View>
 						<View>
 							<OtpInput
-								numberOfDigits={4}
+								numberOfDigits={6}
 								onTextChange={(text) => {
 									form.setValue("token", text);
 								}}
@@ -61,7 +48,7 @@ const OTPVerification = () => {
 								}}
 								theme={{
 									pinCodeContainerStyle: {
-										width: 62.25,
+										width: 40.25,
 										borderRadius: 4,
 										borderWidth: 1,
 										borderColor: "#F2F2F2",
@@ -71,10 +58,7 @@ const OTPVerification = () => {
 						</View>
 					</View>
 					<View className="mt-auto">
-						<StyledButton
-							title="Submit"
-							onPress={form.handleSubmit(verifyOtp)}
-						/>
+						<StyledButton title="Continue" onPress={handleContinue} />
 					</View>
 				</View>
 			</View>

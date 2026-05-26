@@ -62,7 +62,11 @@ const Ongoing = () => {
 						<View className="flex-row items-center max-w-[50%]">
 							<Image
 								className="h-[42px] w-[42px] rounded-full"
-								source={require("../../../../../assets/images/client/temp_user_sq.png")}
+								source={{
+									uri:
+										result?.customer.image ||
+										`https://ui-avatars.com/api/?name=${result?.customer.first_name}+${result?.customer.last_name}`,
+								}}
 								resizeMode="cover"
 							/>
 							<View className="ml-2 gap-y-1">
@@ -71,10 +75,7 @@ const Ongoing = () => {
 									numberOfLines={2}
 									ellipsizeMode="tail"
 								>
-									{result?.customer?.name ||
-										`${result?.customer?.first_name || ""} ${
-											result?.customer?.last_name || ""
-										}`}
+									{`${result?.customer?.first_name || ""} ${result?.customer?.last_name || ""}`.trim()}
 								</Text>
 								<Text className="text-[10px] large:text-xs font-regular text-support">
 									{result?.customer?.phone || ""}
@@ -181,14 +182,12 @@ const Ongoing = () => {
 				<ServiceCompletedModal
 					modalVisible={modalVisible}
 					setModalVisible={setModalVisible}
-					customerName={`${result?.customer?.first_name || ""} ${
-						result?.customer?.last_name || ""
-					}`}
+					customerName={`${result?.customer?.first_name || ""} ${result?.customer?.last_name || ""}`.trim()}
 					onPress={() =>
 						router.push({
 							pathname: "/service-provider/history/[requestId]",
 							params: {
-								requestId: result?.uuid,
+								requestId: result?.uuid || "",
 							},
 						})
 					}

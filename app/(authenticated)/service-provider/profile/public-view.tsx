@@ -17,7 +17,6 @@ import EmptyList from "@/svgs/EmptyList";
 import EmptyServices from "@/components/provider/Dashboard/EmptyServices";
 
 function ServiceComponent({
-	category_id,
 	created_at,
 	description,
 	name,

@@ -169,53 +169,35 @@ export interface ICompletedRequest {
 	customer_rating_status: string;
 }
 
-// export interface IRequestInfo {
-// 	created_at: string;
-// 	customer_id: string;
-// 	deadline: string;
-// 	id: 11;
-// 	latitude: string;
-// 	location: string;
-// 	longitude: string;
-// 	message: string;
-// 	provider_id: string;
-// 	service_id: string;
-// 	status: string;
-// 	updated_at: string;
-// 	uuid: string;
-// 	provider: {
-// 		name: string;
-// 		image: string;
-// 		email: string;
-// 		location: string;
-// 	};
-// }
-
+// Detailed request returned by GET /requests/:id
 export interface IRequestInfo {
 	uuid: string;
-	completed_at: string | null;
-	customer_confirmed_at: string | null;
-	customer_rejected_at: string | null;
-	is_confirmed_completed: string | null;
 	customer_id: string;
 	provider_id: string;
 	service_id: string;
 	deadline: string;
+	location: string;
+	longitude: string;
+	latitude: string;
 	message: string;
+	accepted_at?: string | null;
+	is_confirmed_completed: string | null;
+	customer_confirmed_at: string | null;
+	customer_rejected_at: string | null;
+	completed_at: string | null;
 	status: string;
 	created_at: string;
 	updated_at: string;
 	provider: {
 		uuid: string;
-		name?: string;
 		first_name: string;
 		last_name: string;
 		business_name: string;
-		image: string;
+		business_logo: string;
+		location: string;
 		category_of_service: string;
 		brief_introduction: string;
 		phone?: string;
-		email?: string;
 	};
 	service: {
 		uuid: string;
@@ -223,20 +205,55 @@ export interface IRequestInfo {
 		description: string;
 		images: string[];
 	};
-	latitude: string;
-	location: string;
-	longitude: string;
 	customer: {
 		uuid: string;
-		image: string;
-		name?: string;
 		first_name: string;
 		last_name: string;
-		phone: string;
-		email: string;
 		location: string;
 		latitude: string;
 		longitude: string;
+		phone: string;
+		email: string;
+		image?: string;
+	};
+	rating: null | {
+		uuid: string;
+		customer_rating: number;
+		customer_message: string | null;
+	};
+	provider_rating_status: string;
+	customer_rating_status: string;
+}
+
+// Lightweight request item returned by list endpoints (pending/ongoing)
+export interface IRequestListItem {
+	uuid: string;
+	customer_id: string;
+	provider_id: string;
+	service_id: string;
+	deadline: string;
+	location: string;
+	longitude: string;
+	latitude: string;
+	message: string;
+	accepted_at?: string | null;
+	is_confirmed_completed: string | null;
+	customer_confirmed_at: string | null;
+	customer_rejected_at: string | null;
+	completed_at: string | null;
+	status: string;
+	created_at: string;
+	updated_at: string;
+	customer: {
+		name: string;
+		image: string;
+		location: string;
+	};
+	service?: {
+		uuid: string;
+		name: string;
+		description: string;
+		images: string[];
 	};
 }
 
@@ -319,7 +336,14 @@ export interface IProviderService {
 	description: string;
 	id: number;
 	images: string[];
-	provider: { uuid: string; business_name: string; firstname: string; lastname: string; business_logo: string; bio: string };
+	provider: {
+		uuid: string;
+		business_name: string;
+		firstname: string;
+		lastname: string;
+		business_logo: string;
+		bio: string;
+	};
 	category: {
 		description: string;
 		image: string;
@@ -337,3 +361,61 @@ export interface IProviderService {
 	updated_at: string;
 	uuid: string;
 }
+
+export interface IPagination {
+	totalRecords: number;
+	totalPages: number;
+	currentPage: number;
+	pageSize: number;
+	hasNextPage: boolean;
+	hasPreviousPage: boolean;
+}
+
+export interface IProviderServiceItem {
+	id: number;
+	uuid: string;
+	name: string;
+	description: string;
+	images: string[];
+	status: string;
+	created_at: string;
+	updated_at: string;
+	total_requests: number;
+	total_completed: number;
+	total_rejected: number;
+	unique_customers: number;
+	total_ratings: number;
+	average_rating: number;
+	category: {
+		uuid: string;
+		name: string;
+		description: string;
+		image: string;
+		status: string;
+	};
+}
+
+export interface IProviderProfile {
+	uuid: string;
+	firstname: string;
+	lastname: string;
+	business_name: string | null;
+	business_logo: string;
+	gender: string;
+	email: string;
+	phone: string;
+	bio: string;
+	brief_introduction: string;
+}
+
+export interface IGetProviderServicesResponse {
+	services: IProviderServiceItem[];
+	provider: IProviderProfile;
+	pagination: IPagination;
+}
+
+
+
+
+
+

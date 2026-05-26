@@ -1,7 +1,6 @@
 import BackButton from "@/components/BackButton";
 import ForgotPasswordForm from "@/components/client/ForgotPasswordForm";
 import React from "react";
-import { Keyboard, TouchableWithoutFeedback } from "react-native";
 import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 

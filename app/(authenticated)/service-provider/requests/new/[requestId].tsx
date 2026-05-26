@@ -29,7 +29,7 @@ const NewRequest = () => {
 
 	const params = useLocalSearchParams();
 
-	const { data, isLoading } = useQuery({
+	const { data, isLoading, refetch } = useQuery({
 		queryKey: ["get request by id", params.requestId as string],
 		queryFn: () => Api.getRequestById(params.requestId as string),
 	});
@@ -58,11 +58,9 @@ const NewRequest = () => {
 			handleError(err);
 		},
 		onSuccess: (res) => {
+			refetch();
 			queryClient.invalidateQueries({
 				queryKey: ["get provider user info"],
-			});
-			queryClient.invalidateQueries({
-				queryKey: ["get request by id", params.requestId as string],
 			});
 			queryClient.invalidateQueries({
 				queryKey: ["get provider ongoing requests"],
@@ -80,9 +78,9 @@ const NewRequest = () => {
 			queryClient.invalidateQueries({
 				queryKey: ["get provider user info"],
 			});
-			queryClient.invalidateQueries({
-				queryKey: ["get request by id", params.requestId as string],
-			});
+
+			refetch();
+
 			queryClient.invalidateQueries({
 				queryKey: ["get provider pending requests"],
 			});
@@ -109,7 +107,11 @@ const NewRequest = () => {
 							<View className="flex-row items-center max-w-[60%]">
 								<Image
 									className="h-9 w-9 large:h-[42px] large:w-[42px] rounded-full"
-									source={{ uri: result?.customer.image }}
+									source={{
+										uri:
+											result?.customer.image ||
+											`https://ui-avatars.com/api/?name=${result?.customer?.first_name}+${result?.customer?.last_name}`,
+									}}
 									resizeMode="cover"
 								/>
 								<View className="ml-2 gap-y-1">
@@ -139,7 +141,8 @@ const NewRequest = () => {
 										numberOfLines={2}
 										ellipsizeMode="tail"
 									>
-										{result?.status === "PENDING"
+										{result?.status === "PENDING" ||
+										result?.status === "DECLINED"
 											? distance
 											: result?.customer?.location || ""}
 									</Text>
@@ -208,8 +211,8 @@ const NewRequest = () => {
 									className="w-[18px] h-[18px] mr-[6px]"
 								/>
 								<Text className="flex-1 text-sm large:text-base">
-									{result?.status === "PENDING"
-										? distance
+									{result?.status === "PENDING" || result?.status === "DECLINED"
+										? `${distance} away`
 										: result?.customer?.location || ""}
 								</Text>
 							</View>
@@ -255,6 +258,7 @@ const NewRequest = () => {
 							</Pressable>
 						</View>
 					)}
+
 					<AppModal
 						modalVisible={modalVisible}
 						setModalVisible={setModalVisible}

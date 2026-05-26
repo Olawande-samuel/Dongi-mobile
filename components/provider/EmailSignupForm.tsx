@@ -225,64 +225,70 @@ function EmailForm() {
 				<View className="gap-y-[6px]">
 					<Text className="text-sm text-off-black">Location</Text>
 					<View className="min-h-[200px]">
-						<GooglePlacesAutocomplete
-							placeholder="Enter your location"
-							debounce={300}
-							enablePoweredByContainer
-							onFail={(error) => {
-								setIsFetching(false);
-								console.log(error);
-								toast.error("An error occurred fetching your location");
-							}}
-							fetchDetails
-							textInputProps={{
-								onChangeText: (text) => {
-									setIsFetching(text.length > 0);
-									form.setValue("location", text);
-								},
-							}}
-							renderRightButton={() =>
-								isFetching ? (
-									<ActivityIndicator
-										size="small"
-										color="#18658B"
-										style={{ marginRight: 8, alignSelf: "center" }}
-									/>
-								) : null
-							}
-							onPress={(data, detail) => {
-								setIsFetching(false);
-								const components = detail?.address_components ?? [];
-								const city =
-									components.find((c) => c.types.includes("locality"))
-										?.long_name ?? "";
-								const state =
-									components.find((c) =>
-										c.types.includes("administrative_area_level_1"),
-									)?.long_name ?? "";
-								form.setValue("latitude", detail?.geometry.location.lat);
-								form.setValue("longitude", detail?.geometry.location.lng);
-								const country =
-									components.find((c) => c.types.includes("country"))
-										?.long_name ?? "";
-								form.setValue("city", city);
-								form.setValue("state", state);
-								form.setValue("country", country);
-							}}
-							query={{
-								key: process.env.EXPO_PUBLIC_GOOGLE_API,
-								language: "en",
-							}}
-							styles={{
-								textInput: {
-									borderWidth: 1,
-									borderColor: "#f2f2f2",
-									padding: 2,
-									color: "#99a2b3",
-									borderRadius: 4,
-									fontSize: 16,
-								},
-							}}
+						<Controller
+							control={form.control}
+							name="location"
+							render={({ field }) => (
+								<GooglePlacesAutocomplete
+									placeholder="Enter your location"
+									debounce={300}
+									enablePoweredByContainer
+									onFail={(error) => {
+										setIsFetching(false);
+										console.error(error);
+										toast.error("An error occurred fetching your location");
+									}}
+									fetchDetails
+									textInputProps={{
+										onChangeText: (text) => {
+											setIsFetching(text.length > 0);
+											field.onChange(text);
+										},
+									}}
+									renderRightButton={() =>
+										isFetching ? (
+											<ActivityIndicator
+												size="small"
+												color="#18658B"
+												style={{ marginRight: 8, alignSelf: "center" }}
+											/>
+										) : null
+									}
+									onPress={(data, detail) => {
+										setIsFetching(false);
+										const components = detail?.address_components ?? [];
+										const city =
+											components.find((c) => c.types.includes("locality"))
+												?.long_name ?? "";
+										const state =
+											components.find((c) =>
+												c.types.includes("administrative_area_level_1"),
+											)?.long_name ?? "";
+										form.setValue("latitude", detail?.geometry.location.lat);
+										form.setValue("longitude", detail?.geometry.location.lng);
+										const country =
+											components.find((c) => c.types.includes("country"))
+												?.long_name ?? "";
+										form.setValue("city", city);
+										form.setValue("state", state);
+										form.setValue("country", country);
+									}}
+									query={{
+										key: process.env.EXPO_PUBLIC_GOOGLE_API,
+										language: "en",
+									}}
+									styles={{
+										textInput: {
+											borderWidth: 1,
+											borderColor: "#f2f2f2",
+											padding: 2,
+											color: "#99a2b3",
+											borderRadius: 4,
+											fontSize: 12,
+										},
+									}}
+								/>
+							)}
 						/>
 					</View>
 				</View>
@@ -310,8 +316,6 @@ const EmailSignupForm = ({
 			location: "",
 		},
 		resolver: zodResolver(FormSchema),
-		mode: "onChange",
-		reValidateMode: "onChange",
 	});
 
 	const { mutate } = useMutation({

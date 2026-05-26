@@ -1,13 +1,12 @@
 import useDistance from "@/hooks/useDistance";
 import useServiceProviderUserInfo from "@/hooks/useServiceProviderUserInfo";
-import { ICategoryServices, IRequestInfo } from "@/types";
-import { maskEmail } from "@/utils";
+import { IRequestListItem } from "@/types";
 import { router } from "expo-router";
 import moment from "moment";
 import React from "react";
 import { Image, Pressable, Text, View } from "react-native";
 
-interface Props extends IRequestInfo {
+interface Props extends IRequestListItem {
 	activeTab: number;
 }
 
@@ -19,8 +18,6 @@ const PendingRequestCard = ({
 	activeTab,
 }: Props) => {
 	const { data } = useServiceProviderUserInfo();
-
-	console.log({ customer });
 
 	const { distance } = useDistance({
 		origin: data?.user?.location as string,
@@ -46,7 +43,11 @@ const PendingRequestCard = ({
 					<View className="flex-row items-center flex-1 min-w-0 pr-2">
 						<Image
 							className="h-9 w-9 large:h-[42px] large:w-[42px] rounded-full"
-							source={require("../../../assets/images/client/temp_user_sq.png")}
+							source={{
+								uri:
+									customer.image ||
+									`https://ui-avatars.com/api/?name=${customer.name}`,
+							}}
 							resizeMode="cover"
 						/>
 						<View className="ml-2 gap-y-1 flex-1 min-w-0">
@@ -62,7 +63,7 @@ const PendingRequestCard = ({
 								numberOfLines={1}
 								ellipsizeMode="tail"
 							>
-								{maskEmail(customer.email)}
+								{customer.location.split(",")[0] || ""}
 							</Text>
 						</View>
 					</View>

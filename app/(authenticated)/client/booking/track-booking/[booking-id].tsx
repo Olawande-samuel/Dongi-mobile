@@ -1,7 +1,6 @@
 import ConfirmService from "@/components/client/booking/ConfirmService";
 import ReviewService from "@/components/client/booking/ReviewService";
 import ProviderProfile from "@/components/client/ProviderProfile";
-import VendorProfile from "@/components/client/VendorProfile";
 import ReviewComplete from "@/components/ReviewComplete";
 import StatusPill from "@/components/StatusPill";
 import { handleContactPress } from "@/utils";
@@ -21,22 +20,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const Track = () => {
 	const params = useLocalSearchParams();
 	const bookingId = params?.["booking-id"];
-	const serviceId = params?.["service_id"];
-	const providerId = params?.["provider_id"];
 
-	const { data, isLoading } = useQuery({
+	const { data } = useQuery({
 		queryKey: ["get request detail", bookingId as string],
 		queryFn: () => Api.getRequestById(bookingId as string),
 	});
-
-	const { data: services, isLoading: isServicesLoading } = useQuery({
-		queryKey: ["get provider services", providerId],
-		queryFn: () => Api.getProvidersServices(providerId as string),
-	});
-
-	const providerServiceInfo = services?.data?.data?.services.find(
-		(item) => item.uuid === serviceId,
-	);
 
 	const bookingInfo = data?.data?.data;
 
@@ -63,9 +51,7 @@ const Track = () => {
 		) {
 			handlePresentModalPress();
 		}
-	}, [data?.data.data.status]);
-
-	console.log({ bookingInfo });
+	}, [bookingInfo?.status]);
 
 	return (
 		<SafeAreaView className="flex-1 bg-white" edges={["bottom"]}>
@@ -77,8 +63,15 @@ const Track = () => {
 					>
 						<View className="flex-1 bg-white">
 							<View className="mb-6">
-								{providerServiceInfo && (
-									<ProviderProfile {...providerServiceInfo} />
+								{bookingInfo?.provider && (
+									<ProviderProfile
+										first_name={bookingInfo.provider.first_name}
+										last_name={bookingInfo.provider.last_name}
+										business_name={bookingInfo.provider.business_name}
+										business_logo={bookingInfo.provider.business_logo}
+										brief_introduction={bookingInfo.provider.brief_introduction}
+										service_name={bookingInfo.service?.name || ""}
+									/>
 								)}
 							</View>
 							<View className="gap-y-3 mb-6">
@@ -92,8 +85,8 @@ const Track = () => {
 									<Text className="text-support text-sm font-regular mr-4">
 										Request Type
 									</Text>
-									<Text className="font-regular text-sm text-off-black text-right">
-										{providerServiceInfo?.name || ""}
+									<Text className="capitalize font-regular text-sm text-off-black text-right">
+										{bookingInfo?.service?.name || ""}
 									</Text>
 								</View>
 
@@ -105,24 +98,25 @@ const Track = () => {
 										{moment(bookingInfo?.created_at).format("DD MMM • hh:mmA")}
 									</Text>
 								</View>
-								{bookingInfo?.status === "ACCEPTED" && (
-									<View className="flex-row justify-between items-center">
-										<Text className="text-support text-sm font-regular mr-4">
-											Phone Number
-										</Text>
-										<Pressable
-											onPress={() =>
-												handleContactPress(
-													`tel:+${bookingInfo?.provider?.phone}`,
-												)
-											}
-										>
-											<Text className="font-regular text-sm text-off-black text-right">
-												{bookingInfo?.provider?.phone || ""}
+								{bookingInfo?.status === "ACCEPTED" &&
+									bookingInfo.provider?.phone && (
+										<View className="flex-row justify-between items-center">
+											<Text className="text-support text-sm font-regular mr-4">
+												Phone Number
 											</Text>
-										</Pressable>
-									</View>
-								)}
+											<Pressable
+												onPress={() =>
+													handleContactPress(
+														`tel:+${bookingInfo.provider.phone}`,
+													)
+												}
+											>
+												<Text className="font-regular text-sm text-off-black text-right">
+													{bookingInfo.provider.phone}
+												</Text>
+											</Pressable>
+										</View>
+									)}
 							</View>
 							<View className="flex-1">
 								<View className="gap-y-5 py-3 mb-[149px]">
@@ -144,11 +138,6 @@ const Track = () => {
 											<Text className="flex-1 text-base">
 												{bookingInfo?.location || ""}
 											</Text>
-											{/* <TextInput
-												placeholder="Island Lagos, Nigeria"
-												className="flex-1 text-base"
-												readOnly
-											/> */}
 										</View>
 									</View>
 									<View>
@@ -179,8 +168,8 @@ const Track = () => {
 							openRatings={handlePresentReviewModalPress}
 							providerName={`${bookingInfo?.provider?.first_name || ""} ${
 								bookingInfo?.provider?.last_name || ""
-							} `}
-							serviceName={providerServiceInfo?.name || ""}
+							}`}
+							serviceName={bookingInfo?.service?.name || ""}
 						/>
 						<ReviewService
 							compRef={bottomSheetReviewModalRef}

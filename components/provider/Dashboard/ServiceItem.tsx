@@ -4,8 +4,6 @@ import { router } from "expo-router";
 import { Image, Pressable, Text, View } from "react-native";
 
 function ServiceComponent({
-	category_id,
-	created_at,
 	description,
 	name,
 	uuid,
