@@ -9,9 +9,16 @@ import { z } from "zod";
 const FormSchema = z
 	.object({
 		token: z.string(),
-		new_password: z.string().regex(/^(?=.*[A-Za-z])(?=.*d)[A-Za-zd]{8,}$/, {
-			message: "Password must be a minimum of 8 alphanumeric characters",
-		}),
+		new_password: z
+			.string()
+			.min(8, { message: "Password must be at least 8 characters long" })
+			.regex(
+				/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*+\-_=~`{}|\\:;'"<>,./]).{8,}$/,
+				{
+					message:
+						"Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character",
+				},
+			),
 		confirm_password: z.string(),
 	})
 	.refine((val) => val.new_password === val.confirm_password, {

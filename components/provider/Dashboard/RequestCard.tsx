@@ -1,10 +1,10 @@
-import { ICategoryServices, IRequestInfo } from "@/types";
+import { IRequestListItem } from "@/types";
 import { router } from "expo-router";
 import moment from "moment";
 import React from "react";
 import { Image, Pressable, Text, View } from "react-native";
 
-interface Props extends IRequestInfo {
+interface Props extends IRequestListItem {
 	activeTab: number;
 }
 

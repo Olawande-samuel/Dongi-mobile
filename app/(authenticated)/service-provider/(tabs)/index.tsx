@@ -2,7 +2,7 @@ import HomeTopComponent from "@/components/provider/Dashboard/HomeTopComponent";
 import PendingRequestCard from "@/components/provider/Dashboard/PendingRequestsCard";
 import RequestCard from "@/components/provider/Dashboard/RequestCard";
 import useExpoNotifications from "@/hooks/useExpoNotifications";
-import { IRequestInfo } from "@/types";
+import { IRequestListItem } from "@/types";
 import { SIZES } from "@/utils/constants";
 import { Api } from "@/utils/endpoints";
 import { useQueries, useQueryClient } from "@tanstack/react-query";
@@ -47,9 +47,9 @@ const Index = () => {
 				data={result.data[tab - 1] || []}
 				renderItem={({ item }) =>
 					tab === 1 ? (
-						<RequestCard activeTab={tab} {...(item as IRequestInfo)} />
+						<RequestCard activeTab={tab} {...(item as IRequestListItem)} />
 					) : (
-						<PendingRequestCard activeTab={tab} {...(item as IRequestInfo)} />
+						<PendingRequestCard activeTab={tab} {...(item as IRequestListItem)} />
 					)
 				}
 				ListHeaderComponent={

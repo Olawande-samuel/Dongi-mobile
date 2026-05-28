@@ -2,8 +2,10 @@ import {
 	ICategoryServices,
 	IClient,
 	ICompletedRequest,
+	IGetProviderServicesResponse,
 	IProviderService,
 	IRequestInfo,
+	IRequestListItem,
 	IService,
 	IUser,
 	OngoingRequest,
@@ -400,7 +402,7 @@ class API {
 	async getProviderPendingRequests(): Promise<
 		AxiosResponse<{
 			data: {
-				requests: IRequestInfo[];
+				requests: IRequestListItem[];
 			};
 		}>
 	> {
@@ -415,7 +417,7 @@ class API {
 	async getProviderOngoingRequests(): Promise<
 		AxiosResponse<{
 			data: {
-				requests: IRequestInfo[];
+				requests: IRequestListItem[];
 			};
 		}>
 	> {
@@ -462,9 +464,7 @@ class API {
 	}
 	async getProvidersServices(providerId: string): Promise<
 		AxiosResponse<{
-			data: {
-				services: IProviderService[];
-			};
+			data: IGetProviderServicesResponse;
 		}>
 	> {
 		try {

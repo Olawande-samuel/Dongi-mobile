@@ -52,12 +52,10 @@ const ForgotPasswordForm = () => {
 				payload: val,
 			},
 			{
-				onSuccess: (res) => {
+				onSuccess: () => {
 					router.push({
-						pathname: "/(auth)/reset-password",
-						params: {
-							userType,
-						},
+						pathname: "/(auth)/reset-password/otp-verification",
+						params: { userType },
 					});
 				},
 				onError: (err) => {

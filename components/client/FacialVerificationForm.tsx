@@ -6,7 +6,6 @@ import { Canvas, Group, Oval, Rect } from "@shopify/react-native-skia";
 import { useMutation } from "@tanstack/react-query";
 import { CameraType, CameraView, useCameraPermissions } from "expo-camera";
 import { ImageManipulator, SaveFormat } from "expo-image-manipulator";
-import { router } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Dimensions, Image, Pressable, Text, View } from "react-native";
 import { toast } from "sonner-native";

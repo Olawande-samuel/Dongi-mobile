@@ -5,7 +5,7 @@ import RequestCard from "@/components/provider/Dashboard/RequestCard";
 import RouteHeader from "@/components/shared/RouteHeader";
 import {
 	ICompletedRequest,
-	IRequestInfo
+	IRequestListItem,
 } from "@/types";
 import { groupByDate } from "@/utils";
 import { Api } from "@/utils/endpoints";
@@ -53,8 +53,8 @@ const History = () => {
 						// Fix: Ensure correct typing for SectionList
 						(listItems as Array<{
 							title: string;
-							data: IRequestInfo[];
-						}>) || // tab 1: ongoing, IRequestInfo[]
+							data: IRequestListItem[];
+						}>) || // tab 1: ongoing
 						(listItems as Array<{
 							title: string;
 							data: ICompletedRequest[];

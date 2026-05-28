@@ -17,132 +17,132 @@ import ProviderHomeUserInfo from "./ProviderHomeUserInfo";
 import useServices from "@/hooks/useServices";
 
 const HomeTopComponent = ({
-	setTab,
-	tab,
-	totalOngoing,
-	totalPending,
+  setTab,
+  tab,
+  totalOngoing,
+  totalPending,
 }: {
-	tab: number;
-	setTab: React.Dispatch<React.SetStateAction<number>>;
-	totalOngoing: number;
-	totalPending: number;
+  tab: number;
+  setTab: React.Dispatch<React.SetStateAction<number>>;
+  totalOngoing: number;
+  totalPending: number;
 }) => {
-	const { data, isLoading } = useServiceProviderUserInfo();
-	const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-	const { isLoading: isServiceLoading, result } = useServices();
+  const { data, isLoading } = useServiceProviderUserInfo();
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const { isLoading: isServiceLoading, result } = useServices();
 
-	useEffect(() => {
-		const shouldShowModal =
-			!isLoading &&
-			!isServiceLoading &&
-			(!data?.wallet?.balance || data?.wallet?.balance === 0) &&
-			Array.isArray(result) &&
-			result.length < 1;
+  useEffect(() => {
+    const shouldShowModal =
+      !isLoading &&
+      !isServiceLoading &&
+      (!data?.wallet?.balance || data?.wallet?.balance === 0) &&
+      Array.isArray(result) &&
+      result.length < 1;
 
-		if (shouldShowModal) {
-			bottomSheetModalRef.current?.present();
-		}
-	}, [isLoading, isServiceLoading, data?.wallet?.balance, result]);
+    if (shouldShowModal) {
+      bottomSheetModalRef.current?.present();
+    }
+  }, [isLoading, isServiceLoading, data?.wallet?.balance, result]);
 
-	return (
-		<View className="">
-			<View className="mb-[18px]">
-				{/* <HomeUserInfo /> */}
-				<ProviderHomeUserInfo />
-			</View>
-			<View className="p-2 mb-3 gap-y-2 border border-outer-light rounded-lg">
-				<View className="rounded-lg bg-light justify-center items-center py-4 px-3">
-					<View className="mb-5">
-						<Text>Balance</Text>
-					</View>
-					<View className="flex-row items-end">
-						<Text className="text-off-black text-4xl large:text-[42px] text-center font-bold">
-							{formatCurrency(data?.wallet?.balance || 0)}
-						</Text>
-					</View>
-				</View>
-				<View className="flex-row gap-x-2">
-					<View className="bg-light flex-1 p-2 rounded-[2px] border border-outer-light">
-						<View className="flex-row gap-x-1 mb-3 items-center">
-							<Users />
-							<Text className="font-regular text-xs large:text-sm text-off-black">
-								Jobs Completed
-							</Text>
-						</View>
-						<View>
-							<Text className="large:text-base text-off-black font-regular">
-								{data?.jobs_completed || 0}
-							</Text>
-						</View>
-					</View>
-					<View className="bg-light flex-1 p-2 rounded-[2px] border border-outer-light">
-						<View className="flex-row gap-x-1 mb-3 items-center">
-							<Star />
-							<Text className="font-regular text-xs large:text-sm text-off-black ">
-								Rating
-							</Text>
-						</View>
-						<View>
-							<Text className="large:text-base text-off-black font-regular">
-								{data?.rating?.average_rating || 0} (
-								{data?.rating?.total_rating || 0})
-							</Text>
-						</View>
-					</View>
-				</View>
-				<View className="flex-row justify-center gap-x-1 bg-[#F7EFDE] p-2 rounded items-center">
-					<Text className="text-xs large:text-sm font-normal text-center text-service-primary font-regular">
-						Paystack-Titan
-					</Text>
-					<Text className="text-xs large:text-sm font-semibold text-service-primary">
-						{data?.wallet?.account_number || ""}
-					</Text>
-					<Pressable
-						onPress={async () => {
-							if (data?.wallet?.account_number) {
-								await Clipboard.setStringAsync(
-									data?.wallet?.account_number || "",
-								);
-								// Clipboard.setString(data?.wallet?.account_number || "");
-								toast.success("Account number copied to clipboard");
-							}
-						}}
-					>
-						<Copy />
-					</Pressable>
-				</View>
-			</View>
-			<View className="mb-9">
-				<Pressable
-					onPress={() =>
-						router.push("/(authenticated)/service-provider/profile/public-view")
-					}
-					className="flex-row justify-between p-1 items-center"
-				>
-					<View />
-					<Text className="text-primary text-sm text-center font-regular">
-						View public profile
-					</Text>
-					<AntDesign
-						name="arrow-right"
-						size={SIZES.height > 700 ? 24 : 16}
-						color="#18658B"
-					/>
-				</Pressable>
-			</View>
-			<View className="mb-3">
-				<View className="">
-					<HomeTabs
-						tab1title={`Ongoing (${totalOngoing})`}
-						tab2title={`Requests (${totalPending})`}
-						tab={tab}
-						setTab={setTab}
-					/>
-				</View>
-			</View>
-			<AccountApproved compRef={bottomSheetModalRef} />
-		</View>
-	);
+  return (
+    <View className="">
+      <View className="mb-[18px]">
+        {/* <HomeUserInfo /> */}
+        <ProviderHomeUserInfo />
+      </View>
+      <View className="p-2 mb-3 gap-y-2 border border-outer-light rounded-lg">
+        <View className="rounded-lg bg-light justify-center items-center py-4 px-3">
+          <View className="mb-5">
+            <Text>Balance</Text>
+          </View>
+          <View className="">
+            <Text className="text-off-black text-4xl large:text-[42px] text-center font-bold">
+              {formatCurrency(data?.wallet?.balance || 0)}
+            </Text>
+          </View>
+        </View>
+        <View className="flex-row gap-x-2">
+          <View className="bg-light flex-1 p-2 rounded-[2px] border border-outer-light">
+            <View className="flex-row gap-x-1 mb-3 items-center">
+              <Users />
+              <Text className="font-regular text-xs large:text-sm text-off-black">
+                Jobs Completed
+              </Text>
+            </View>
+            <View>
+              <Text className="large:text-base text-off-black font-regular">
+                {data?.jobs_completed || 0}
+              </Text>
+            </View>
+          </View>
+          <View className="bg-light flex-1 p-2 rounded-[2px] border border-outer-light">
+            <View className="flex-row gap-x-1 mb-3 items-center">
+              <Star />
+              <Text className="font-regular text-xs large:text-sm text-off-black ">
+                Rating
+              </Text>
+            </View>
+            <View>
+              <Text className="large:text-base text-off-black font-regular">
+                {data?.rating?.average_rating || 0} (
+                {data?.rating?.total_rating || 0})
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View className="flex-row justify-center gap-x-1 bg-[#F7EFDE] p-2 rounded items-center">
+          <Text className="text-xs large:text-sm font-normal text-center text-service-primary font-regular">
+            Paystack-Titan
+          </Text>
+          <Text className="text-xs large:text-sm font-semibold text-service-primary">
+            {data?.wallet?.account_number || ""}
+          </Text>
+          <Pressable
+            onPress={async () => {
+              if (data?.wallet?.account_number) {
+                await Clipboard.setStringAsync(
+                  data?.wallet?.account_number || "",
+                );
+                // Clipboard.setString(data?.wallet?.account_number || "");
+                toast.success("Account number copied to clipboard");
+              }
+            }}
+          >
+            <Copy />
+          </Pressable>
+        </View>
+      </View>
+      <View className="mb-9">
+        <Pressable
+          onPress={() =>
+            router.push("/(authenticated)/service-provider/profile/public-view")
+          }
+          className="flex-row justify-between p-1 items-center"
+        >
+          <View />
+          <Text className="text-primary text-sm text-center font-regular">
+            View public profile
+          </Text>
+          <AntDesign
+            name="arrow-right"
+            size={SIZES.height > 700 ? 24 : 16}
+            color="#18658B"
+          />
+        </Pressable>
+      </View>
+      <View className="mb-3">
+        <View className="">
+          <HomeTabs
+            tab1title={`Ongoing (${totalOngoing})`}
+            tab2title={`Requests (${totalPending})`}
+            tab={tab}
+            setTab={setTab}
+          />
+        </View>
+      </View>
+      <AccountApproved compRef={bottomSheetModalRef} />
+    </View>
+  );
 };
 
 export default HomeTopComponent;

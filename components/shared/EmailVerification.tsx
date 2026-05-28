@@ -4,13 +4,20 @@ import { handleError } from "@/utils";
 import { Api } from "@/utils/endpoints";
 import { useMutation } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { KeyboardAvoidingView, Platform, Text, View } from "react-native";
+import {
+	Keyboard,
+	KeyboardAvoidingView,
+	Platform,
+	Text,
+	View,
+} from "react-native";
 import { OtpInput } from "react-native-otp-entry";
 import { toast } from "sonner-native";
 import StyledButton from "../StyledButton";
 import ResendOtp from "./ResendOtp";
 import ResendVerificationOtp from "./ResendVerificationOTP";
 import { usePathname } from "expo-router";
+import { TouchableWithoutFeedback } from "react-native";
 
 const EmailVerification = ({
 	nextStep,
@@ -91,50 +98,52 @@ const EmailVerification = ({
 	}
 	return (
 		<View className="flex-1 bg-white">
-			<KeyboardAvoidingView
-				enabled
-				behavior={Platform.OS === "ios" ? "padding" : "height"}
-				keyboardVerticalOffset={100}
-				style={{
-					flex: 1,
-				}}
-			>
-				<View className="flex-1">
-					<View className="flex-1 ">
-						<View className="mb-[6px]">
-							<Text className="text-sm text-off-black">
-								A code was sent to{" "}
-								<Text className="font-bold">{maskEmail(data?.email)}</Text>
-							</Text>
-						</View>
-						<View>
-							<OtpInput
-								numberOfDigits={4}
-								onTextChange={(text) => setOtp(text)}
-								type="numeric"
-								textInputProps={{
-									accessibilityLabel: "One-Time Password",
-								}}
-								theme={{
-									pinCodeContainerStyle: {
-										width: 62.25,
-										borderRadius: 4,
-										borderWidth: 1,
-										borderColor: "#F2F2F2",
-									},
-								}}
+			<TouchableWithoutFeedback className="flex-1" onPress={Keyboard.dismiss}>
+				<KeyboardAvoidingView
+					enabled
+					behavior={Platform.OS === "ios" ? "padding" : "height"}
+					keyboardVerticalOffset={100}
+					style={{
+						flex: 1,
+					}}
+				>
+					<View className="flex-1">
+						<View className="flex-1 ">
+							<View className="mb-[6px]">
+								<Text className="text-sm text-off-black">
+									A code was sent to{" "}
+									<Text className="font-bold">{maskEmail(data?.email)}</Text>
+								</Text>
+							</View>
+							<View>
+								<OtpInput
+									numberOfDigits={4}
+									onTextChange={(text) => setOtp(text)}
+									type="numeric"
+									textInputProps={{
+										accessibilityLabel: "One-Time Password",
+									}}
+									theme={{
+										pinCodeContainerStyle: {
+											width: 62.25,
+											borderRadius: 4,
+											borderWidth: 1,
+											borderColor: "#F2F2F2",
+										},
+									}}
+								/>
+							</View>
+							<ResendVerificationOtp
+								type="EMAIL_VERIFICATION"
+								reference={data?.email}
 							/>
 						</View>
-						<ResendVerificationOtp
-							type="EMAIL_VERIFICATION"
-							reference={data?.email}
-						/>
+						<View className="mt-auto mb-3">
+							<StyledButton title="Submit" onPress={handleSubmit} />
+						</View>
 					</View>
-					<View className="mt-auto mb-3">
-						<StyledButton title="Submit" onPress={handleSubmit} />
-					</View>
-				</View>
-			</KeyboardAvoidingView>
+				</KeyboardAvoidingView>
+			</TouchableWithoutFeedback>
 		</View>
 	);
 };

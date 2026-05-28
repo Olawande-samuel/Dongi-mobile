@@ -4,7 +4,7 @@ import { router } from "expo-router";
 import { OngoingRequest } from "@/types";
 import moment from "moment";
 
-const OngoingCard = ({
+const PendingCard = ({
 	message,
 	provider,
 	location,
@@ -37,6 +37,14 @@ const OngoingCard = ({
 			className="p-3 rounded-lg bg-white border border-outer-light mb-4"
 		>
 			<View>
+				<View className="flex-row justify-between items-center mb-2">
+					<Text className="text-xs font-medium text-[#E4AE1B] bg-[#FDF6E3] px-2 py-1 rounded-full">
+						Pending
+					</Text>
+					<Text className="text-xs font-regular text-support">
+						{moment(created_at).format("DD MMM • hh:mmA")}
+					</Text>
+				</View>
 				<View className="border border-inner-light p-2 mb-[10px] rounded">
 					<Text
 						className="text-base font-regular text-off-black"
@@ -46,7 +54,7 @@ const OngoingCard = ({
 					</Text>
 				</View>
 				<View className="flex-row justify-between gap-x-4 flex-wrap">
-					<View className="flex-row items-center max-w-[50%]">
+					<View className="flex-row items-center max-w-[60%]">
 						<Image
 							className="h-[42px] w-[42px] rounded-full"
 							source={{
@@ -60,32 +68,21 @@ const OngoingCard = ({
 							<Text className="text-base font-regular text-off-black">
 								{provider.name || ""}
 							</Text>
-							<Text
-								className="text-xs font-regular text-support"
-								numberOfLines={1}
-							>
-								Real estate agent
-							</Text>
 						</View>
 					</View>
-					<View className="gap-y-1 max-w-[45%]">
-						<View className="flex-row items-center justify-end">
-							<Image
-								source={require("../../../assets/images/location.png")}
-								width={18}
-								height={18}
-								resizeMode="contain"
-								className="w-[18px] h-[18px] mr-[6px]"
-							/>
-							<Text
-								className="font-regular max-w-[150px] text-sm text-off-black"
-								numberOfLines={1}
-							>
-								{location || ""}
-							</Text>
-						</View>
-						<Text className="text-xs text-end font-regular text-primaryII">
-							{moment(created_at).format("DD MMM • hh:mmA")}
+					<View className="flex-row items-center max-w-[35%]">
+						<Image
+							source={require("../../../assets/images/location.png")}
+							width={18}
+							height={18}
+							resizeMode="contain"
+							className="w-[18px] h-[18px] mr-[6px]"
+						/>
+						<Text
+							className="font-regular text-sm text-off-black"
+							numberOfLines={1}
+						>
+							{location || ""}
 						</Text>
 					</View>
 				</View>
@@ -94,4 +91,4 @@ const OngoingCard = ({
 	);
 };
 
-export default OngoingCard;
+export default PendingCard;

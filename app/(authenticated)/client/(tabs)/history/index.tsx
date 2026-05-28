@@ -2,6 +2,7 @@ import HomeTabs from "@/components/client/dashboard/HomeTabs";
 import HistoryCard from "@/components/client/history/HistoryCard";
 import NoHistory from "@/components/client/history/NoHistory";
 import OngoingCard from "@/components/client/history/OngoingCard";
+import PendingCard from "@/components/client/history/PendingCard";
 import { ICompletedRequest, OngoingRequest } from "@/types";
 import { groupByDate } from "@/utils";
 import { Api } from "@/utils/endpoints";
@@ -17,17 +18,16 @@ import {
 	View,
 } from "react-native";
 
-const DATA: any[] = [];
 const History = () => {
 	const [tab, setTab] = useState(1);
 	const { height } = useWindowDimensions();
 
 	const queryClient = useQueryClient();
 
-	const { data, isLoading } = useQuery({
+	const { data: pendingData, isLoading: isPendingLoading } = useQuery({
 		queryKey: ["fetch pending requests"],
 		queryFn: Api.getPendingRequests,
-		enabled: tab === 2,
+		enabled: tab === 3,
 	});
 
 	const { data: ongoingRequestData, isLoading: isOngoingRequestLoading } =
@@ -47,10 +47,24 @@ const History = () => {
 	const listItems =
 		tab === 1
 			? groupByDate(completedData?.data.data.requests || [])
-			: groupByDate([
-					...(ongoingRequestData?.data.data?.requests || []),
-					...(data?.data?.data.requests || []),
-			  ]);
+			: tab === 2
+			? groupByDate(ongoingRequestData?.data.data?.requests || [])
+			: groupByDate(pendingData?.data?.data.requests || []);
+
+	const isLoading =
+		tab === 1
+			? isCompletedRequestLoading
+			: tab === 2
+			? isOngoingRequestLoading
+			: isPendingLoading;
+
+	const emptyText =
+		tab === 1
+			? "You do not have any completed request"
+			: tab === 2
+			? "You do not have any ongoing request"
+			: "You do not have any pending request";
+
 	return (
 		<SectionList
 			className="bg-white px-6"
@@ -62,29 +76,26 @@ const History = () => {
 			renderItem={({ item }: { item: any }) =>
 				tab === 1 ? (
 					<HistoryCard {...(item as ICompletedRequest)} />
-				) : (
+				) : tab === 2 ? (
 					<OngoingCard {...(item as OngoingRequest)} />
+				) : (
+					<PendingCard {...(item as OngoingRequest)} />
 				)
 			}
 			ListHeaderComponent={
 				<HomeTabs
 					tab1title="Completed"
 					tab2title="Ongoing"
+					tab3title="Pending"
 					setTab={setTab}
 					tab={tab}
 				/>
 			}
 			ListEmptyComponent={
-				isLoading || isOngoingRequestLoading || isCompletedRequestLoading ? (
+				isLoading ? (
 					<ActivityIndicator />
 				) : (
-					<NoHistory
-						text={
-							tab === 1
-								? "You do not have any completed request"
-								: "You do not have any ongoing request"
-						}
-					/>
+					<NoHistory text={emptyText} />
 				)
 			}
 			keyExtractor={(item, index) => String(item.uuid + index)}
@@ -100,14 +111,21 @@ const History = () => {
 			}}
 			refreshControl={
 				<RefreshControl
-					refreshing={isOngoingRequestLoading || isLoading}
+					refreshing={isLoading}
 					onRefresh={() => {
-						queryClient.invalidateQueries({
-							queryKey: ["fetch ongoing requests"],
-						});
-						queryClient.invalidateQueries({
-							queryKey: ["fetch completed requests"],
-						});
+						if (tab === 1) {
+							queryClient.invalidateQueries({
+								queryKey: ["fetch completed requests"],
+							});
+						} else if (tab === 2) {
+							queryClient.invalidateQueries({
+								queryKey: ["fetch ongoing requests"],
+							});
+						} else {
+							queryClient.invalidateQueries({
+								queryKey: ["fetch pending requests"],
+							});
+						}
 					}}
 				/>
 			}
