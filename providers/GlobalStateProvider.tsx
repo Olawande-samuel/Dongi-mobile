@@ -19,7 +19,7 @@ export const useGlobalContext = () => {
 	const context = useContext(GlobalContext);
 	if (context === null) {
 		throw new Error(
-			"useGlobalContext must be used within a GlobalStateProvider"
+			"useGlobalContext must be used within a GlobalStateProvider",
 		);
 	}
 	return context;
@@ -41,7 +41,7 @@ const GlobalStateProvider = ({ children }: PropsWithChildren) => {
 						<View className="h-[150px] mb-6 justify-center items-center">
 							<AnimatedPulse>
 								<Image
-									source={require("../assets/images/icon.png")}
+									source={require("../assets/images/icon-old.png")}
 									width={124.97}
 									height={113.97}
 									resizeMode="contain"

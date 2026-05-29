@@ -43,7 +43,7 @@ const Welcome = () => {
 				<View />
 				<View className="items-center">
 					<Image
-						source={require("../assets/images/icon.png")}
+						source={require("../assets/images/icon-old.png")}
 						className="w-[116.51px] h-[106.26px] mb-6"
 						resizeMode="contain"
 					/>

@@ -32,7 +32,7 @@ const SignUp = () => {
 				>
 					<View className="h-[150px] mb-6 justify-center items-center">
 						<Image
-							source={require("../../../../assets/images/icon.png")}
+							source={require("../../../../assets/images/icon-old.png")}
 							width={124.97}
 							height={113.97}
 							resizeMode="contain"

@@ -13,9 +13,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 function checkpointToHref(cp: OnboardingCheckpoint): string {
 	const base =
-		cp.userType === "client"
-			? "/(auth)/clients"
-			: "/(auth)/service-provider";
+		cp.userType === "client" ? "/(auth)/clients" : "/(auth)/service-provider";
 	if (cp.phase === "phone-verification") {
 		return `${base}/phone-verification`;
 	}
@@ -86,7 +84,7 @@ export default function Index() {
 					<View>
 						<View className="h-[150px] mb-6 justify-center items-center">
 							<Image
-								source={require("../assets/images/icon.png")}
+								source={require("../assets/images/icon-old.png")}
 								width={159}
 								height={145}
 								resizeMode="contain"
