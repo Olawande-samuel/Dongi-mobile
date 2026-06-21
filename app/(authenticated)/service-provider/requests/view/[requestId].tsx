@@ -9,7 +9,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { router, useLocalSearchParams } from "expo-router";
 import moment from "moment";
 import React, { useState } from "react";
-import { Image, ScrollView, Text, View } from "react-native";
+import { Image, Linking, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Ongoing = () => {
@@ -47,8 +47,17 @@ const Ongoing = () => {
 		mutate(result?.uuid as string);
 	}
 
+	function openInMaps(location: string | undefined) {
+		if (!location) return;
+		const url = `https://maps.google.com/?q=${encodeURIComponent(location)}`;
+		Linking.openURL(url);
+	}
+
 	return (
-		<SafeAreaView className="flex-1 bg-white px-4 large:px-6" edges={["top"]}>
+		<SafeAreaView
+			className="flex-1 bg-white px-4 large:px-6"
+			edges={["top", "bottom"]}
+		>
 			<RouteHeader
 				title="Ongoing Request"
 				subTitle={result?.service?.name || ""}
@@ -77,13 +86,18 @@ const Ongoing = () => {
 								>
 									{`${result?.customer?.first_name || ""} ${result?.customer?.last_name || ""}`.trim()}
 								</Text>
-								<Text className="text-[10px] large:text-xs font-regular text-support">
-									{result?.customer?.phone || ""}
-								</Text>
+								<Pressable onPress={() => result?.customer?.phone && Linking.openURL(`tel:${result.customer.phone}`)}>
+									<Text className="text-[10px] underline large:text-xs font-regular text-support">
+										{result?.customer?.phone || ""}
+									</Text>
+								</Pressable>
 							</View>
 						</View>
 						<View className="gap-y-1 max-w-[50%]">
-							<View className="flex-row items-center justify-end">
+							<Pressable
+								onPress={() => openInMaps(result?.customer?.location)}
+								className="flex-row items-center justify-end"
+							>
 								<Image
 									source={require("../../../../../assets/images/location.png")}
 									width={18}
@@ -92,13 +106,13 @@ const Ongoing = () => {
 									className="w-[18px] h-[18px] mr-[6px]"
 								/>
 								<Text
-									className="font-regular text-xs large:text-sm text-off-black"
-									numberOfLines={1}
+									className="font-regular text-xs large:text-sm text-off-black "
+									numberOfLines={2}
 									ellipsizeMode="tail"
 								>
 									{result?.customer?.location || ""}
 								</Text>
-							</View>
+							</Pressable>
 							<Text className="text-[10px] large:text-xs text-end font-regular text-primaryII">
 								{moment(result?.created_at).format("DD MMM • hh:mmA")}
 							</Text>
@@ -113,7 +127,10 @@ const Ongoing = () => {
 						<Text className="text-xs large:text-sm text-off-black font-regular mb-[6px]">
 							Where are you located?
 						</Text>
-						<View className="flex-row items-center border p-2 border-inner-background-light">
+						<Pressable
+							onPress={() => openInMaps(result?.customer?.location)}
+							className="flex-row items-center border p-2 border-inner-background-light"
+						>
 							<Image
 								source={require("../../../../../assets/images/location.png")}
 								width={18}
@@ -121,10 +138,10 @@ const Ongoing = () => {
 								resizeMode="contain"
 								className="w-[18px] h-[18px] mr-[6px]"
 							/>
-							<Text className="flex-1 text-sm large:text-base">
+							<Text className="flex-1 text-sm large:text-base ">
 								{result?.customer?.location || ""}
 							</Text>
-						</View>
+						</Pressable>
 					</View>
 					<View>
 						<Text className="text-xs large:text-sm text-off-black font-regular mb-[6px]">
@@ -172,13 +189,15 @@ const Ongoing = () => {
 						</Text>
 					</View>
 				</View>
-				<View className="mb-6">
-					<StyledButton
-						disabled={isPending}
-						title="Mark as Completed"
-						onPress={markAsCompleted}
-					/>
-				</View>
+				{result?.status !== "COMPLETED" && (
+					<View className="mb-6">
+						<StyledButton
+							disabled={isPending}
+							title="Mark as Completed"
+							onPress={markAsCompleted}
+						/>
+					</View>
+				)}
 				<ServiceCompletedModal
 					modalVisible={modalVisible}
 					setModalVisible={setModalVisible}

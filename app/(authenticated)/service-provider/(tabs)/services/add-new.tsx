@@ -264,7 +264,7 @@ const AddNewService = () => {
 					</ScrollView>
 				</KeyboardAvoidingView>
 				<View className="mt-auto mb-3">
-					<StyledButton title="Next" onPress={form.handleSubmit(onSubmit)} />
+					<StyledButton title="Save" onPress={form.handleSubmit(onSubmit)} />
 				</View>
 			</View>
 			<AppModal

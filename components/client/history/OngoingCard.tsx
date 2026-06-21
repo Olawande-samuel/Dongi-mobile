@@ -9,7 +9,6 @@ const OngoingCard = ({
 	provider,
 	location,
 	created_at,
-	id,
 	uuid,
 	service_id,
 	provider_id,
@@ -21,7 +20,6 @@ const OngoingCard = ({
 					pathname: "/client/booking/track-booking/[booking-id]",
 					params: {
 						"booking-id": uuid,
-						id,
 						service_id,
 						provider_id,
 					},
@@ -51,7 +49,7 @@ const OngoingCard = ({
 							className="h-[42px] w-[42px] rounded-full"
 							source={{
 								uri:
-									provider.image ||
+									provider.business_logo ||
 									`https://ui-avatars.com/api/?name=${provider.name}`,
 							}}
 							resizeMode="cover"

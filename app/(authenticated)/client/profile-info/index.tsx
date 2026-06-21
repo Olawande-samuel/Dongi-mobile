@@ -45,11 +45,7 @@ const Index = () => {
 						Email address
 					</Text>
 					<View className="flex-row items-center gap-2 flex-1 justify-between">
-						<Text
-							className="text-sm text-off-black font-regular"
-
-							// numberOfLines={1}
-						>
+						<Text className="text-sm text-off-black font-regular" style={{ flex: 1 }} numberOfLines={2}>
 							{data?.user?.email || ""}
 						</Text>
 						<Link href="/client/profile-info/change-email">

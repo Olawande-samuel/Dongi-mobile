@@ -2,10 +2,11 @@ import { View, Text, TextInput } from "react-native";
 import React from "react";
 import PrimaryButton from "@/components/PrimaryButton";
 import { SafeAreaView } from "react-native-safe-area-context";
+import StyledButton from "@/components/StyledButton";
 
 const ChangeEmail = () => {
 	return (
-		<SafeAreaView className="flex-1 bg-white" edges={["bottom"]}>
+		<SafeAreaView className="flex-1 pb-8 bg-white" edges={["bottom"]}>
 			<View className="flex-1 bg-white px-6 pt-[18px]">
 				<View className="gap-y-5">
 					<View>
@@ -26,7 +27,7 @@ const ChangeEmail = () => {
 					</View>
 				</View>
 				<View className="mt-auto">
-					<PrimaryButton onPress={() => {}} title="Continue" />
+					<StyledButton onPress={() => {}} title="Continue" />
 				</View>
 			</View>
 		</SafeAreaView>

@@ -61,8 +61,8 @@ const Index = () => {
 							</Text>
 							<View className="flex-row items-center gap-2 flex-1 justify-between">
 								<Text
-									className="text-xs large:text-sm text-off-black font-regular"
-									numberOfLines={1}
+									className="text-xs large:text-sm text-off-black font-regular flex-1"
+									numberOfLines={2}
 								>
 									{data?.user?.email || ""}
 								</Text>
@@ -115,7 +115,7 @@ const Index = () => {
 							</Text>
 							<View className="flex-row items-center gap-2 flex-1 justify-between">
 								<Text className="text-xs large:text-sm text-off-black font-regular">
-									NIN
+									{data?.user?.means_of_identification?.split("_").join(" ")}
 								</Text>
 								<View>
 									{/* <Image

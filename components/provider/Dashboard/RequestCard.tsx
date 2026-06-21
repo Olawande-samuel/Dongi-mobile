@@ -1,4 +1,4 @@
-import { IRequestListItem } from "@/types";
+﻿import { IRequestListItem } from "@/types";
 import { router } from "expo-router";
 import moment from "moment";
 import React from "react";
@@ -14,7 +14,7 @@ const RequestCard = ({
 	created_at,
 	uuid,
 	activeTab,
-	service,
+	status,
 }: Props) => {
 	return (
 		<Pressable
@@ -31,24 +31,29 @@ const RequestCard = ({
 			}
 		>
 			<View className="p-3 rounded-lg border border-outer-light mb-5">
-				<View className="flex-row justify-between gap-x-4 flex-wrap mb-[10px]">
-					<View className="flex-row items-center max-w-[50%]">
-						<Image
-							className="h-9 w-9 large:h-[42px] large:w-[42px] rounded-full"
-							source={require("../../../assets/images/client/temp_user_sq.png")}
-							resizeMode="cover"
-						/>
+				<View className="flex-row justify-between gap-4 mb-[10px]">
+					<View className="flex-row items-center mr-5 ">
+						<View className="">
+							<Image
+								className="h-9 w-9 large:h-[42px] large:w-[42px] rounded-full"
+								source={{
+									uri: customer.image?.startsWith("https://")
+										? customer.image
+										: `https://ui-avatars.com/api/?name=${customer.name}`,
+								}}
+								resizeMode="cover"
+							/>
+						</View>
 						<View className="ml-2 gap-y-1">
 							<Text className="text-sm large:text-base font-regular text-off-black">
-								{customer?.name ||
-									`${customer?.first_name || ""} ${customer?.last_name || ""}`}
+								{customer?.name}
 							</Text>
 							<Text className="text-[10px] large:text-xs font-regular text-support">
-								{service?.name || ""}
+								{status || ""}
 							</Text>
 						</View>
 					</View>
-					<View className="gap-y-1 max-w-[50%]">
+					<View className="gap-y-1 flex-1">
 						<View className="flex-row items-center justify-end">
 							<Image
 								source={require("../../../assets/images/location.png")}
@@ -59,7 +64,7 @@ const RequestCard = ({
 							/>
 							<Text
 								className="font-regular text-xs large:text-sm text-off-black"
-								numberOfLines={2}
+								numberOfLines={1}
 							>
 								{customer?.location || ""}
 							</Text>

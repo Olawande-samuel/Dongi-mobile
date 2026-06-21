@@ -49,7 +49,10 @@ const Index = () => {
 					tab === 1 ? (
 						<RequestCard activeTab={tab} {...(item as IRequestListItem)} />
 					) : (
-						<PendingRequestCard activeTab={tab} {...(item as IRequestListItem)} />
+						<PendingRequestCard
+							activeTab={tab}
+							{...(item as IRequestListItem)}
+						/>
 					)
 				}
 				ListHeaderComponent={
@@ -79,6 +82,9 @@ const Index = () => {
 							});
 							queryClient.invalidateQueries({
 								queryKey: ["get provider user info"],
+							});
+							queryClient.invalidateQueries({
+								queryKey: ["get wallet balance"],
 							});
 						}}
 					/>

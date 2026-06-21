@@ -7,7 +7,6 @@ import {
 	useBottomSheetModal,
 } from "@gorhom/bottom-sheet";
 import { Ionicons } from "@expo/vector-icons";
-import { AirbnbRating } from "react-native-ratings";
 import StyledButton from "@/components/StyledButton";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Api } from "@/utils/endpoints";
@@ -36,7 +35,7 @@ function ReviewClient({
 	name: string;
 }) {
 	const { dismissAll } = useBottomSheetModal();
-	const snapPoints = useMemo(() => ["50%"], []);
+	const snapPoints = useMemo(() => ["50%", "100%"], []);
 
 	const globalContext = useGlobalContext();
 
@@ -118,11 +117,15 @@ function ReviewClient({
 										Rate your experience with {name || ""}
 									</Text>
 									<View className="flex-row justify-center gap-x-1">
-										<AirbnbRating
-											onFinishRating={field.onChange}
-											showRating={false}
-											defaultRating={0}
-										/>
+										{[1, 2, 3, 4, 5].map((star) => (
+											<Pressable key={star} onPress={() => field.onChange(star)}>
+												<Ionicons
+													name={field.value >= star ? "star" : "star-outline"}
+													size={32}
+													color={field.value >= star ? "#E4AE1B" : "#BDC3C7"}
+												/>
+											</Pressable>
+										))}
 									</View>
 									{form.formState.errors?.rate && (
 										<Text className="text-xs text-red-400">

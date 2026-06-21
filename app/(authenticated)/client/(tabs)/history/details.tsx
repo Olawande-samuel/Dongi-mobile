@@ -1,10 +1,14 @@
+import ReviewService from "@/components/client/booking/ReviewService";
 import HistoryDetailUserCard from "@/components/client/history/HistoryDetailUserCard";
+import ReviewComplete from "@/components/ReviewComplete";
 import { Api } from "@/utils/endpoints";
+import { BottomSheetModal, BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import moment from "moment";
-import React from "react";
-import { ScrollView, Text, TextInput, View } from "react-native";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { ScrollView, Text, View } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const Details = () => {
 	const params = useLocalSearchParams();
@@ -20,8 +24,22 @@ const Details = () => {
 		(item) => item.uuid === params.id,
 	);
 
-	console.log({ info });
+	const reviewModalRef = useRef<BottomSheetModal>(null);
+	const [completionModalVisible, setCompletionModalVisible] = useState(false);
+
+	const showCompletionModal = useCallback(() => {
+		setCompletionModalVisible(true);
+	}, []);
+
+	useEffect(() => {
+		if (info && !info?.rating?.customer_rating) {
+			reviewModalRef.current?.present();
+		}
+	}, [info]);
+
 	return (
+		<GestureHandlerRootView className="flex-1 bg-white">
+			<BottomSheetModalProvider>
 		<ScrollView
 			className="flex-1 bg-white px-6 pt-[18px]"
 			showsVerticalScrollIndicator={false}
@@ -31,6 +49,7 @@ const Details = () => {
 				image={info?.provider?.image || ""}
 				status={info?.status || ""}
 				ratings={info?.rating?.customer_rating || 0}
+				service_name={info?.service?.name || ""}
 			/>
 			<View className="flex-1 mt-6 gap-y-5">
 				<View className="gap-y-3">
@@ -92,12 +111,23 @@ const Details = () => {
 					</Text>
 					<View className="flex-1">
 						<Text className="flex-1 placeholder:text-muted">
-							{info?.provider_rating_status || ""}
+							{info?.provider_rating_status?.split("_").join(" ") || ""}
 						</Text>
 					</View>
 				</View>
 			</View>
-		</ScrollView>
+			</ScrollView>
+			<ReviewService
+				compRef={reviewModalRef}
+				showCompletionModal={showCompletionModal}
+				bookingId={id as string}
+			/>
+			<ReviewComplete
+				modalVisible={completionModalVisible}
+				setModalVisible={setCompletionModalVisible}
+			/>
+			</BottomSheetModalProvider>
+		</GestureHandlerRootView>
 	);
 };
 

@@ -45,13 +45,16 @@ const AppModal = ({
 						{subtitle}
 					</Text>
 				)}
-				<View className="mt-auto mb-2">
+				<View className="mt-auto mb-2 gap-y-2">
 					<StyledButton
 						onPress={onPress}
 						textClassName="font-regular text-base"
 						title={buttonText ?? "Continue"}
 						isLoading={loading}
 					/>
+					<Pressable onPress={() => setModalVisible(false)} className="py-3 items-center">
+						<Text className="text-sm font-regular text-off-black">Cancel</Text>
+					</Pressable>
 				</View>
 			</View>
 		</ModalComp>

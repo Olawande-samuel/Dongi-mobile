@@ -7,7 +7,9 @@ import {
 	IRequestInfo,
 	IRequestListItem,
 	IService,
+	ITransaction,
 	IUser,
+	IWallet,
 	OngoingRequest,
 	ServiceProviderOngoingRequest,
 	ServiceProviderPendingRequest,
@@ -534,7 +536,7 @@ class API {
 	async fetchTransactions(): Promise<
 		AxiosResponse<
 			ApiResponse<{
-				transactions: any[];
+				transactions: ITransaction[];
 				pagination: {
 					totalRecords: number;
 					totalPages: number;
@@ -555,14 +557,7 @@ class API {
 	async fetchWallet(): Promise<
 		AxiosResponse<
 			ApiResponse<{
-				wallet: {
-					id: string;
-					user_id: string;
-					balance: string;
-					is_active: boolean;
-					created_at: string;
-					updated_at: string;
-				};
+				wallet: IWallet;
 			}>
 		>
 	> {

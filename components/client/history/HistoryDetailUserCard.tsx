@@ -8,20 +8,19 @@ interface Props {
 	ratings: string | number;
 	status: string;
 	image: string;
+	service_name:string;
 }
 
-const HistoryDetailUserCard = ({ name, ratings, image, status }: Props) => {
+const HistoryDetailUserCard = ({ name, ratings, image, service_name, status }: Props) => {
 	return (
 		<View className="border border-inner-light p-2 rounded-lg">
 			<View className="flex-row gap-x-3">
 				<View className="">
 					<Image
 						className="rounded-lg w-20 h-20"
-						source={
-							image
-								? { uri: image }
-								: require("../../../assets/images/client/temp_user_sq.png")
-						}
+						source={{
+							uri: image || `https://ui-avatars.com/api/?name=${name}`,
+						}}
 						resizeMode="cover"
 						height={80}
 						width={80}
@@ -35,7 +34,7 @@ const HistoryDetailUserCard = ({ name, ratings, image, status }: Props) => {
 								{name || ""}
 							</Text>
 							<Text className="text-xs text-support mb-2 leading-[15.12px] font-regular">
-								{/* Real Estate Agent */}
+								{service_name}
 							</Text>
 						</View>
 						<View className="flex-row gap-1 items-center">

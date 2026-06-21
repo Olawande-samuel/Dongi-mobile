@@ -17,6 +17,7 @@ const StatusPill = ({
 			case "customer_confirmed_completion":
 				return "bg-success-100";
 			case "cancelled":
+			case "declined":
 				return "bg-danger-100";
 			case "accepted":
 				return "bg-success-100";
@@ -32,6 +33,7 @@ const StatusPill = ({
 			case "customer_confirmed_completion":
 				return "bg-success-500";
 			case "cancelled":
+			case "declined":
 				return "bg-danger-500";
 			case "accepted":
 				return "bg-success-500";
@@ -43,7 +45,7 @@ const StatusPill = ({
 		<View
 			className={cn(
 				`flex-row items-center gap-x-1 px-2 py-[5.58px] rounded-[999px] bg-success-100 ${getPillBGColor()}`,
-				buttonClassName
+				buttonClassName,
 			)}
 		>
 			<View

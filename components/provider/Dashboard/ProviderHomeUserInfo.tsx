@@ -8,14 +8,6 @@ import { ActivityIndicator, Image, Pressable, Text, View } from "react-native";
 const ProviderHomeUserInfo = () => {
 	const { data } = useServiceProviderUserInfo();
 
-	// if (isLoading) {
-	// 	return (
-	// 		<View className="mb-4">
-	// 			<ActivityIndicator size={14} />;
-	// 		</View>
-	// 	);
-	// }
-
 	return (
 		<View className="flex-row items-center mb-4">
 			<Text className="mr-4 font-semibold text-base large:text-lg text-black">
@@ -25,7 +17,7 @@ const ProviderHomeUserInfo = () => {
 				<Text>at</Text>
 				<Pressable
 					className="flex-row px-1 py-[7px]"
-					onPress={() => router.push("/provider/change-location")}
+					// onPress={() => router.push("/provider/change-location")}
 				>
 					<Image
 						source={require("../../../assets/images/location.png")}

@@ -1,7 +1,7 @@
 import { View, Text, Image, Pressable } from "react-native";
 import React from "react";
 import { Entypo } from "@expo/vector-icons";
-import { Link, router } from "expo-router";
+import { router } from "expo-router";
 import { ICompletedRequest } from "@/types";
 import moment from "moment";
 
@@ -28,11 +28,11 @@ const HistoryCard = ({
 				<View className="h-[80px] w-[80px] mr-2">
 					<Image
 						className="h-[80px] w-[80px] rounded-lg"
-						source={
-							provider.image
-								? { uri: provider.image }
-								: require("../../../assets/images/client/temp_user_sq.png")
-						}
+						source={{
+							uri:
+								provider.image ||
+								`https://ui-avatars.com/api/?name=${provider.name}}`,
+						}}
 						resizeMode="cover"
 					/>
 				</View>

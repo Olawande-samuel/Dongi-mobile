@@ -40,6 +40,8 @@ const History = () => {
 		tab === 1
 			? groupByDate(ongoingServices?.data.data?.requests || [])
 			: groupByDate(data?.data.data.requests || []);
+	
+	console.log({ listItems });
 
 	return (
 		// <View className="flex-1">

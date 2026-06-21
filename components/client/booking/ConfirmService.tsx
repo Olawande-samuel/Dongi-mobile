@@ -30,7 +30,6 @@ function ConfirmService({
 	providerName,
 	serviceName,
 }: Props) {
-	console.log({ providerName });
 	const { dismiss } = useBottomSheetModal();
 	const snapPoints = useMemo(() => ["90%"], []);
 
@@ -44,6 +43,8 @@ function ConfirmService({
 	});
 
 	const result = data?.data?.data;
+
+	console.log({ result });
 
 	const handleClosePress = useCallback(() => {
 		dismiss();
@@ -96,7 +97,7 @@ function ConfirmService({
 						<View />
 						<View>
 							<Text className="text-center text-base text-off-black font-regular">
-								Confirm Service
+								Confirm Service Completion
 							</Text>
 						</View>
 						<Pressable onPress={handleClosePress}>
@@ -112,11 +113,19 @@ function ConfirmService({
 						</View>
 						<View className="rounded-lg p-2 border border-outer-light mb-6">
 							<View className="flex-row items-center gap-x-3">
-								<View>
+								<View
+									className="h-20 w-20 rounded-full "
+									style={{ height: 80, width: 80 }}
+								>
 									<Image
-										className="h-20 w-20"
-										source={require("../../../assets/images/client/temp_user_sq.png")}
-										resizeMode="contain"
+										className="h-20 w-20 rounded-full"
+										style={{ height: 80, width: 80 }}
+										source={{
+											uri:
+												result?.provider?.business_logo ||
+												`https://ui-avatars.com/api/?name=${result?.provider?.first_name}+${result?.provider?.last_name}`,
+										}}
+										resizeMode="cover"
 									/>
 								</View>
 								<View className="gap-y-1 flex-1">
@@ -127,7 +136,7 @@ function ConfirmService({
 										Real estate agent
 									</Text> */}
 									<Text className="text-xs font-regular text-support">
-										{result?.location || ""}
+										{result?.service?.name || ""}
 									</Text>
 									<Text className="text-xs font-regular text-support">
 										{moment(result?.created_at).format("DD MMM • hh:mmA")}

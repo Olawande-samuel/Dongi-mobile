@@ -14,9 +14,13 @@ import { toast } from "sonner-native";
 import { z } from "zod";
 import StyledButton from "../StyledButton";
 import BusinessInformation from "../provider/BusinessInformation";
+import FormError from "../FormError";
 
 const FormSchema = z.object({
-	phone: z.string().min(10).max(15),
+	phone: z
+		.string()
+		.min(10, "Phone number should be a minimum of 10 digits")
+		.max(15),
 });
 type FormType = z.infer<typeof FormSchema>;
 
@@ -34,6 +38,7 @@ const PhoneSignup = ({ userType }: { userType: "service" | "client" }) => {
 			phone: "",
 		},
 		resolver: zodResolver(FormSchema),
+		mode: "onChange",
 	});
 
 	const { mutate } = useMutation({
@@ -147,8 +152,15 @@ const PhoneSignup = ({ userType }: { userType: "service" | "client" }) => {
 									inputMode="tel"
 									textContentType="telephoneNumber"
 									keyboardType="phone-pad"
+									placeholder="80....."
+									placeholderTextColor="#ddd"
 								/>
 							</View>
+							{form.formState?.errors?.phone ? (
+								<FormError
+									value={form.formState.errors?.phone?.message as string}
+								/>
+							) : null}
 						</View>
 					)}
 				/>
@@ -157,9 +169,7 @@ const PhoneSignup = ({ userType }: { userType: "service" | "client" }) => {
 			<View className="mt-4" style={{ marginTop: 13 }}>
 				<StyledButton
 					onPress={form.handleSubmit(handleSubmit)}
-					// onPress={() => {
-					// 	router.push("/clients/sign-up/email");
-					// }}
+					disabled={!form.formState.isValid}
 					title="Continue"
 				/>
 			</View>

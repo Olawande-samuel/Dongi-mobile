@@ -7,9 +7,8 @@ import {
 	useBottomSheetModal,
 } from "@gorhom/bottom-sheet";
 import { Ionicons } from "@expo/vector-icons";
-import { AirbnbRating } from "react-native-ratings";
 import StyledButton from "@/components/StyledButton";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Api } from "@/utils/endpoints";
 import { useGlobalContext } from "@/providers/GlobalStateProvider";
 import { z } from "zod";
@@ -34,7 +33,8 @@ function ReviewService({
 	bookingId: string;
 }) {
 	const { dismissAll } = useBottomSheetModal();
-	const snapPoints = useMemo(() => ["50%"], []);
+	const queryClient = useQueryClient();
+	const snapPoints = useMemo(() => ["50%", "90%"], []);
 
 	const globalContext = useGlobalContext();
 
@@ -71,6 +71,9 @@ function ReviewService({
 			{
 				onSuccess: (res) => {
 					toast.success(res?.data?.message || "Rating submitted successfully");
+					queryClient.invalidateQueries({ queryKey: ["fetch pending requests"] });
+					queryClient.invalidateQueries({ queryKey: ["fetch ongoing requests"] });
+					queryClient.invalidateQueries({ queryKey: ["fetch completed requests"] });
 					dismissAll();
 					showCompletionModal();
 				},
@@ -115,14 +118,18 @@ function ReviewService({
 							render={({ field }) => (
 								<View className="mb-5">
 									<Text className="text-center text-base font-regular mb-2">
-										{`Rate your experience with ${bookingInfo?.provider?.name}`}
+										{`Rate your experience with ${bookingInfo?.provider?.first_name} ${bookingInfo?.provider?.last_name}`}
 									</Text>
 									<View className="flex-row justify-center gap-x-1">
-										<AirbnbRating
-											onFinishRating={field.onChange}
-											showRating={false}
-											defaultRating={0}
-										/>
+										{[1, 2, 3, 4, 5].map((star) => (
+											<Pressable key={star} onPress={() => field.onChange(star)}>
+												<Ionicons
+													name={field.value >= star ? "star" : "star-outline"}
+													size={62}
+													color={field.value >= star ? "#E4AE1B" : "#BDC3C7"}
+												/>
+											</Pressable>
+										))}
 									</View>
 									{form.formState.errors?.rate && (
 										<Text className="text-xs text-red-400">
@@ -142,7 +149,7 @@ function ReviewService({
 									</Text>
 									<View className="flex-row border p-2 border-inner-background-light h-[158px]">
 										<TextInput
-											placeholder="Mr John did a fantastic job ..."
+											placeholder="Provider did a fantastic job ..."
 											className="flex-1 text-muted placeholder:text-muted text-base"
 											multiline
 											textAlignVertical="top"

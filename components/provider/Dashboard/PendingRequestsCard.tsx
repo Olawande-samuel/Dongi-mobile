@@ -16,6 +16,7 @@ const PendingRequestCard = ({
 	created_at,
 	uuid,
 	activeTab,
+	status,
 }: Props) => {
 	const { data } = useServiceProviderUserInfo();
 
@@ -59,11 +60,11 @@ const PendingRequestCard = ({
 								{customer.name || ""}
 							</Text>
 							<Text
-								className="text-[10px] large:text-xs font-regular text-support"
+								className="text-[10px] capitalize large:text-xs font-regular text-support"
 								numberOfLines={1}
 								ellipsizeMode="tail"
 							>
-								{customer.location.split(",")[0] || ""}
+								{status?.toLowerCase() || ""}
 							</Text>
 						</View>
 					</View>

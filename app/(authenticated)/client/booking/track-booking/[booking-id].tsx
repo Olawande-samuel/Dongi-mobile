@@ -111,7 +111,7 @@ const Track = () => {
 													)
 												}
 											>
-												<Text className="font-regular text-sm text-off-black text-right">
+												<Text className="font-regular underline text-sm text-off-black text-right">
 													{bookingInfo.provider.phone}
 												</Text>
 											</Pressable>

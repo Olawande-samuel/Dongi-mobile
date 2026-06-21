@@ -28,21 +28,19 @@ const StyledButton: React.FC<StyledButtonProps> = ({
 	const userType = pathname.includes("client")
 		? "client"
 		: pathname.includes("service-provider")
-		? "service"
-		: params.userType
-		? params.userType
-		: "";
-
-
+			? "service"
+			: params.userType
+				? params.userType
+				: "";
 
 	return (
 		<Pressable
 			{...props}
 			onPress={onPress}
 			className={cn(
-				` rounded px-1 py-2 large:py-[10px] mt-auto justify-center items-center`,
+				` rounded px-1 py-2 large:py-[10px] mt-auto justify-center items-center disabled:opacity-20`,
 				userType === "service" ? "bg-service-primary" : "bg-primary",
-				className
+				className,
 			)}
 		>
 			{isLoading ? (
@@ -51,7 +49,7 @@ const StyledButton: React.FC<StyledButtonProps> = ({
 				<Text
 					className={cn(
 						"text-white text-sm large:text-base font-regular",
-						textClassName
+						textClassName,
 					)}
 				>
 					{title}

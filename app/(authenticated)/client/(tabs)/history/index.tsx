@@ -48,22 +48,22 @@ const History = () => {
 		tab === 1
 			? groupByDate(completedData?.data.data.requests || [])
 			: tab === 2
-			? groupByDate(ongoingRequestData?.data.data?.requests || [])
-			: groupByDate(pendingData?.data?.data.requests || []);
+				? groupByDate(ongoingRequestData?.data.data?.requests || [])
+				: groupByDate(pendingData?.data?.data.requests || []);
 
 	const isLoading =
 		tab === 1
 			? isCompletedRequestLoading
 			: tab === 2
-			? isOngoingRequestLoading
-			: isPendingLoading;
+				? isOngoingRequestLoading
+				: isPendingLoading;
 
 	const emptyText =
 		tab === 1
 			? "You do not have any completed request"
 			: tab === 2
-			? "You do not have any ongoing request"
-			: "You do not have any pending request";
+				? "You do not have any ongoing request"
+				: "You do not have any pending request";
 
 	return (
 		<SectionList
@@ -92,11 +92,7 @@ const History = () => {
 				/>
 			}
 			ListEmptyComponent={
-				isLoading ? (
-					<ActivityIndicator />
-				) : (
-					<NoHistory text={emptyText} />
-				)
+				isLoading ? <ActivityIndicator /> : <NoHistory text={emptyText} />
 			}
 			keyExtractor={(item, index) => String(item.uuid + index)}
 			renderSectionHeader={({ section: { title } }) => (

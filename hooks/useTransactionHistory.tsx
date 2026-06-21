@@ -10,6 +10,7 @@ const useTransactionHistory = () => {
 	return {
 		isLoading,
 		data: data?.data?.data.transactions || [],
+		pagination: data?.data?.data.pagination,
 	};
 };
 export default useTransactionHistory;

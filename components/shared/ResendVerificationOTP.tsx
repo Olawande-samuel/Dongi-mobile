@@ -9,11 +9,13 @@ import { View, Text, Pressable } from "react-native";
 const ResendVerificationOtp = ({
 	reference,
 	type,
+	initialSeconds = 300,
 }: {
 	reference: string;
 	type: "PHONE_VERIFICATION" | "EMAIL_VERIFICATION";
+	initialSeconds?: number;
 }) => {
-	const [countdown, setCountdown] = useState(20);
+	const [countdown, setCountdown] = useState(initialSeconds);
 	const [isRunning, setIsRunning] = useState(true);
 	const globalContext = useGlobalContext();
 	const { data } = useTempUser();
@@ -28,7 +30,7 @@ const ResendVerificationOtp = ({
 		onMutate: () => setIsLoading(true),
 		onSettled: () => {
 			setIsLoading(false);
-			setCountdown(20);
+			setCountdown(initialSeconds);
 			setIsRunning(true);
 		},
 	});
@@ -37,10 +39,13 @@ const ResendVerificationOtp = ({
 		let timer: any;
 		if (isRunning) {
 			timer = setInterval(() => {
-				setCountdown((prev) => prev - 1);
-				if (countdown === 1) {
-					setIsRunning(false);
-				}
+				setCountdown((prev) => {
+					if (prev <= 1) {
+						setIsRunning(false);
+						return 0;
+					}
+					return prev - 1;
+				});
 			}, 1000);
 		}
 		return () => {
@@ -59,11 +64,15 @@ const ResendVerificationOtp = ({
 			},
 		});
 	};
+	const minutes = Math.floor(countdown / 60);
+	const seconds = countdown % 60;
+	const formatted = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+
 	return (
 		<View className="flex-row gap-2 items-center mt-3">
 			<Text>Didn't get a token?</Text>
-			{countdown > 1 ? (
-				<Text>{countdown}</Text>
+			{countdown > 0 ? (
+				<Text>{formatted}</Text>
 			) : (
 				<Pressable onPress={resetCountdown}>
 					<Text className="underline">Resend</Text>

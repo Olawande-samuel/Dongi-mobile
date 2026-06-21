@@ -75,12 +75,10 @@ const NewRequest = () => {
 			handleError(err);
 		},
 		onSuccess: (res) => {
+			refetch();
 			queryClient.invalidateQueries({
 				queryKey: ["get provider user info"],
 			});
-
-			refetch();
-
 			queryClient.invalidateQueries({
 				queryKey: ["get provider pending requests"],
 			});
@@ -187,7 +185,7 @@ const NewRequest = () => {
 										handleContactPress(`tel:${result?.customer?.phone}`)
 									}
 								>
-									<Text className="font-regular text-xs large:text-sm text-off-black text-right">
+									<Text className="font-regular underline text-xs large:text-sm text-off-black text-right">
 										{result?.customer?.phone}
 									</Text>
 								</Pressable>

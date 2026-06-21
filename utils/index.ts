@@ -12,6 +12,7 @@ export function cn(...inputs: ClassValue[]) {
 export const handleError = (err: any) => {
 	if (isAxiosError(err)) {
 		const axiosError = err as AxiosError<{ message: string }>;
+		console.error(err.request)
 		console.error(err.response);
 		const errorMessage =
 			axiosError.response?.data?.message || axiosError.message;
