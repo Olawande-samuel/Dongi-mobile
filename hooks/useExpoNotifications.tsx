@@ -36,7 +36,11 @@ const useExpoNotifications = () => {
 
 	async function registerForPushNotificationsAsync() {
 		if (Platform.OS === "android") {
-			await Notifications.setNotificationChannelAsync("default", {
+			// Android locks a channel's settings (including sound) at creation.
+			// "default" was created without a custom sound on older installs,
+			// so it can never play dongi.wav — replace it with a new channel ID.
+			await Notifications.deleteNotificationChannelAsync("default");
+			await Notifications.setNotificationChannelAsync("default-v2", {
 				name: "default",
 				importance: Notifications.AndroidImportance.MAX,
 				vibrationPattern: [0, 250, 250, 250],
@@ -62,10 +66,6 @@ const useExpoNotifications = () => {
 			const projectId =
 				Constants?.expoConfig?.extra?.eas?.projectId ??
 				Constants?.easConfig?.projectId;
-			const pushTokenString = (
-				await Notifications.getExpoPushTokenAsync({ projectId })
-			).data;
-
 			if (!projectId) {
 				handleRegistrationError("Project ID not found");
 			}

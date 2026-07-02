@@ -1,4 +1,5 @@
 import { useAuth } from "@/context/Auth";
+import LocationProvider from "@/providers/LocationProvider";
 import { Redirect, Stack } from "expo-router";
 import { ActivityIndicator, View } from "react-native";
 
@@ -17,5 +18,9 @@ export default function AuthenticatedLayout() {
 		return <Redirect href="/" />;
 	}
 
-	return <Stack screenOptions={{ headerShown: false }} />;
+	return (
+		<LocationProvider>
+			<Stack screenOptions={{ headerShown: false }} />
+		</LocationProvider>
+	);
 }

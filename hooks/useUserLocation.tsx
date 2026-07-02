@@ -25,8 +25,8 @@ const useUserLocation = () => {
 
 	return {
 		location: {
-			logitude: location?.coords.longitude,
-			latitutde: location?.coords.latitude,
+			longitude: location?.coords.longitude,
+			latitude: location?.coords.latitude,
 			latitudeDelta: 0.0922,
 			longitudeDelta: 0.0421,
 		},

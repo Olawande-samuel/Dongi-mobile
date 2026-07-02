@@ -1,6 +1,7 @@
 import NoHistory from "@/components/client/history/NoHistory";
 import CategorySearch from "@/components/client/search/CategorySearch";
 import ServiceItem from "@/components/client/search/ServiceItem";
+import useCurrentLocation from "@/hooks/useCurrentLocation";
 import { Api } from "@/utils/endpoints";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
@@ -21,19 +22,28 @@ const Query = () => {
 
 	const queryClient = useQueryClient();
 
+	const { location, errorMsg: locationError } = useCurrentLocation();
+	const lat = location?.coords.latitude.toString();
+	const lng = location?.coords.longitude.toString();
+	// wait for the location attempt to settle so results are proximity-based;
+	// if permission is denied we still search, just without coordinates
+	const locationReady = !!location || !!locationError;
+
 	const { data, isLoading } = useQuery({
 		queryKey: ["get service items", params.query],
 		queryFn: () => Api.getCategoryServices(params.query as string),
 	});
 
 	const { data: searchResults, isLoading: searchLoading } = useQuery({
-		queryKey: ["get search values", debouncedSearch],
+		queryKey: ["get search values", debouncedSearch, lat, lng],
 		queryFn: () =>
 			Api.searchService({
 				category: params.query as string,
 				query: debouncedSearch,
+				lat,
+				lng,
 			}),
-		enabled: !!debouncedSearch,
+		enabled: !!debouncedSearch && locationReady,
 	});
 
 	const services =

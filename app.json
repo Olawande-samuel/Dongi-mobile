@@ -79,11 +79,23 @@
         "expo-notifications",
         {
           "color": "#18658B",
-          "defaultChannel": "default",
+          "defaultChannel": "default-v2",
           "sounds": [
             "./assets/sounds/dongi.wav"
           ],
           "enableBackgroundRemoteNotifications": true
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "androidGradlePluginVersion": "8.6.0",
+            "compileSdkVersion": 35,
+            "targetSdkVersion": 35,
+            "buildToolsVersion": "35.0.0",
+            "ndkVersion": "29.0.13113456"
+          }
         }
       ]
     ],

@@ -1,6 +1,7 @@
 import HomeContent from "@/components/client/dashboard/HomeContent";
 import ServiceCard from "@/components/client/dashboard/ServiceCard";
 import OngoingCard from "@/components/client/history/OngoingCard";
+import useCurrentLocation from "@/hooks/useCurrentLocation";
 import useExpoNotifications from "@/hooks/useExpoNotifications";
 import { ICategoryServices, IProviderService, OngoingRequest } from "@/types";
 import { Api } from "@/utils/endpoints";
@@ -23,9 +24,17 @@ const Home = () => {
 
 	const [tab, setTab] = useState(1);
 
+	const { location, errorMsg: locationError } = useCurrentLocation();
+	const lat = location?.coords.latitude.toString();
+	const lng = location?.coords.longitude.toString();
+	// wait for the location attempt to settle so results are proximity-based;
+	// if permission is denied we still search, just without coordinates
+	const locationReady = !!location || !!locationError;
+
 	const { data: services, isLoading } = useQuery({
-		queryKey: ["fetch all services"],
-		queryFn: () => Api.searchService({}),
+		queryKey: ["fetch all services", lat, lng],
+		queryFn: () => Api.searchService({ lat, lng }),
+		enabled: locationReady,
 	});
 
 	const { data: ongoingRequestData, isLoading: isOngoingRequestLoading } =
@@ -53,7 +62,7 @@ const Home = () => {
 				}
 				ListHeaderComponent={<HomeContent tab={tab} setTab={setTab} />}
 				ListEmptyComponent={
-					isLoading || isOngoingRequestLoading ? (
+					isLoading || isOngoingRequestLoading || !locationReady ? (
 						<ActivityIndicator />
 					) : (
 						<EmptyComponent

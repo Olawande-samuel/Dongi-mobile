@@ -1,5 +1,3 @@
-import useCurrentLocation from "@/hooks/useCurrentLocation";
-import useLocation from "@/hooks/useLocation";
 import useUserInfo from "@/hooks/useUserInfo";
 import { router } from "expo-router";
 import React from "react";

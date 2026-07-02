@@ -8,7 +8,6 @@ import {
 	View,
 } from "react-native";
 
-import useCurrentLocation from "@/hooks/useCurrentLocation";
 import useUserInfo from "@/hooks/useUserInfo";
 import { IService } from "@/types";
 import { cn } from "@/utils";
@@ -100,7 +99,6 @@ const CategorySearch = ({
 	setSearchValue,
 }: Props) => {
 	const { data, isLoading } = useUserInfo();
-	const { location, address } = useCurrentLocation();
 
 	return (
 		<View>

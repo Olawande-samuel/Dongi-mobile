@@ -161,7 +161,9 @@ const EmailForm = () => {
 									onSelect={(selectedItem) => {
 										field.onChange(selectedItem.value);
 									}}
-									defaultValue={field.value}
+									defaultValue={GENDER_OPTIONS.find(
+										(option) => option.value === field.value,
+									)}
 									renderButton={(selectedItem, isOpened) => {
 										return (
 											<View
@@ -270,12 +272,12 @@ const EmailForm = () => {
 									const country =
 										components.find((c) => c.types.includes("country"))
 											?.long_name ?? "";
-									field.onChange(data.description);
 									form.setValue("latitude", detail?.geometry.location.lat);
 									form.setValue("longitude", detail?.geometry.location.lng);
 									form.setValue("city", city);
 									form.setValue("state", state);
 									form.setValue("country", country);
+									field.onChange(data.description);
 								}}
 								query={{
 									key: process.env.EXPO_PUBLIC_GOOGLE_API,
@@ -363,7 +365,7 @@ function EmailSignup({
 					<TouchableWithoutFeedback className="" onPress={Keyboard.dismiss}>
 						<FlatList
 							data={[]}
-							ListHeaderComponent={() => <EmailForm />}
+							ListHeaderComponent={<EmailForm />}
 							renderItem={() => null}
 							showsVerticalScrollIndicator={false}
 							keyboardShouldPersistTaps="always"
